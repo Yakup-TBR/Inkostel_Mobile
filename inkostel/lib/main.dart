@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Chandra Kontrol'),
+      home: const MyHomePage(title: 'haiya hafiq lanciao, tembak betul betul looo'),
     );
   }
 }
