@@ -31,7 +31,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'haiya hafiq lanciao, tembak betul betul looo'),
+      home: const MyHomePage(
+          title: 'haiya hafiq lanciao, tembak betul betul looo'),
     );
   }
 }
@@ -106,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'You have pushed the button this many times:',
+              'tekan yang banyak babi',
             ),
             Text(
               '$_counter',
