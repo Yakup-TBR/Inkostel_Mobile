@@ -1,33 +1,24 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(CariKos());
+  runApp(const CariKos());
 }
 
 class CariKos extends StatelessWidget {
+  const CariKos({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Home'),
+          title: const Text('Hai Supri Makmur'),
           actions: [
             IconButton(
-              icon: Icon(Icons.search),
+              icon: const Icon(Icons.search),
               onPressed: () {
                 // Action when search icon is pressed
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.save),
-              onPressed: () {
-                // Action when save icon is pressed
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                // Action when add icon is pressed
               },
             ),
           ],
@@ -36,15 +27,15 @@ class CariKos extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Row(
                 children: [
                   // Logo profile di sini
-                  Expanded(
+                  const Expanded(
                     child: Text('Logo Profile'),
                   ),
                   // Kolom search di sini
-                  Expanded(
+                  const Expanded(
                     flex: 3,
                     child: TextField(
                       decoration: InputDecoration(
@@ -54,7 +45,7 @@ class CariKos extends StatelessWidget {
                   ),
                   // Icon filter di sini
                   IconButton(
-                    icon: Icon(Icons.filter_list),
+                    icon: const Icon(Icons.filter_list),
                     onPressed: () {
                       // Action when filter icon is pressed
                     },
@@ -70,19 +61,19 @@ class CariKos extends StatelessWidget {
                   onPressed: () {
                     // Action when nearest button is pressed
                   },
-                  child: Text('Nearest'),
+                  child: const Text('Nearest'),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     // Action when cheapest button is pressed
                   },
-                  child: Text('Cheapest'),
+                  child: const Text('Cheapest'),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     // Action when recommended button is pressed
                   },
-                  child: Text('Recommended'),
+                  child: const Text('Recommended'),
                 ),
               ],
             ),
@@ -90,7 +81,7 @@ class CariKos extends StatelessWidget {
             Container(
               height: 200,
               color: Colors.blue,
-              child: Center(
+              child: const Center(
                 child: Text('Square 1'),
               ),
             ),
@@ -98,7 +89,7 @@ class CariKos extends StatelessWidget {
             Container(
               height: 200,
               color: Colors.green,
-              child: Center(
+              child: const Center(
                 child: Text('Square 2'),
               ),
             ),
@@ -109,25 +100,25 @@ class CariKos extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               IconButton(
-                icon: Icon(Icons.home),
+                icon: const Icon(Icons.home),
                 onPressed: () {
                   // Action when home icon is pressed
                 },
               ),
               IconButton(
-                icon: Icon(Icons.search),
+                icon: const Icon(Icons.search),
                 onPressed: () {
                   // Action when search icon is pressed
                 },
               ),
               IconButton(
-                icon: Icon(Icons.save),
+                icon: const Icon(Icons.save),
                 onPressed: () {
                   // Action when save icon is pressed
                 },
               ),
               IconButton(
-                icon: Icon(Icons.add),
+                icon: const Icon(Icons.add),
                 onPressed: () {
                   // Action when add icon is pressed
                 },
