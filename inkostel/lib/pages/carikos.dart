@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(CariKos());
+  runApp(const CariKos());
 }
 
 class CariKos extends StatelessWidget {
+  const CariKos({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Home'),
+          title: const Text('Home'),
           actions: [
             IconButton(
               icon: Icon(Icons.search),
