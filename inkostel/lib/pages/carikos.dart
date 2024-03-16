@@ -109,13 +109,15 @@ class CariKos extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               IconButton(
-                icon: Icon(Icons.home),
+                icon: Icon(Icons.home,),
                 onPressed: () {
                   // Action when home icon is pressed
                 },
               ),
               IconButton(
-                icon: Icon(Icons.search),
+                icon: Icon(
+                  Icons.search,
+                  ),
                 onPressed: () {
                   // Action when search icon is pressed
                 },
