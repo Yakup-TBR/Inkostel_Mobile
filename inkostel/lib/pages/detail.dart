@@ -90,7 +90,7 @@ class detail extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 20,
                                   vertical: 20), // Atur padding di dalam tombol
-                              backgroundColor: Color.fromRGBO(67, 104, 80, 1)),
+                              backgroundColor: Color(0xFF436850)),
                           child: const Text(
                             'Tekan Tombol',
                             style: TextStyle(

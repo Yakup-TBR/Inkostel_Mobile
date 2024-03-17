@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/detail.dart';
+import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/validation.dart';
 
@@ -19,6 +20,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           fontFamily: 'Schyler',
         ),
-        home: Validation());
+        home: CariKos());
   }
 }
