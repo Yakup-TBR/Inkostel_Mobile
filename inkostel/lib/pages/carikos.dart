@@ -5,7 +5,7 @@ void main() {
 }
 
 class CariKos extends StatelessWidget {
-  const CariKos({super.key});
+  const CariKos({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,16 +13,40 @@ class CariKos extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Hai Supri Makmur'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {
-                // Action when search icon is pressed
-              },
-            ),
-          ],
+          backgroundColor: const Color.fromRGBO(173,188,159, 1),
+
+          title: Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  // Action when the box is tapped
+                },
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.account_circle),
+                    color: Colors.blue,
+                    onPressed: () {
+                      // Action when profile icon is pressed
+                    },
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              const Text(
+                'Test',
+                style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+              ),
+            ],
+          ),
         ),
+
+        backgroundColor: const Color.fromRGBO(173,188,159, 1),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -30,30 +54,29 @@ class CariKos extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 children: [
-                  // Logo profile di sini
-                  const Expanded(
-                    child: Text('Logo Profile'),
-                  ),
-                  // Kolom search di sini
                   const Expanded(
                     flex: 3,
                     child: TextField(
                       decoration: InputDecoration(
-                        hintText: 'Search...',
+                        hintText: 'Cari Kos Disini..',
                       ),
                     ),
                   ),
-                  // Icon filter di sini
+                  IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                // Action when search icon is pressed
+              },
+            ),
                   IconButton(
                     icon: const Icon(Icons.filter_list),
                     onPressed: () {
-                      // Action when filter icon is pressed
+                      // atur filter
                     },
                   ),
                 ],
-              ),
+              ), 
             ),
-            // Tiga tombol terdekat, termurah, dan rekomendasi
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -61,13 +84,13 @@ class CariKos extends StatelessWidget {
                   onPressed: () {
                     // Action when nearest button is pressed
                   },
-                  child: const Text('Nearest'),
+                  child: const Text('Terdekat'),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     // Action when cheapest button is pressed
                   },
-                  child: const Text('Cheapest'),
+                  child: const Text('Termurah'),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -77,54 +100,75 @@ class CariKos extends StatelessWidget {
                 ),
               ],
             ),
-            // Persegi panjang di satu kolom
-            Container(
-              height: 200,
-              color: Colors.blue,
-              child: const Center(
-                child: Text('Square 1'),
-              ),
-            ),
-            // Persegi panjang di kolom sendiri
-            Container(
-              height: 200,
-              color: Colors.green,
-              child: const Center(
-                child: Text('Square 2'),
+            
+            Expanded(
+              child: Stack( // Gunakan Stack sebagai wadah
+                children: [
+                  Container(
+                    margin: const EdgeInsets.all(1),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ListView.builder(
+                      itemCount: 10,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text('Item $index'),
+                          onTap: () {
+                            // Action icon
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 50,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.8, 
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(67,104,80, 1),
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.home),
+                            onPressed: () {
+                              // Action when home icon is pressed
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.search),
+                            onPressed: () {
+                              // Action when search icon is pressed
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.save),
+                            onPressed: () {
+                              // Action when save icon is pressed
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.add),
+                            onPressed: () {
+                              // Action when add icon is pressed
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
-        ),
-        bottomNavigationBar: BottomAppBar(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.home),
-                onPressed: () {
-                  // Action when home icon is pressed
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.search),
-                onPressed: () {
-                  // Action when search icon is pressed
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.save),
-                onPressed: () {
-                  // Action when save icon is pressed
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () {
-                  // Action when add icon is pressed
-                },
-              ),
-            ],
-          ),
         ),
       ),
     );
