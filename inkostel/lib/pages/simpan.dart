@@ -1,126 +1,89 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(simpan());
+  runApp(const Simpan());
 }
 
-class simpan extends StatelessWidget {
+class Simpan extends StatelessWidget {
+  const Simpan({Key? key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Test'),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                // Action when search icon is pressed
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.save),
-              onPressed: () {
-                // Action when save icon is pressed
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                // Action when add icon is pressed
-              },
-            ),
-          ],
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              padding: EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  // Logo profile di sini
-                  Expanded(
-                    child: Text('Logo Profile'),
+          backgroundColor: const Color.fromRGBO(173, 188, 159, 1),
+          title: Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  // Action when the box is tapped
+                },
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  // Kolom search di sini
-                  Expanded(
-                    flex: 3,
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search...',
-                      ),
-                    ),
-                  ),
-                  // Icon filter di sini
-                  IconButton(
-                    icon: Icon(Icons.filter_list),
+                  child: IconButton(
+                    icon: const Icon(Icons.account_circle),
+                    color: Colors.blue,
                     onPressed: () {
-                      // Action when filter icon is pressed
+                      // Action when profile icon is pressed
                     },
                   ),
-                ],
+                ),
               ),
-            ),
-            // Tiga tombol terdekat, termurah, dan rekomendasi
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Action when nearest button is pressed
-                  },
-                  child: Text('Nearest'),
+              // Flexible untuk membuat teks "Test" bisa berubah ukuran sesuai kebutuhan AppBar
+              const Flexible(
+                child: Center(
+                  child: Text(
+                    'Kos Tersimpan',
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255),
+                    ),
+                  ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Action when cheapest button is pressed
-                  },
-                  child: Text('Cheapest'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Action when recommended button is pressed
-                  },
-                  child: Text('Recommended'),
-                ),
-              ],
-            ),
-            // Halaman Simpan
-            Expanded(
-              child: Center(
-                child: Text('Halaman Simpan'),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-        bottomNavigationBar: BottomAppBar(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+        backgroundColor: const Color.fromRGBO(173, 188, 159, 1),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          child: Column(
             children: [
-              IconButton(
-                icon: Icon(Icons.home),
-                onPressed: () {
-                  // Action when home icon is pressed
-                },
+              const SizedBox(
+                height: 15,
               ),
-              IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () {
-                  // Action when search icon is pressed
-                },
+              Container(
+                margin: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 255, 255, 255),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                height: 150,
+                width: double.infinity,
               ),
-              IconButton(
-                icon: Icon(Icons.save),
-                onPressed: () {
-                  // Action when save icon is pressed
-                },
+              Container(
+                margin: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 255, 255, 255),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                height: 150,
+                width: double.infinity,
               ),
-              IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () {
-                  // Action when add icon is pressed
-                },
+              Container(
+                margin: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 255, 255, 255),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                height: 150,
+                width: double.infinity,
               ),
             ],
           ),
