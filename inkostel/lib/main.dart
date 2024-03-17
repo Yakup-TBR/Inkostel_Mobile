@@ -17,6 +17,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           fontFamily: 'Schyler',
         ),
-        home: detail());
+        home: CariKos());
   }
 }
