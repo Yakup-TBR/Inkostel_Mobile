@@ -13,7 +13,7 @@ class JualKos extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromRGBO(67, 104, 80, 1),
+          backgroundColor: const Color.fromRGBO(173,188,159, 1),
           title: Row(
             children: [
               InkWell(
@@ -50,7 +50,7 @@ class JualKos extends StatelessWidget {
           children: [
             Container(
               decoration: const BoxDecoration(
-                color:  Color.fromRGBO(67, 104, 80, 1),
+                color:  Color.fromRGBO(173,188,159, 1),
               ),
               padding: const EdgeInsets.all(20.0),
               child: Row(
@@ -183,7 +183,7 @@ class JualKos extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.8,
                   height: 60,
                   decoration: BoxDecoration(
-                    color: const Color.fromRGBO(67, 104, 80, 1),
+                    color: const Color.fromRGBO(173,188,159, 1),
                     borderRadius: BorderRadius.circular(40),
                   ),
                   child: Row(
