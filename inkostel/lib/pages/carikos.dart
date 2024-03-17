@@ -170,39 +170,6 @@ class CariKos extends StatelessWidget {
             ),
           ],
         ),
-        bottomNavigationBar: BottomAppBar(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              IconButton(
-                icon: Icon(Icons.home,),
-                onPressed: () {
-                  // Action when home icon is pressed
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.search,
-                  ),
-                onPressed: () {
-                  // Action when search icon is pressed
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.save),
-                onPressed: () {
-                  // Action when save icon is pressed
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () {
-                  // Action when add icon is pressed
-                },
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
