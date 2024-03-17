@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const jualkos());
+  runApp(const JualKos());
 }
 
-class jualkos extends StatelessWidget {
-  const jualkos({Key? key});
+class JualKos extends StatelessWidget {
+  const JualKos({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +44,13 @@ class jualkos extends StatelessWidget {
             ],
           ),
         ),
-        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              decoration: BoxDecoration(
-                color: const Color.fromRGBO(18, 55, 42, 1),
+              decoration: const BoxDecoration(
+                color:  Color.fromRGBO(18, 55, 42, 1),
               ),
               padding: const EdgeInsets.all(20.0),
               child: Row(
@@ -112,8 +112,8 @@ class jualkos extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 20.0),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 20.0),
                           child: Column(
                             children: [
                               Text(
@@ -135,19 +135,19 @@ class jualkos extends StatelessWidget {
                           ),
                         ),
                         TextFormField(
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'Nama Kostan',
                           ),
                         ),
                         const SizedBox(height: 10),
                         TextFormField(
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'Nomor Telepon',
                           ),
                         ),
                         const SizedBox(height: 10),
                         TextFormField(
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'Alamat',
                           ),
                         ),
@@ -157,14 +157,14 @@ class jualkos extends StatelessWidget {
                           onPressed: () {
                             // Action when image upload button is pressed
                           },
-                          child: Text('Upload Foto Kostan'),
+                          child: const Text('Upload Foto Kostan'),
                         ),
                         const SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {
                             // Action when submit button is pressed
                           },
-                          child: Text('Submit'),
+                          child: const Text('Submit'),
                         ),
                       ],
                     ),
