@@ -13,8 +13,7 @@ class CariKos extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromRGBO(173,188,159, 1),
-
+          backgroundColor: const Color.fromRGBO(173, 188, 159, 1),
           title: Row(
             children: [
               InkWell(
@@ -45,8 +44,7 @@ class CariKos extends StatelessWidget {
             ],
           ),
         ),
-
-        backgroundColor: const Color.fromRGBO(173,188,159, 1),
+        backgroundColor: const Color.fromRGBO(173, 188, 159, 1),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -63,11 +61,11 @@ class CariKos extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {
-                // Action when search icon is pressed
-              },
-            ),
+                    icon: const Icon(Icons.search),
+                    onPressed: () {
+                      // Action when search icon is pressed
+                    },
+                  ),
                   IconButton(
                     icon: const Icon(Icons.filter_list),
                     onPressed: () {
@@ -75,7 +73,7 @@ class CariKos extends StatelessWidget {
                     },
                   ),
                 ],
-              ), 
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -100,9 +98,9 @@ class CariKos extends StatelessWidget {
                 ),
               ],
             ),
-            
             Expanded(
-              child: Stack( // Gunakan Stack sebagai wadah
+              child: Stack(
+                // Gunakan Stack sebagai wadah
                 children: [
                   Container(
                     margin: const EdgeInsets.all(1),
@@ -122,16 +120,15 @@ class CariKos extends StatelessWidget {
                       },
                     ),
                   ),
-                  
                   Positioned(
                     left: 0,
                     right: 0,
                     bottom: 50,
                     child: Container(
-                      width: MediaQuery.of(context).size.width * 0.8, 
+                      width: MediaQuery.of(context).size.width * 0.8,
                       height: 60,
                       decoration: BoxDecoration(
-                        color: const Color.fromRGBO(67,104,80, 1),
+                        color: const Color.fromRGBO(67, 104, 80, 1),
                         borderRadius: BorderRadius.circular(40),
                       ),
                       child: Row(
@@ -169,6 +166,41 @@ class CariKos extends StatelessWidget {
               ),
             ),
           ],
+        ),
+        bottomNavigationBar: BottomAppBar(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                icon: Icon(
+                  Icons.home,
+                ),
+                onPressed: () {
+                  // Action when home icon is pressed
+                },
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.search,
+                ),
+                onPressed: () {
+                  // Action when search icon is pressed
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.save),
+                onPressed: () {
+                  // Action when save icon is pressed
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () {
+                  // Action when add icon is pressed
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
