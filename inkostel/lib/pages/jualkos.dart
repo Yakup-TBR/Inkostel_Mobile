@@ -52,104 +52,126 @@ class jualkos extends StatelessWidget {
               decoration: BoxDecoration(
                 color: const Color.fromRGBO(18, 55, 42, 1),
               ),
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(20.0),
               child: Row(
                 children: [
-                  const Expanded(
-                    flex: 3,
+                  Expanded(
+                    flex: 2,
                     child: TextField(
                       decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 1, horizontal: 10),
                         hintText: 'Cari Kos Disini..',
-                        hintStyle: TextStyle(
-                          color: Colors.white,
+                        suffixIcon: const Icon(Icons.search),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                          borderSide: const BorderSide(
+                              color: Colors.white), // Belum berubah
                         ),
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                        hintStyle:
+                            const TextStyle(color: Colors.grey, fontSize: 14.0),
                       ),
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () {
-                      // Action when search icon is pressed
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.filter_list),
-                    onPressed: () {
-                      // atur filter
-                    },
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 255, 255, 255),
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2, // Penyebaran shadow
+                            blurRadius: 3, // Blur radius shadow
+                            offset: const Offset(
+                                0, 3), // Offset shadow (horizontal, vertical)
+                          ),
+                        ],
+                      ),
+                      child: IconButton(
+                        icon: const Icon(Icons.filter_list),
+                        onPressed: () {
+                          // atur filter
+                        },
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
             Expanded(
-  child: ListView(
-    children: [
-      Container(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20.0),
-              child: Column(
+              child: ListView(
                 children: [
-                  Text(
-                    'Daftarkan kostan Anda sekarang!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'Tampilkan kostan terbaikmu dengan hadir di online.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
+                  Container(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20.0),
+                          child: Column(
+                            children: [
+                              Text(
+                                'Daftarkan kostan Anda sekarang!',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'Tampilkan kostan terbaikmu dengan hadir di online.',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(
+                            labelText: 'Nama Kostan',
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        TextFormField(
+                          decoration: InputDecoration(
+                            labelText: 'Nomor Telepon',
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        TextFormField(
+                          decoration: InputDecoration(
+                            labelText: 'Alamat',
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        // Add image upload functionality
+                        ElevatedButton(
+                          onPressed: () {
+                            // Action when image upload button is pressed
+                          },
+                          child: Text('Upload Foto Kostan'),
+                        ),
+                        const SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            // Action when submit button is pressed
+                          },
+                          child: Text('Submit'),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-            TextFormField(
-              decoration: InputDecoration(
-                labelText: 'Nama Kostan',
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              decoration: InputDecoration(
-                labelText: 'Nomor Telepon',
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              decoration: InputDecoration(
-                labelText: 'Alamat',
-              ),
-            ),
-            const SizedBox(height: 10),
-            // Add image upload functionality
-            ElevatedButton(
-              onPressed: () {
-                // Action when image upload button is pressed
-              },
-              child: Text('Upload Foto Kostan'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                // Action when submit button is pressed
-              },
-              child: Text('Submit'),
-            ),
-          ],
-        ),
-      ),
-    ],
-  ),
-),
-
             Container(
               width: MediaQuery.of(context).size.width,
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
