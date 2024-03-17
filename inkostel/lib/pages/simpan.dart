@@ -83,6 +83,15 @@ class Simpan extends StatelessWidget {
                     height: 150,
                     width: double.infinity,
                   ),
+                  Container(
+                    margin: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 255, 255, 255),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    height: 102,
+                    width: double.infinity,
+                  ),
                 ],
               ),
             ),
