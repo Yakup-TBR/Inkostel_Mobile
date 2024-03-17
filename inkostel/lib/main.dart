@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/detail.dart';
+import 'package:inkostel/pages/jualkos.dart';
+import 'package:inkostel/pages/simpan.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,6 +19,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           fontFamily: 'Schyler',
         ),
-        home: detail());
+        home: Simpan());
   }
 }
