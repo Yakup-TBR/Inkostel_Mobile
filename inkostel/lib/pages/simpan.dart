@@ -17,9 +17,7 @@ class Simpan extends StatelessWidget {
           title: Row(
             children: [
               InkWell(
-                onTap: () {
-                  // Action when the box is tapped
-                },
+                onTap: () {},
                 child: Container(
                   width: 40,
                   height: 40,
@@ -30,13 +28,10 @@ class Simpan extends StatelessWidget {
                   child: IconButton(
                     icon: const Icon(Icons.account_circle),
                     color: Colors.blue,
-                    onPressed: () {
-                      // Action when profile icon is pressed
-                    },
+                    onPressed: () {},
                   ),
                 ),
               ),
-              // Flexible untuk membuat teks "Test" bisa berubah ukuran sesuai kebutuhan AppBar
               const Flexible(
                 child: Center(
                   child: Text(
