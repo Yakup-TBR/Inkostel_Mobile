@@ -46,42 +46,89 @@ class Simpan extends StatelessWidget {
           ),
         ),
         backgroundColor: const Color.fromRGBO(173, 188, 159, 1),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 15,
+        body: Stack(
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 255, 255, 255),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    height: 150,
+                    width: double.infinity,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 255, 255, 255),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    height: 150,
+                    width: double.infinity,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 255, 255, 255),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    height: 150,
+                    width: double.infinity,
+                  ),
+                ],
               ),
-              Container(
-                margin: const EdgeInsets.all(15),
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 30,
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.8,
+                height: 60,
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 255, 255, 255),
-                  borderRadius: BorderRadius.circular(20),
+                  color: const Color.fromRGBO(67, 104, 80, 1),
+                  borderRadius: BorderRadius.circular(40),
                 ),
-                height: 150,
-                width: double.infinity,
-              ),
-              Container(
-                margin: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 255, 255, 255),
-                  borderRadius: BorderRadius.circular(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.home),
+                      onPressed: () {
+                        // Action when home icon is pressed
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.search),
+                      onPressed: () {
+                        // Action when search icon is pressed
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.save),
+                      onPressed: () {
+                        // Action when save icon is pressed
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () {
+                        // Action when add icon is pressed
+                      },
+                    ),
+                  ],
                 ),
-                height: 150,
-                width: double.infinity,
               ),
-              Container(
-                margin: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 255, 255, 255),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                height: 150,
-                width: double.infinity,
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

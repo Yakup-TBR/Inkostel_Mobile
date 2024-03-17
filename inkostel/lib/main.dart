@@ -18,6 +18,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           fontFamily: 'Schyler',
         ),
-        home: Simpan());
+        home: CariKos());
   }
 }
