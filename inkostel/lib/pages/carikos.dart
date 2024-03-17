@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(CariKos());
+  runApp(const CariKos());
 }
 
 class CariKos extends StatelessWidget {
+  const CariKos({Key? key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Home'),
@@ -32,6 +35,7 @@ class CariKos extends StatelessWidget {
             ),
           ],
         ),
+        backgroundColor: const Color.fromRGBO(173, 188, 159, 1),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -48,21 +52,25 @@ class CariKos extends StatelessWidget {
                     flex: 3,
                     child: TextField(
                       decoration: InputDecoration(
-                        hintText: 'Search...',
+                        hintText: 'Cari Kos Disini..',
                       ),
                     ),
                   ),
-                  // Icon filter di sini
                   IconButton(
                     icon: const Icon(Icons.filter_list),
                     onPressed: () {
-                      // Action when filter icon is pressed
+                      // Action when search icon is pressed
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.filter_list),
+                    onPressed: () {
+                      // atur filter
                     },
                   ),
                 ],
               ),
             ),
-            // Tiga tombol terdekat, termurah, dan rekomendasi
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
