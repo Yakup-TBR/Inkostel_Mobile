@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inkostel/pages/carikos.dart';
+import 'package:inkostel/pages/detail.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,6 +17,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           fontFamily: 'Schyler',
         ),
-        home: CariKos());
+        home: detail());
   }
 }
