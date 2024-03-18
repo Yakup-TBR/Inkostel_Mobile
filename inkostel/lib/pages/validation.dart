@@ -1,16 +1,16 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const Validation());
+  runApp( Validation());
 }
 
 class Validation extends StatelessWidget {
-  const Validation({Key? key});
-  
+   Validation({Key? key});
 
   @override
   Widget build(BuildContext context) {
+    
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -111,7 +111,7 @@ class Validation extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: ListView.builder(
-                      itemCount: 10,
+                      itemCount: 20,
                       itemBuilder: (context, index) {
                         return ListTile(
                           title: Text('Item $index'),
@@ -122,12 +122,62 @@ class Validation extends StatelessWidget {
                       },
                     ),
                   ),
+                  
+                  Align(alignment: Alignment.bottomCenter, child: _navBar())
                 ],
-              )
-            )
+              ),
+            ),
           ],
         ),
-      )
+      ),
+    );
+  }
+
+  List<IconData> navIcons = [
+    Icons.home,
+    Icons.search,
+    Icons.save,
+    Icons.add
+  ];
+
+  int selectedIndex = 0;
+
+  Widget _navBar(){
+    return Container(
+      height: 65,
+      margin: const EdgeInsets.only(
+        right: 24,
+        left: 24,
+        bottom: 24,
+      ),
+      decoration: BoxDecoration(
+        color: const Color.fromRGBO(67,104,80, 1),
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: [
+          BoxShadow(
+            color: const Color.fromARGB(255, 47, 47, 47).withAlpha(25),
+            blurRadius: 20,
+            spreadRadius: 10
+          )
+        ],
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: navIcons.map((icon) {
+          int index = navIcons.indexOf(icon);
+          bool isSeleted = selectedIndex ==index;
+          return Material(
+            child: Container(
+              decoration: const BoxDecoration(
+                  color:  Color.fromRGBO(67,104,80, 1),
+              ),  
+              child: Icon(icon,
+              color: isSeleted?Colors.blue:Colors.grey,)
+            )
+          );
+        }).toList(),
+      ),
     );
   }
 }

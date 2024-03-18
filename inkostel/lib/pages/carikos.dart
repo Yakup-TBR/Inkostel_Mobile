@@ -38,7 +38,7 @@ class CariKos extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               const Text(
-                'Validation - Admin',
+                'Hai, Supri Kowalski',
                 style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
               ),
             ],
@@ -154,7 +154,7 @@ class CariKos extends StatelessWidget {
                     right: 0,
                     bottom: 50,
                     child: Container(
-                      width: MediaQuery.of(context).size.width * 0.4,
+                      width: MediaQuery.of(context).size.width * 0.8,
                       height: 50,
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(173, 188, 159, 1),
