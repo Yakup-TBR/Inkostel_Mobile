@@ -26,14 +26,30 @@ class detail extends StatelessWidget {
                       fit: BoxFit.cover, // Sesuaikan sesuai kebutuhan Anda
                     ),
                   ),
-                  child: const Stack(
+                  child: Stack(
+                    alignment: Alignment.topLeft,
                     children: [
                       Positioned(
-                        top: 40,
-                        left: 30,
-                        child: CircleAvatar(
-                          radius: 30,
-                          backgroundImage: AssetImage('images/hapid.jpg'),
+                        top: 30,
+                        left: 20,
+                        child: GestureDetector(
+                          onTap: () {
+                            // Tambahkan fungsi untuk kembali ke halaman sebelumnya
+                          },
+                          child: Container(
+                            width:
+                                40, // Sesuaikan lebar dan tinggi sesuai dengan kebutuhan
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.25),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Icon(
+                              Icons.arrow_back,
+                              size: 30,
+                              color: Colors.black,
+                            ),
+                          ),
                         ),
                       ),
                       // Isi lainnya jika ada
@@ -73,8 +89,8 @@ class detail extends StatelessWidget {
                                     20, // Sesuaikan ukuran font sesuai kebutuhan
                                 fontWeight: FontWeight
                                     .bold, // Sesuaikan gaya tebal sesuai kebutuhan
-                                color: Colors
-                                    .black, // Sesuaikan warna teks sesuai kebutuhan
+                                color: Color.fromRGBO(67, 104, 80,
+                                    1), // Sesuaikan warna teks sesuai kebutuhan
                               ),
                             ),
                           ),
