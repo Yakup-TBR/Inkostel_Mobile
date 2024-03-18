@@ -44,7 +44,7 @@ class CariKos extends StatelessWidget {
             ],
           ),
         ),
-        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        backgroundColor: const Color.fromRGBO(173, 188, 159, 1),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -52,51 +52,30 @@ class CariKos extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 children: [
-                  Expanded(
-                    flex: 2,
+                  // Logo profile di sini
+                  const Expanded(
+                    child: Text('Logo Profile'),
+                  ),
+                  // Kolom search di sini
+                  const Expanded(
+                    flex: 3,
                     child: TextField(
                       decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 1, horizontal: 10),
                         hintText: 'Cari Kos Disini..',
-                        suffixIcon: const Icon(Icons.search),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                          borderSide: const BorderSide(
-                              color: Colors.white), // Belum berubah
-                        ),
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        hintStyle:
-                            const TextStyle(color: Colors.grey, fontSize: 14.0),
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 255, 255, 255),
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 2, // Penyebaran shadow
-                            blurRadius: 3, // Blur radius shadow
-                            offset: const Offset(
-                                0, 3), // Offset shadow (horizontal, vertical)
-                          ),
-                        ],
-                      ),
-                      child: IconButton(
-                        icon: const Icon(Icons.filter_list),
-                        onPressed: () {
-                          // atur filter
-                        },
-                      ),
-                    ),
+                  IconButton(
+                    icon: const Icon(Icons.filter_list),
+                    onPressed: () {
+                      // Action when search icon is pressed
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.filter_list),
+                    onPressed: () {
+                      // atur filter
+                    },
                   ),
                 ],
               ),
@@ -108,13 +87,13 @@ class CariKos extends StatelessWidget {
                   onPressed: () {
                     // Action when nearest button is pressed
                   },
-                  child: const Text('Terdekat'),
+                  child: const Text('Nearest'),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     // Action when cheapest button is pressed
                   },
-                  child: const Text('Termurah'),
+                  child: const Text('Cheapest'),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -199,6 +178,37 @@ class CariKos extends StatelessWidget {
               ),
             ),
           ],
+        ),
+        bottomNavigationBar: BottomAppBar(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.home),
+                onPressed: () {
+                  // Action when home icon is pressed
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () {
+                  // Action when search icon is pressed
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.save),
+                onPressed: () {
+                  // Action when save icon is pressed
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.add),
+                onPressed: () {
+                  // Action when add icon is pressed
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
