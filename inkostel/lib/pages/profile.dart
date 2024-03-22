@@ -2,24 +2,39 @@ import 'package:flutter/material.dart';
 
 class Profile extends StatelessWidget {
   const Profile({Key? key}) : super(key: key);
-  final double coverHeight = 280;
-  final double profileSize = 144;
+  final double coverHeight = 250;
+  final double profileSize = 136;
 
   @override
   Widget build(BuildContext context) {
-    final top = coverHeight - profileSize / 2;
     return Scaffold(
-      body: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.center,
-        children: [
-          buildCoverImage(),
-          Positioned(
-            top: top,
-            child: buildProfileImage(),
-          ),
+      body: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          buildTop(),
+          SizedBox(height: 20), // Spasi antara gambar profil dan konten teks
+          buildContent(),
         ],
       ),
+    );
+  }
+
+  Widget buildTop() {
+    final bottom = profileSize / 2;
+    final top = coverHeight - profileSize / 2;
+    return Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.center,
+      children: [
+        Container(
+          margin: EdgeInsets.only(bottom: bottom),
+          child: buildCoverImage(),
+        ),
+        Positioned(
+          top: top,
+          child: buildProfileImageWithShadow(),
+        ),
+      ],
     );
   }
 
@@ -33,13 +48,63 @@ class Profile extends StatelessWidget {
     ),
   );
 
-  Widget buildProfileImage() => ClipRRect( // Menggunakan ClipRRect di sini
-    borderRadius: BorderRadius.circular(16), // Atur sudut border sesuai keinginan
-    child: Image.network(
-      'https://s3-alpha-sig.figma.com/img/e5bd/2aef/17da75645f56342cadd550313e0262d4?Expires=1711929600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=RzpMf7Ze1xFaaBmOvV2CYUXMU3O7uwBwFcew~bBavyAVl9DBZCJeh~nG2L-BN0ACt6ZOddTNfwluT4i42BTH8wE4Am52y-NYxFurFfmH0TLmYb34r3eQ0CnsZRTaV-ErZYODViA0nCq2KQwbgvzmflDYGYI2DFi-rI0LKPZLWWLszxAIsFLtm1IDBw8wxlUAnjEU-wLAjwl0Fd9Up2wtaDM-siJBI0Xg9VpXrKl~282WvbWGbqM3Dz50QcL-3P6eUSjOGiHUAUuyRUlX8CtAyHSDZHVk5ljghiuaosofHjBgQJTV1vHs2YK2JB5h37f1m5kVs0IiQz4HpbQYaGcC6A__',
-      width: profileSize,
-      height: profileSize,
-      fit: BoxFit.cover,
+  Widget buildProfileImageWithShadow() => Container(
+    width: profileSize,
+    height: profileSize,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(16),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.3),
+          spreadRadius: 2,
+          blurRadius: 4,
+          offset: Offset(0, 2),
+        ),
+      ],
+    ),
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: Image.network(
+        'https://s3-alpha-sig.figma.com/img/e5bd/2aef/17da75645f56342cadd550313e0262d4?Expires=1711929600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=RzpMf7Ze1xFaaBmOvV2CYUXMU3O7uwBwFcew~bBavyAVl9DBZCJeh~nG2L-BN0ACt6ZOddTNfwluT4i42BTH8wE4Am52y-NYxFurFfmH0TLmYb34r3eQ0CnsZRTaV-ErZYODViA0nCq2KQwbgvzmflDYGYI2DFi-rI0LKPZLWWLszxAIsFLtm1IDBw8wxlUAnjEU-wLAjwl0Fd9Up2wtaDM-siJBI0Xg9VpXrKl~282WvbWGbqM3Dz50QcL-3P6eUSjOGiHUAUuyRUlX8CtAyHSDZHVk5ljghiuaosofHjBgQJTV1vHs2YK2JB5h37f1m5kVs0IiQz4HpbQYaGcC6A__',
+        width: profileSize,
+        height: profileSize,
+        fit: BoxFit.cover,
+      ),
     ),
   );
+
+  Widget buildContent() {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      
+      children: [
+        Text(
+          'Supri Basuki', // Ganti dengan nama pengguna
+          style: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.bold, // Mengatur teks menjadi tebal (bold)
+            color: Color(0xFF436850), // Mengatur warna teks menjadi #436850
+          ),
+        ),
+        // SizedBox(height: 10),
+        // Text(
+        //   'UI/UX Designer', // Ganti dengan pekerjaan atau deskripsi singkat
+        //   style: TextStyle(
+        //     fontSize: 16,
+        //     color: Colors.grey,
+        //   ),
+        // ),
+        // SizedBox(height: 10),
+        // Text(
+        //   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+        //   textAlign: TextAlign.center,
+        //   style: TextStyle(
+        //     fontSize: 16,
+        //   ),
+        // ),
+      ],
+    );
+  }
+
+
 }
