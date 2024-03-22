@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inkostel/pages/tes.dart';
 import 'package:inkostel/pages/login.dart';
 import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/detail.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: 'Schyler',
-        ),
-        home: Simpan());
+        ),  
+        home:  Tes());
   }
 }
