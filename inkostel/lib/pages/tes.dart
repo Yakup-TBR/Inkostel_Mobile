@@ -145,16 +145,58 @@ class Tes extends StatelessWidget {
                 const Row()
               ],
             ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Wrap(
+                direction: Axis.vertical,
+                spacing: 20,
+                children: <Widget>[
+                  Container(
+                    // ---------Pop up Gagal Login
+                    constraints:
+                        const BoxConstraints(minWidth: 150, maxWidth: 330),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(
+                          255, 209, 205, 205), //warna ubah aja
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                    BoxShadow(
+                      color:
+                          const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+                      spreadRadius: 0,
+                      blurRadius: 4,
+                      offset: const Offset(0, 1), // Atur posisi shadow
+                    )],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          top: 20, left: 24, right: 24, bottom: 35),
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            'lib/icons/alert.png',
+                            height: 50,
+                          ),
+                          Text('Email atau Password Salah!',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.getFont('Poppins',
+                                  fontSize: 24, fontWeight: FontWeight.w600)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    // Isi
+                    child: Text('Hitam dilarang login'),
+                  ),
+                ],
+              ),
+            )
           ]),
-          Container(// Tombol Terdekat Termurah Rekomendasi
-
-              ),
-          Container(// Isi
-
-              ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar( // Bottom NavBar
+      bottomNavigationBar: BottomNavigationBar(
+        // Bottom NavBar
         showSelectedLabels: false,
         showUnselectedLabels: false,
         backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
