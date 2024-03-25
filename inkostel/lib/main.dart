@@ -21,8 +21,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          fontFamily: 'Schyler',
+          fontFamily: 'Poppins',
         ),  
-        home:  Profile());
+        home:  const Tes());
   }
 }
