@@ -45,12 +45,9 @@ class Tes extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 20),
-                child: Text(
-                  'Hai, Supri Makmur',
-                  style: GoogleFonts.getFont('Poppins',
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold)
-                ),
+                child: Text('Hai, Supri Makmur',
+                    style: GoogleFonts.getFont('Poppins',
+                        fontSize: 18, fontWeight: FontWeight.bold)),
               ),
             ],
           ),
@@ -73,9 +70,10 @@ class Tes extends StatelessWidget {
                       ),
                       child: TextField(
                         decoration: InputDecoration(
-                          hintStyle: GoogleFonts.getFont('Poppins',
-                  fontSize: 16,
-                 ),
+                          hintStyle: GoogleFonts.getFont(
+                            'Poppins',
+                            fontSize: 16,
+                          ),
                           hintText: 'Cari Kos Disini..',
                           suffixIcon: Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -156,7 +154,7 @@ class Tes extends StatelessWidget {
               ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: BottomNavigationBar( // Bottom NavBar
         showSelectedLabels: false,
         showUnselectedLabels: false,
         backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
