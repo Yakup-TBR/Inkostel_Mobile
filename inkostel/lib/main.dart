@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:inkostel/pages/profile.dart';
-import 'package:inkostel/pages/splash.dart';
-import 'package:inkostel/pages/tes.dart';
 import 'package:inkostel/pages/login.dart';
 import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/detail.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/simpan.dart';
+import 'package:inkostel/pages/splash.dart';
 import 'package:inkostel/pages/validation.dart';
 
 void main() {
