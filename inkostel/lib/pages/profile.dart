@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:inkostel/pages/carikos.dart';
+import 'package:inkostel/pages/jualkos.dart';
+import 'package:inkostel/pages/simpan.dart';
+import 'package:inkostel/pages/tes.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
@@ -8,15 +13,121 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          buildTop(context),
-          buildBottom(),
+      body: Stack(
+        children: [
+          ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              buildTop(context),
+              buildBottom(),
+              SizedBox(height: 100), // Membuat ruang kosong di bagian bawah untuk memberi tempat pada tombol back
+            ],
+          ),
+          Positioned(
+            left: 10,
+            top: 10,
+            child: Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 234, 234, 234),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Center(
+                  child: Image.asset(
+                    'lib/icons/back.png',
+                    color: const Color.fromRGBO(100, 204, 197, 1),
+                    width: 20,
+                    height: 20,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        // Bottom NavBar
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
+        selectedItemColor: const Color.fromARGB(255, 232, 255, 240),
+        unselectedItemColor: Colors.grey,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        selectedFontSize: 14,
+        unselectedFontSize: 14,
+        onTap: (int index) {
+          // Handle bottom navigation bar item tap here
+          switch (index) {
+            case 0:
+              // Navigasi ke halaman Home
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CariKos()),
+              );
+              break;
+            case 1:
+              // Navigasi ke halaman Search
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Simpan()),
+              );
+              break;
+            case 2:
+              // Navigasi ke halaman Save
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const JualKos()),
+              );
+              break;
+            case 3:
+              // Navigasi ke halaman Add
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Tes()),
+              );
+              break;
+            default:
+          }
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'lib/icons/home.png',
+              height: 30,
+            ),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'lib/icons/simpan.png',
+              height: 30,
+            ),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'lib/icons/plus.png',
+              height: 30,
+            ),
+            label: 'Save',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'lib/icons/gear_active.png',
+              height: 30,
+            ),
+            label: 'Settings',
+          ),
         ],
       ),
     );
   }
+
 
   Widget buildTop(BuildContext context) {
     final bottom = profileSize / 2;
@@ -120,72 +231,78 @@ class Profile extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
+          Text(
             'Supri Basuki',
-            style: TextStyle(
+            style: GoogleFonts.getFont(
+              'Poppins',
               fontSize: 36,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF436850),
+              color: const Color(0xFF436850),
             ),
           ),
-          const Text(
+          Text(
             '@supribasuki',
-            style: TextStyle(
+            style: GoogleFonts.getFont(
+              'Poppins',
               fontSize: 18,
               color: Colors.grey,
             ),
           ),
-          const Text(
+          Text(
             '+62 - 8123 - 5643 - 8923',
-            style: TextStyle(
+            style: GoogleFonts.getFont(
+              'Poppins',
               fontSize: 18,
               color: Colors.grey,
             ),
           ),
-          const Text(
+          Text(
             'supribasuki@gmail.com',
-            style: TextStyle(
+            style: GoogleFonts.getFont(
+              'Poppins',
               fontSize: 18,
               color: Colors.grey,
             ),
           ),
           const SizedBox(height: 30), 
-          const Text(
+          Text(
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-            style: TextStyle(
+            style: GoogleFonts.getFont(
+              'Poppins',
               fontSize: 18,
               color: Colors.black,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 150), 
-          ElevatedButton(
-            onPressed: () {
-              // Aksi ketika tombol ditekan
-              // Misalnya, menuju halaman edit profil
-            },
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF436850)), // Warna latar belakang
-              fixedSize: MaterialStateProperty.all<Size>(
-                const Size.fromWidth(500), 
-              ),
-            ),
-            child: const SizedBox(
-              width: double.infinity, 
-              height: 50, 
-              child: Center(
-                child: Text(
-                  'Edit Profil',
-                  style: TextStyle(
-                    color: Colors.white, 
-                    fontWeight: FontWeight.bold, 
-                    fontSize: 25, 
-                  ),
-                ),
-              ),
-            ),
-          )
+          // const SizedBox(height: 150), 
+          // ElevatedButton(
+          //   onPressed: () {
+          //     // Aksi ketika tombol ditekan
+          //     // Misalnya, menuju halaman edit profil
+          //   },
+          //   style: ButtonStyle(
+          //     backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF436850)), // Warna latar belakang
+          //     fixedSize: MaterialStateProperty.all<Size>(
+          //       const Size.fromWidth(500), 
+          //     ),
+          //   ),
+          //   child: const SizedBox(
+          //     width: double.infinity, 
+          //     height: 50, 
+          //     child: Center(
+          //       child: Text(
+          //         'Edit Profil',
+          //         style: TextStyle(
+          //           color: Colors.white, 
+          //           fontWeight: FontWeight.bold, 
+          //           fontSize: 25, 
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // )
         ],
+        
       ),
     );
   }
