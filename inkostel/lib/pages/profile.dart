@@ -12,7 +12,7 @@ class Profile extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: <Widget>[
           buildTop(),
-          SizedBox(height: 20), // Spasi antara gambar profil dan konten teks
+          SizedBox(height: 20),
           buildContent(),
         ],
       ),
@@ -79,11 +79,11 @@ class Profile extends StatelessWidget {
       
       children: [
         Text(
-          'Supri Basuki', // Ganti dengan nama pengguna
+          'Supri Basuki', 
           style: TextStyle(
             fontSize: 32,
-            fontWeight: FontWeight.bold, // Mengatur teks menjadi tebal (bold)
-            color: Color(0xFF436850), // Mengatur warna teks menjadi #436850
+            fontWeight: FontWeight.bold, 
+            color: Color(0xFF436850),
           ),
         ),
         // SizedBox(height: 10),

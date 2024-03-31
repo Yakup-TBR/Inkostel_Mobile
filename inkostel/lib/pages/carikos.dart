@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:inkostel/pages/detail.dart';
+import 'detail.dart';
 
 void main() {
   runApp(const CariKos());
 }
 
-class CariKos extends StatelessWidget {
-  const CariKos({super.key});
+class CariKos extends StatefulWidget {
+  const CariKos({Key? key}) : super(key: key);
+
+  @override
+  _CariKosState createState() => _CariKosState();
+}
+
+class _CariKosState extends State<CariKos> {
+  bool isFavorite1 = false;
+  bool isFavorite2 = false;
+  bool isFavorite3 = false;
+  bool isFavorite4 = false; // State variable to track love icon color
 
   @override
   Widget build(BuildContext context) {
@@ -279,250 +291,32 @@ class CariKos extends StatelessWidget {
                           Container(
                             width: 370,
                             height: 200,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                color: Color.fromARGB(109, 134, 146, 134),
-                              ),
-                              borderRadius: BorderRadius.circular(20.0),
-                              image: DecorationImage(
-                                image: AssetImage('images/kamar.png'),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
                             child: Stack(
                               children: [
-                                Positioned(
-                                  top: 10,
-                                  right: 10,
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => detail(),
+                                      ),
+                                    );
+                                  },
                                   child: Container(
-                                    padding: EdgeInsets.all(10),
                                     decoration: BoxDecoration(
-                                      color: Colors
-                                          .white, // Mengatur warna background menjadi putih penuh
-                                      borderRadius: BorderRadius.circular(
-                                          20), // Mengatur borderRadius menjadi lebih besar untuk membuat border lonjong
+                                      color: Colors.white,
                                       border: Border.all(
-                                        color: Colors.black.withOpacity(
-                                            0.5), // Mengatur warna border
-                                        width: 1, // Mengatur lebar border
-                                      ),
-                                    ),
-                                    child: Text(
-                                      formatCurrency(8500000),
-                                      style: TextStyle(
                                         color:
-                                            Colors.black, // Mengatur warna teks
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
+                                            Color.fromARGB(109, 134, 146, 134),
+                                      ),
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      image: DecorationImage(
+                                        image: AssetImage('images/kamar.png'),
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                                   ),
                                 ),
-                                Positioned(
-                                  bottom: 35,
-                                  left: 10,
-                                  child: Container(
-                                    child: Text(
-                                      'Kost Putri Pondok Firdaus',
-                                      style: TextStyle(
-                                        color: const Color.fromARGB(
-                                            255, 255, 255, 255),
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  bottom: 10,
-                                  left: 10,
-                                  child: Container(
-                                    child: Text(
-                                      getDistanceText(900),
-                                      style: TextStyle(
-                                        color: const Color.fromARGB(
-                                            255, 255, 255, 255),
-                                        fontSize: 17,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          Container(
-                            width: 370,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                color: Color.fromARGB(109, 134, 146, 134),
-                              ),
-                              borderRadius: BorderRadius.circular(20.0),
-                              image: DecorationImage(
-                                image: AssetImage('images/kamar.png'),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                  top: 10,
-                                  right: 10,
-                                  child: Container(
-                                    padding: EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      color: Colors
-                                          .white, // Mengatur warna background menjadi putih penuh
-                                      borderRadius: BorderRadius.circular(
-                                          20), // Mengatur borderRadius menjadi lebih besar untuk membuat border lonjong
-                                      border: Border.all(
-                                        color: Colors.black.withOpacity(
-                                            0.5), // Mengatur warna border
-                                        width: 1, // Mengatur lebar border
-                                      ),
-                                    ),
-                                    child: Text(
-                                      formatCurrency(9000000),
-                                      style: TextStyle(
-                                        color:
-                                            Colors.black, // Mengatur warna teks
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  bottom: 35,
-                                  left: 10,
-                                  child: Container(
-                                    child: Text(
-                                      'Kost Putra Pondok Firdaus',
-                                      style: TextStyle(
-                                        color: const Color.fromARGB(
-                                            255, 255, 255, 255),
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  bottom: 10,
-                                  left: 10,
-                                  child: Container(
-                                    child: Text(
-                                      getDistanceText(5000),
-                                      style: TextStyle(
-                                        color: const Color.fromARGB(
-                                            255, 255, 255, 255),
-                                        fontSize: 17,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          Container(
-                            width: 370,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                color: Color.fromARGB(109, 134, 146, 134),
-                              ),
-                              borderRadius: BorderRadius.circular(20.0),
-                              image: DecorationImage(
-                                image: AssetImage('images/kamar.png'),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                  top: 10,
-                                  right: 10,
-                                  child: Container(
-                                    padding: EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      color: Colors
-                                          .white, // Mengatur warna background menjadi putih penuh
-                                      borderRadius: BorderRadius.circular(
-                                          20), // Mengatur borderRadius menjadi lebih besar untuk membuat border lonjong
-                                      border: Border.all(
-                                        color: Colors.black.withOpacity(
-                                            0.5), // Mengatur warna border
-                                        width: 1, // Mengatur lebar border
-                                      ),
-                                    ),
-                                    child: Text(
-                                      formatCurrency(7000000),
-                                      style: TextStyle(
-                                        color:
-                                            Colors.black, // Mengatur warna teks
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  bottom: 35,
-                                  left: 10,
-                                  child: Container(
-                                    child: Text(
-                                      'Kost Putri Pondok Firdaus',
-                                      style: TextStyle(
-                                        color: const Color.fromARGB(
-                                            255, 255, 255, 255),
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  bottom: 10,
-                                  left: 10,
-                                  child: Container(
-                                    child: Text(
-                                      getDistanceText(600),
-                                      style: TextStyle(
-                                        color: const Color.fromARGB(
-                                            255, 255, 255, 255),
-                                        fontSize: 17,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          Container(
-                            width: 370,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                color: Color.fromARGB(109, 134, 146, 134),
-                              ),
-                              borderRadius: BorderRadius.circular(20.0),
-                              image: DecorationImage(
-                                image: AssetImage('images/kamar.png'),
-                                colorFilter: ColorFilter.mode(
-                                    Colors.black.withOpacity(0.2),
-                                    BlendMode.darken),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            child: Stack(
-                              children: [
                                 Positioned(
                                   top: 10,
                                   right: 10,
@@ -537,7 +331,7 @@ class CariKos extends StatelessWidget {
                                       ),
                                     ),
                                     child: Text(
-                                      formatCurrency(10000000),
+                                      formatCurrency(8500000),
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
@@ -551,7 +345,7 @@ class CariKos extends StatelessWidget {
                                   left: 10,
                                   child: Container(
                                     child: Text(
-                                      'Kost Putra Pondok Firdaus',
+                                      'Kost Putri Pondok Firdaus',
                                       style: TextStyle(
                                         color: const Color.fromARGB(
                                             255, 255, 255, 255),
@@ -564,18 +358,343 @@ class CariKos extends StatelessWidget {
                                 Positioned(
                                   bottom: 10,
                                   left: 10,
-                                  child: Container(
-                                    child: Text(
-                                      getDistanceText(6500),
-                                      style: TextStyle(
-                                        color: const Color.fromARGB(
-                                            255, 255, 255, 255),
-                                        fontSize: 17,
-                                      ),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        isFavorite1 = !isFavorite1;
+                                      });
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          getDistanceText(900),
+                                          style: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontSize: 17,
+                                          ),
+                                        ),
+                                        SizedBox(width: 5),
+                                        Icon(
+                                          Icons.favorite,
+                                          color: isFavorite1
+                                              ? Colors.red
+                                              : Colors.white,
+                                          size: 30,
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
                               ],
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        detail()), // Navigasi ke halaman detail.dart
+                              );
+                            },
+                            child: Container(
+                              width: 370,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: Color.fromARGB(109, 134, 146, 134),
+                                ),
+                                borderRadius: BorderRadius.circular(20.0),
+                                image: DecorationImage(
+                                  image: AssetImage('images/kamar.png'),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    top: 10,
+                                    right: 10,
+                                    child: Container(
+                                      padding: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: Colors
+                                            .white, // Mengatur warna background menjadi putih penuh
+                                        borderRadius: BorderRadius.circular(
+                                            20), // Mengatur borderRadius menjadi lebih besar untuk membuat border lonjong
+                                        border: Border.all(
+                                          color: Colors.black.withOpacity(
+                                              0.5), // Mengatur warna border
+                                          width: 1, // Mengatur lebar border
+                                        ),
+                                      ),
+                                      child: Text(
+                                        formatCurrency(9000000),
+                                        style: TextStyle(
+                                          color: Colors
+                                              .black, // Mengatur warna teks
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 35,
+                                    left: 10,
+                                    child: Container(
+                                      child: Text(
+                                        'Kost Putra Pondok Firdaus',
+                                        style: TextStyle(
+                                          color: const Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 10,
+                                    left: 10,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          isFavorite2 = !isFavorite2;
+                                        });
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            getDistanceText(5000),
+                                            style: TextStyle(
+                                              color: const Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              fontSize: 17,
+                                            ),
+                                          ),
+                                          SizedBox(width: 5),
+                                          Icon(
+                                            Icons.favorite,
+                                            color: isFavorite2
+                                                ? Colors.red
+                                                : Colors.white,
+                                            size: 30,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        detail()), // Navigasi ke halaman detail.dart
+                              );
+                            },
+                            child: Container(
+                              width: 370,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: Color.fromARGB(109, 134, 146, 134),
+                                ),
+                                borderRadius: BorderRadius.circular(20.0),
+                                image: DecorationImage(
+                                  image: AssetImage('images/kamar.png'),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    top: 10,
+                                    right: 10,
+                                    child: Container(
+                                      padding: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: Colors
+                                            .white, // Mengatur warna background menjadi putih penuh
+                                        borderRadius: BorderRadius.circular(
+                                            20), // Mengatur borderRadius menjadi lebih besar untuk membuat border lonjong
+                                        border: Border.all(
+                                          color: Colors.black.withOpacity(
+                                              0.5), // Mengatur warna border
+                                          width: 1, // Mengatur lebar border
+                                        ),
+                                      ),
+                                      child: Text(
+                                        formatCurrency(7000000),
+                                        style: TextStyle(
+                                          color: Colors
+                                              .black, // Mengatur warna teks
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 35,
+                                    left: 10,
+                                    child: Container(
+                                      child: Text(
+                                        'Kost Putri Pondok Firdaus',
+                                        style: TextStyle(
+                                          color: const Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 10,
+                                    left: 10,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          isFavorite3 = !isFavorite3;
+                                        });
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            getDistanceText(600),
+                                            style: TextStyle(
+                                              color: const Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              fontSize: 17,
+                                            ),
+                                          ),
+                                          SizedBox(width: 5),
+                                          Icon(
+                                            Icons.favorite,
+                                            color: isFavorite3
+                                                ? Colors.red
+                                                : Colors.white,
+                                            size: 30,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        detail()), // Navigasi ke halaman detail.dart
+                              );
+                            },
+                            child: Container(
+                              width: 370,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: Color.fromARGB(109, 134, 146, 134),
+                                ),
+                                borderRadius: BorderRadius.circular(20.0),
+                                image: DecorationImage(
+                                  image: AssetImage('images/kamar.png'),
+                                  colorFilter: ColorFilter.mode(
+                                      Colors.black.withOpacity(0.2),
+                                      BlendMode.darken),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    top: 10,
+                                    right: 10,
+                                    child: Container(
+                                      padding: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
+                                          color: Colors.black.withOpacity(0.5),
+                                          width: 1,
+                                        ),
+                                      ),
+                                      child: Text(
+                                        formatCurrency(10000000),
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 35,
+                                    left: 10,
+                                    child: Container(
+                                      child: Text(
+                                        'Kost Putra Pondok Firdaus',
+                                        style: TextStyle(
+                                          color: const Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 10,
+                                    left: 10,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          isFavorite4 = !isFavorite4;
+                                        });
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            getDistanceText(6500),
+                                            style: TextStyle(
+                                              color: const Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              fontSize: 17,
+                                            ),
+                                          ),
+                                          SizedBox(width: 5),
+                                          Icon(
+                                            Icons.favorite,
+                                            color: isFavorite4
+                                                ? Colors.red
+                                                : Colors.white,
+                                            size: 30,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
