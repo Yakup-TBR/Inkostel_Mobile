@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/pages/carikos.dart';
+import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/jualkos.dart';
 
@@ -223,7 +224,7 @@ class _TesState extends State<Tes> {
               // Navigasi ke halaman Home
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const CariKos()),
+                MaterialPageRoute(builder: (context) => const Home()),
               );
               break;
             case 1:
