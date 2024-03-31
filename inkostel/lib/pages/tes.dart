@@ -1,15 +1,21 @@
-import 'package:flutter/material.dart' show AppBar, Axis, Border, BorderRadius, BorderSide, BottomNavigationBar, BottomNavigationBarItem, BottomNavigationBarType, BoxConstraints, BoxDecoration, BoxFit, BoxShadow, BuildContext, Color, Colors, Column, Container, EdgeInsets, Expanded, FontWeight, Image, InputDecoration, MaterialApp, MaterialPageRoute, Navigator, Offset, OutlineInputBorder, Padding, Radius, Row, Scaffold, Stack, StatelessWidget, Text, TextAlign, TextField, Widget, Wrap, runApp;
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/pages/carikos.dart';
-import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/simpan.dart';
+import 'package:inkostel/pages/jualkos.dart';
 
 void main() {
   runApp(const Tes());
 }
 
-class Tes extends StatelessWidget {
+class Tes extends StatefulWidget {
   const Tes({super.key});
+
+  @override
+  State<Tes> createState() => _TesState();
+}
+
+class _TesState extends State<Tes> {
 
   @override
   Widget build(BuildContext context) {
@@ -163,13 +169,14 @@ class Tes extends StatelessWidget {
                           255, 209, 205, 205), //warna ubah aja
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: [
-                    BoxShadow(
-                      color:
-                          const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
-                      spreadRadius: 0,
-                      blurRadius: 4,
-                      offset: const Offset(0, 1), // Atur posisi shadow
-                    )],
+                        BoxShadow(
+                          color: const Color.fromARGB(255, 0, 0, 0)
+                              .withOpacity(0.5),
+                          spreadRadius: 0,
+                          blurRadius: 4,
+                          offset: const Offset(0, 1), // Atur posisi shadow
+                        )
+                      ],
                     ),
                     child: Padding(
                       padding: const EdgeInsets.only(
@@ -191,8 +198,7 @@ class Tes extends StatelessWidget {
                   Container(
                     // Isi
                     decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 230, 71, 71)
-                    ),
+                        color: Color.fromARGB(255, 230, 71, 71)),
                     child: const Text('Hitam dilarang login'),
                   ),
                 ],
@@ -203,15 +209,50 @@ class Tes extends StatelessWidget {
       ),
       bottomNavigationBar: BottomNavigationBar(
         // Bottom NavBar
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
+        type: BottomNavigationBarType.fixed,
         backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
         selectedItemColor: const Color.fromARGB(255, 232, 255, 240),
         unselectedItemColor: Colors.grey,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         selectedFontSize: 14,
         unselectedFontSize: 14,
-        type: BottomNavigationBarType.fixed,
-        items: <BottomNavigationBarItem>[
+        onTap: (int index) {
+  // Handle bottom navigation bar item tap here
+  switch (index) {
+    case 0:
+      // Navigasi ke halaman Home
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const CariKos()),
+      );
+      break;
+    case 1:
+      // Navigasi ke halaman Search
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const Simpan()),
+      );
+      break;
+    case 2:
+      // Navigasi ke halaman Save
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const JualKos()),
+      );
+      break;
+    case 3:
+      // Navigasi ke halaman Add
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const Tes()),
+      );
+      break;
+    default:
+  }
+},
+
+        items: [
           BottomNavigationBarItem(
             icon: Image.asset(
               'lib/icons/home.png',
@@ -221,62 +262,27 @@ class Tes extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: Image.asset(
-              'lib/icons/search.png',
-              color: const Color.fromARGB(159, 252, 252, 252),
+              'lib/icons/simpan.png',
               height: 30,
             ),
             label: 'Search',
           ),
           BottomNavigationBarItem(
             icon: Image.asset(
-              'lib/icons/simpan.png',
+              'lib/icons/plus.png',
               height: 30,
             ),
             label: 'Save',
           ),
           BottomNavigationBarItem(
             icon: Image.asset(
-              'lib/icons/plus.png',
+              'lib/icons/gear_active.png',
               height: 30,
             ),
-            label: 'Add',
+            label: 'Settings',
           ),
         ],
-        onTap: (int index) {
-  // Handle bottom navigation bar item tap here
-  switch (index) {
-    case 0:
-      // Navigasi ke halaman Home
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CariKos()),
-      );
-      break;
-    case 1:
-      // Navigasi ke halaman Search
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Simpan()),
-      );
-      break;
-    case 2:
-      // Navigasi ke halaman Save
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => JualKos()),
-      );
-      break;
-    case 3:
-      // Navigasi ke halaman Add
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Tes()),
-      );
-      break;
-    default:
-  }
-},
-
+        
       ),
     ));
   }
