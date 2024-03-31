@@ -4,6 +4,7 @@ import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/tes.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
@@ -179,6 +180,30 @@ class Profile extends StatelessWidget {
                 child: Image.asset(
                   'lib/icons/back.png',
                   color: const Color.fromRGBO(100, 204, 197, 1),
+                  width: 20,
+                  height: 20,
+                ),
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          right: 10,
+          top: 10,
+          child: Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Center(
+                child: SvgPicture.asset(
+                  "lib/icons/pen.svg",
                   width: 20,
                   height: 20,
                 ),
