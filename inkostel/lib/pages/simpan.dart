@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:inkostel/pages/carikos.dart';
+import 'package:inkostel/pages/jualkos.dart';
 
 void main() {
   runApp(Simpan());
@@ -25,7 +27,7 @@ class _SimpanState extends State<Simpan> {
         backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
         appBar: AppBar(
           backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
-          toolbarHeight: 90,
+          toolbarHeight: 65,
           title: Padding(
             padding: const EdgeInsets.only(left: 15),
             child: Row(
@@ -110,7 +112,69 @@ class _SimpanState extends State<Simpan> {
             ),
           ],
         ),
-        bottomNavigationBar: _buildBottomNavigationBar(),
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
+          selectedItemColor: const Color.fromARGB(255, 232, 255, 240),
+          unselectedItemColor: Colors.grey,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          selectedFontSize: 14,
+          unselectedFontSize: 14,
+          onTap: (int index) {
+            switch (index) {
+              case 0:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CariKos()),
+                );
+                break;
+              case 1:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Simpan()),
+                );
+                break;
+              case 2:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const JualKos()),
+                );
+                break;
+              default:
+            }
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'lib/icons/home.png',
+                height: 30,
+              ),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'lib/icons/simpan_active.png',
+                height: 30,
+              ),
+              label: 'Search',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'lib/icons/plus.png',
+                height: 30,
+              ),
+              label: 'Save',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'lib/icons/gear.png',
+                height: 30,
+              ),
+              label: 'Settings',
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -273,54 +337,6 @@ class _SimpanState extends State<Simpan> {
           const SizedBox(height: 2),
         ],
       ),
-    );
-  }
-
-  Widget _buildBottomNavigationBar() {
-    return BottomNavigationBar(
-      showSelectedLabels: false,
-      showUnselectedLabels: false,
-      backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
-      selectedItemColor: const Color.fromARGB(255, 232, 255, 240),
-      unselectedItemColor: Colors.grey,
-      selectedFontSize: 14,
-      unselectedFontSize: 14,
-      type: BottomNavigationBarType.fixed,
-      items: <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Image.asset(
-            'lib/icons/home.png',
-            height: 30,
-          ),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Image.asset(
-            'lib/icons/search.png',
-            color: const Color.fromARGB(159, 252, 252, 252),
-            height: 30,
-          ),
-          label: 'Search',
-        ),
-        BottomNavigationBarItem(
-          icon: Image.asset(
-            'lib/icons/simpan.png',
-            height: 30,
-          ),
-          label: 'Save',
-        ),
-        BottomNavigationBarItem(
-          icon: Image.asset(
-            'lib/icons/plus.png',
-            height: 30,
-          ),
-          label: 'Add',
-        ),
-      ],
-      onTap: (int index) {
-        // Handle bottom navigation bar item tap here
-        // You can navigate to different screens or perform any other actions
-      },
     );
   }
 
