@@ -2,11 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
-  runApp(const Simpan());
+  runApp(Simpan());
 }
 
-class Simpan extends StatelessWidget {
-  const Simpan({super.key});
+class Simpan extends StatefulWidget {
+  const Simpan({Key? key}) : super(key: key);
+
+  @override
+  _SimpanState createState() => _SimpanState();
+}
+
+class _SimpanState extends State<Simpan> {
+  bool isFavorite1 = false;
+  bool isFavorite2 = false;
+  bool isFavorite3 = false;
+  bool isFavorite4 = false;
 
   @override
   Widget build(BuildContext context) {
@@ -49,24 +59,48 @@ class Simpan extends StatelessWidget {
                           price: 8500000,
                           name: 'Kost Putri Pondok Firdaus',
                           distance: 900,
+                          isFavorite: isFavorite1,
+                          onTap: () {
+                            setState(() {
+                              isFavorite1 = !isFavorite1;
+                            });
+                          },
                         ),
                         _buildListItem(
                           imagePath: 'images/kamar.png',
                           price: 9000000,
                           name: 'Kost Putra Pondok Firdaus',
                           distance: 5000,
+                          isFavorite: isFavorite2,
+                          onTap: () {
+                            setState(() {
+                              isFavorite2 = !isFavorite2;
+                            });
+                          },
                         ),
                         _buildListItem(
                           imagePath: 'images/kamar.png',
                           price: 7000000,
                           name: 'Kost Putri Pondok Firdaus',
                           distance: 600,
+                          isFavorite: isFavorite3,
+                          onTap: () {
+                            setState(() {
+                              isFavorite3 = !isFavorite3;
+                            });
+                          },
                         ),
                         _buildListItem(
                           imagePath: 'images/kamar.png',
                           price: 10000000,
                           name: 'Kost Putra Pondok Firdaus',
                           distance: 6500,
+                          isFavorite: isFavorite4,
+                          onTap: () {
+                            setState(() {
+                              isFavorite4 = !isFavorite4;
+                            });
+                          },
                         ),
                       ],
                     ),
@@ -145,6 +179,8 @@ class Simpan extends StatelessWidget {
     required int price,
     required String name,
     required int distance,
+    required bool isFavorite,
+    required VoidCallback onTap,
   }) {
     return Container(
       width: double.infinity,
@@ -210,12 +246,25 @@ class Simpan extends StatelessWidget {
                 Positioned(
                   bottom: 10,
                   left: 10,
-                  child: Text(
-                    getDistanceText(distance),
-                    style: const TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      fontSize: 17,
-                    ),
+                  child: Row(
+                    children: [
+                      Text(
+                        getDistanceText(distance),
+                        style: const TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          fontSize: 17,
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      GestureDetector(
+                        onTap: onTap,
+                        child: Icon(
+                          Icons.favorite,
+                          color: isFavorite ? Colors.red : Colors.white,
+                          size: 30,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
