@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: 'Poppins',
-        ),  
-        home:   const Tes());
+        ),
+        home: const CariKos());
   }
 }
