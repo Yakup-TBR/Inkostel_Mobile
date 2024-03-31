@@ -187,7 +187,10 @@ class Tes extends StatelessWidget {
                   ),
                   Container(
                     // Isi
-                    child: Text('Hitam dilarang login'),
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 230, 71, 71)
+                    ),
+                    child: const Text('Hitam dilarang login'),
                   ),
                 ],
               ),
