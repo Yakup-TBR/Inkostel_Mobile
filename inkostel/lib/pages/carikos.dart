@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/pages/detail.dart';
+import 'package:inkostel/pages/jualkos.dart';
+import 'package:inkostel/pages/simpan.dart';
+import 'package:inkostel/pages/tes.dart';
 import 'detail.dart';
 
 void main() {
@@ -375,12 +378,13 @@ class _CariKosState extends State<CariKos> {
                                           ),
                                         ),
                                         SizedBox(width: 5),
-                                        Icon(
-                                          Icons.favorite,
+                                        Image.asset(
+                                          'lib/icons/simpan_active.png',
                                           color: isFavorite1
-                                              ? Colors.red
+                                              ? Color.fromRGBO(100, 204, 197, 1)
                                               : Colors.white,
-                                          size: 30,
+                                          width: 30,
+                                          height: 30,
                                         ),
                                       ],
                                     ),
@@ -477,12 +481,14 @@ class _CariKosState extends State<CariKos> {
                                             ),
                                           ),
                                           SizedBox(width: 5),
-                                          Icon(
-                                            Icons.favorite,
+                                          Image.asset(
+                                            'lib/icons/simpan_active.png',
                                             color: isFavorite2
-                                                ? Colors.red
+                                                ? Color.fromRGBO(
+                                                    100, 204, 197, 1)
                                                 : Colors.white,
-                                            size: 30,
+                                            width: 30,
+                                            height: 30,
                                           ),
                                         ],
                                       ),
@@ -580,12 +586,14 @@ class _CariKosState extends State<CariKos> {
                                             ),
                                           ),
                                           SizedBox(width: 5),
-                                          Icon(
-                                            Icons.favorite,
+                                          Image.asset(
+                                            'lib/icons/simpan_active.png',
                                             color: isFavorite3
-                                                ? Colors.red
+                                                ? Color.fromRGBO(
+                                                    100, 204, 197, 1)
                                                 : Colors.white,
-                                            size: 30,
+                                            width: 30,
+                                            height: 30,
                                           ),
                                         ],
                                       ),
@@ -682,12 +690,14 @@ class _CariKosState extends State<CariKos> {
                                             ),
                                           ),
                                           SizedBox(width: 5),
-                                          Icon(
-                                            Icons.favorite,
+                                          Image.asset(
+                                            'lib/icons/simpan_active.png',
                                             color: isFavorite4
-                                                ? Colors.red
+                                                ? Color.fromRGBO(
+                                                    100, 204, 197, 1)
                                                 : Colors.white,
-                                            size: 30,
+                                            width: 30,
+                                            height: 30,
                                           ),
                                         ],
                                       ),
@@ -709,15 +719,50 @@ class _CariKosState extends State<CariKos> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         // Bottom NavBar
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
+        type: BottomNavigationBarType.fixed,
         backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
         selectedItemColor: const Color.fromARGB(255, 232, 255, 240),
         unselectedItemColor: Colors.grey,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         selectedFontSize: 14,
         unselectedFontSize: 14,
-        type: BottomNavigationBarType.fixed,
-        items: <BottomNavigationBarItem>[
+        onTap: (int index) {
+          // Handle bottom navigation bar item tap here
+          switch (index) {
+            case 0:
+              // Navigasi ke halaman Home
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CariKos()),
+              );
+              break;
+            case 1:
+              // Navigasi ke halaman Search
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Simpan()),
+              );
+              break;
+            case 2:
+              // Navigasi ke halaman Save
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const JualKos()),
+              );
+              break;
+            case 3:
+              // Navigasi ke halaman Add
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Tes()),
+              );
+              break;
+            default:
+          }
+        },
+
+        items: [
           BottomNavigationBarItem(
             icon: Image.asset(
               'lib/icons/home.png',
@@ -727,31 +772,26 @@ class _CariKosState extends State<CariKos> {
           ),
           BottomNavigationBarItem(
             icon: Image.asset(
-              'lib/icons/search.png',
-              color: const Color.fromARGB(159, 252, 252, 252),
+              'lib/icons/simpan.png',
               height: 30,
             ),
             label: 'Search',
           ),
           BottomNavigationBarItem(
             icon: Image.asset(
-              'lib/icons/simpan.png',
+              'lib/icons/plus.png',
               height: 30,
             ),
             label: 'Save',
           ),
           BottomNavigationBarItem(
             icon: Image.asset(
-              'lib/icons/plus.png',
+              'lib/icons/gear_active.png',
               height: 30,
             ),
-            label: 'Add',
+            label: 'Settings',
           ),
         ],
-        onTap: (int index) {
-          // Handle bottom navigation bar item tap here
-          // You can navigate to different screens or perform any other actions
-        },
       ),
     ));
   }
