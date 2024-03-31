@@ -23,12 +23,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,  
         theme: ThemeData(
           fontFamily: 'Poppins',
-<<<<<<< Updated upstream
         ),
-        home: const Profile());
-=======
-        ),  
-        home:   const Home());
->>>>>>> Stashed changes
+        home: const Home());
   }
 }

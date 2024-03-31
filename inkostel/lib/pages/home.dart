@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/simpan.dart';
@@ -17,6 +19,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
         appBar: AppBar(
           // ----------Appbar
@@ -270,20 +273,157 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
-              // ----- End Filter
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              // ---------- End Filter, Start Isi
+              Expanded(
+  child: SingleChildScrollView(
+    child: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Rekomendasi',
+                  style: GoogleFonts.getFont(
+                    'Poppins',
+                    fontSize: 25,
+                    fontWeight: FontWeight.w600,
+                  )),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CariKos()),
+                  );
+                },
+                child: Text(
+                  'See All',
+                  style: GoogleFonts.getFont(
+                    'Poppins',
+                    color: const Color.fromRGBO(100, 204, 197, 1),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 18, top: 8),
+          child: Container(
+              height: 260,
+              color: const Color.fromRGBO(254, 251, 246, 1),
+              child: ListView(
+                scrollDirection: Axis.horizontal,
                 children: [
-                  Text('Rekomendasi',
-                      textAlign: TextAlign.start,
-                      style: GoogleFonts.getFont(
-                        'Poppins',
-                        fontSize: 25,
-                        fontWeight: FontWeight.w600,
-                      )),
-                  
+                  buildCard(),
+                  buildCard(),
+                  buildCard(),
+                  buildCard(),
                 ],
-              )
+              )),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Terdekat',
+                  style: GoogleFonts.getFont(
+                    'Poppins',
+                    fontSize: 25,
+                    fontWeight: FontWeight.w600,
+                  )),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CariKos()),
+                  );
+                },
+                child: Text(
+                  'See All',
+                  style: GoogleFonts.getFont(
+                    'Poppins',
+                    color: const Color.fromRGBO(100, 204, 197, 1),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 18, top: 8),
+          child: Container(
+              height: 260,
+              color: const Color.fromRGBO(254, 251, 246, 1),
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  buildCard(),
+                  buildCard(),
+                  buildCard(),
+                  buildCard(),
+                ],
+              )),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Termurah',
+                  style: GoogleFonts.getFont(
+                    'Poppins',
+                    fontSize: 25,
+                    fontWeight: FontWeight.w600,
+                  )),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CariKos()),
+                  );
+                },
+                child: Text(
+                  'See All',
+                  style: GoogleFonts.getFont(
+                    'Poppins',
+                    color: const Color.fromRGBO(100, 204, 197, 1),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 18, top: 8),
+          child: Container(
+              height: 260,
+              color: const Color.fromRGBO(254, 251, 246, 1),
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  buildCard(),
+                  buildCard(),
+                  buildCard(),
+                  buildCard(),
+                ],
+              )),
+        ),
+      ],
+    ),
+  ),
+),
+
             ]),
           ],
         ),
@@ -304,7 +444,7 @@ class _HomeState extends State<Home> {
                 // Navigasi ke halaman Home
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const CariKos()),
+                  MaterialPageRoute(builder: (context) => const Home()),
                 );
                 break;
               case 1:
@@ -365,4 +505,100 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
+  Widget buildCard() => Padding(
+        padding: const EdgeInsets.only(left: 10, right: 10),
+        child: Container(
+            // Widget Card Kos
+            width: 230,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                color: const Color.fromARGB(109, 134, 146, 134),
+              ),
+              borderRadius: BorderRadius.circular(20.0),
+              image: DecorationImage(
+                image: const AssetImage('images/kamar.png'),
+                colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.2), BlendMode.darken),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Colors.black.withOpacity(0.5),
+                          width: 0,
+                        ),
+                      ),
+                      child: RichText(
+                        text: const TextSpan(
+                          children: [
+                            TextSpan(
+                              text: '1 Juta /',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            TextSpan(
+                              text: ' Bln',
+                              style: TextStyle(
+                                color: Colors
+                                    .grey, // Atur warna yang diinginkan untuk bagian "Juta / Bln"
+                                fontSize: 15,
+                                fontWeight: FontWeight
+                                    .normal, // Jika diperlukan, ubah berat font sesuai kebutuhan
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 15, bottom: 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "Kos Mak Cik",
+                          style: GoogleFonts.getFont(
+                            'Poppins',
+                            fontSize: 25,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Text(
+                          "Sukapura, DeyeuhKolot",
+                          style: GoogleFonts.getFont(
+                            'Poppins',
+                            fontSize: 13,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            )),
+      );
 }

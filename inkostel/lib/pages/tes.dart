@@ -20,6 +20,7 @@ class _TesState extends State<Tes> {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
       appBar: AppBar(
         // ----------Appbar
@@ -199,7 +200,6 @@ class _TesState extends State<Tes> {
                     decoration: const BoxDecoration(
                         color: Color.fromARGB(255, 230, 71, 71)),
                   ),
-                  
                 ],
               ),
             )
