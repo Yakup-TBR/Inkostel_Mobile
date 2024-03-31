@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/login.dart';
 import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/detail.dart';
@@ -19,10 +20,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,  
         theme: ThemeData(
           fontFamily: 'Poppins',
+<<<<<<< Updated upstream
         ),
         home: const Profile());
+=======
+        ),  
+        home:   const Home());
+>>>>>>> Stashed changes
   }
 }
