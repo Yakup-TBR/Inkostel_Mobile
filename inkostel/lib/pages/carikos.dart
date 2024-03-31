@@ -830,7 +830,7 @@ class _CariKosState extends State<CariKos> {
         items: [
           BottomNavigationBarItem(
             icon: Image.asset(
-              'lib/icons/home.png',
+              'lib/icons/home_active.png',
               height: 30,
             ),
             label: 'Home',
@@ -851,7 +851,7 @@ class _CariKosState extends State<CariKos> {
           ),
           BottomNavigationBarItem(
             icon: Image.asset(
-              'lib/icons/gear_active.png',
+              'lib/icons/gear.png',
               height: 30,
             ),
             label: 'Settings',

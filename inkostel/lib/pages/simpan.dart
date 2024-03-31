@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/pages/carikos.dart';
+import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/jualkos.dart';
 
 void main() {
@@ -126,7 +127,7 @@ class _SimpanState extends State<Simpan> {
               case 0:
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const CariKos()),
+                  MaterialPageRoute(builder: (context) => const Home()),
                 );
                 break;
               case 1:

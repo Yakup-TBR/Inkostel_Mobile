@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:inkostel/pages/home.dart';
+import 'package:inkostel/pages/simpan.dart';
+import 'package:inkostel/pages/tes.dart';
 
 void main() {
   runApp(const JualKos());
@@ -239,14 +242,14 @@ class _JualKosState extends State<JualKos> {
                 // Navigasi ke halaman Home
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const JualKos()),
+                  MaterialPageRoute(builder: (context) => const Home()),
                 );
                 break;
               case 1:
                 // Navigasi ke halaman Search
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const JualKos()),
+                  MaterialPageRoute(builder: (context) => const Simpan()),
                 );
                 break;
               case 2:
@@ -260,7 +263,7 @@ class _JualKosState extends State<JualKos> {
                 // Navigasi ke halaman Add
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const JualKos()),
+                  MaterialPageRoute(builder: (context) => const Tes()),
                 );
                 break;
               default:
@@ -283,14 +286,14 @@ class _JualKosState extends State<JualKos> {
             ),
             BottomNavigationBarItem(
               icon: Image.asset(
-                'lib/icons/plus.png',
+                'lib/icons/plus_active.png',
                 height: 30,
               ),
               label: 'Save',
             ),
             BottomNavigationBarItem(
               icon: Image.asset(
-                'lib/icons/gear_active.png',
+                'lib/icons/gear.png',
                 height: 30,
               ),
               label: 'Settings',
