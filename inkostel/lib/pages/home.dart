@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/simpan.dart';
@@ -275,155 +273,162 @@ class _HomeState extends State<Home> {
               ),
               // ---------- End Filter, Start Isi
               Expanded(
-  child: SingleChildScrollView(
-    child: Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Rekomendasi',
-                  style: GoogleFonts.getFont(
-                    'Poppins',
-                    fontSize: 25,
-                    fontWeight: FontWeight.w600,
-                  )),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CariKos()),
-                  );
-                },
-                child: Text(
-                  'See All',
-                  style: GoogleFonts.getFont(
-                    'Poppins',
-                    color: const Color.fromRGBO(100, 204, 197, 1),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: 10, left: 25, right: 25),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Rekomendasi',
+                                style: GoogleFonts.getFont(
+                                  'Poppins',
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w600,
+                                )),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const CariKos()),
+                                );
+                              },
+                              child: Text(
+                                'See All',
+                                style: GoogleFonts.getFont(
+                                  'Poppins',
+                                  color: const Color.fromRGBO(100, 204, 197, 1),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15, top: 8),
+                        child: Container(
+                            height: 260,
+                            color: const Color.fromRGBO(254, 251, 246, 1),
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                buildCard(),
+                                buildCard(),
+                                buildCard(),
+                                buildCard(),
+                              ],
+                            )),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: 10, left: 25, right: 25),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Terdekat',
+                                style: GoogleFonts.getFont(
+                                  'Poppins',
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w600,
+                                )),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const CariKos()),
+                                );
+                              },
+                              child: Text(
+                                'See All',
+                                style: GoogleFonts.getFont(
+                                  'Poppins',
+                                  color: const Color.fromRGBO(100, 204, 197, 1),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15, top: 8),
+                        child: Container(
+                            height: 260,
+                            color: const Color.fromRGBO(254, 251, 246, 1),
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                buildCard(),
+                                buildCard(),
+                                buildCard(),
+                                buildCard(),
+                              ],
+                            )),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: 10, left: 25, right: 25),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Termurah',
+                                style: GoogleFonts.getFont(
+                                  'Poppins',
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w600,
+                                )),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const CariKos()),
+                                );
+                              },
+                              child: Text(
+                                'See All',
+                                style: GoogleFonts.getFont(
+                                  'Poppins',
+                                  color: const Color.fromRGBO(100, 204, 197, 1),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15, top: 8),
+                        child: Container(
+                            height: 260,
+                            color: const Color.fromRGBO(254, 251, 246, 1),
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                buildCard(),
+                                buildCard(),
+                                buildCard(),
+                                buildCard(),
+                              ],
+                            )),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(
+                          bottom: 10,
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 18, top: 8),
-          child: Container(
-              height: 260,
-              color: const Color.fromRGBO(254, 251, 246, 1),
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  buildCard(),
-                  buildCard(),
-                  buildCard(),
-                  buildCard(),
-                ],
-              )),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Terdekat',
-                  style: GoogleFonts.getFont(
-                    'Poppins',
-                    fontSize: 25,
-                    fontWeight: FontWeight.w600,
-                  )),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CariKos()),
-                  );
-                },
-                child: Text(
-                  'See All',
-                  style: GoogleFonts.getFont(
-                    'Poppins',
-                    color: const Color.fromRGBO(100, 204, 197, 1),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 18, top: 8),
-          child: Container(
-              height: 260,
-              color: const Color.fromRGBO(254, 251, 246, 1),
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  buildCard(),
-                  buildCard(),
-                  buildCard(),
-                  buildCard(),
-                ],
-              )),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Termurah',
-                  style: GoogleFonts.getFont(
-                    'Poppins',
-                    fontSize: 25,
-                    fontWeight: FontWeight.w600,
-                  )),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CariKos()),
-                  );
-                },
-                child: Text(
-                  'See All',
-                  style: GoogleFonts.getFont(
-                    'Poppins',
-                    color: const Color.fromRGBO(100, 204, 197, 1),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 18, top: 8),
-          child: Container(
-              height: 260,
-              color: const Color.fromRGBO(254, 251, 246, 1),
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  buildCard(),
-                  buildCard(),
-                  buildCard(),
-                  buildCard(),
-                ],
-              )),
-        ),
-      ],
-    ),
-  ),
-),
-
             ]),
           ],
         ),
