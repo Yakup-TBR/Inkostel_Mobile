@@ -1,5 +1,8 @@
-import 'package:flutter/material.dart' show AppBar, Axis, Border, BorderRadius, BorderSide, BottomNavigationBar, BottomNavigationBarItem, BottomNavigationBarType, BoxConstraints, BoxDecoration, BoxFit, BoxShadow, BuildContext, Color, Colors, Column, Container, EdgeInsets, Expanded, FontWeight, Image, InputDecoration, MaterialApp, Offset, OutlineInputBorder, Padding, Radius, Row, Scaffold, Stack, StatelessWidget, Text, TextAlign, TextField, Widget, Wrap, runApp;
+import 'package:flutter/material.dart' show AppBar, Axis, Border, BorderRadius, BorderSide, BottomNavigationBar, BottomNavigationBarItem, BottomNavigationBarType, BoxConstraints, BoxDecoration, BoxFit, BoxShadow, BuildContext, Color, Colors, Column, Container, EdgeInsets, Expanded, FontWeight, Image, InputDecoration, MaterialApp, MaterialPageRoute, Navigator, Offset, OutlineInputBorder, Padding, Radius, Row, Scaffold, Stack, StatelessWidget, Text, TextAlign, TextField, Widget, Wrap, runApp;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:inkostel/pages/carikos.dart';
+import 'package:inkostel/pages/jualkos.dart';
+import 'package:inkostel/pages/simpan.dart';
 
 void main() {
   runApp(const Tes());
@@ -240,9 +243,40 @@ class Tes extends StatelessWidget {
           ),
         ],
         onTap: (int index) {
-          // Handle bottom navigation bar item tap here
-          // You can navigate to different screens or perform any other actions
-        },
+  // Handle bottom navigation bar item tap here
+  switch (index) {
+    case 0:
+      // Navigasi ke halaman Home
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CariKos()),
+      );
+      break;
+    case 1:
+      // Navigasi ke halaman Search
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Simpan()),
+      );
+      break;
+    case 2:
+      // Navigasi ke halaman Save
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => JualKos()),
+      );
+      break;
+    case 3:
+      // Navigasi ke halaman Add
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Tes()),
+      );
+      break;
+    default:
+  }
+},
+
       ),
     ));
   }
