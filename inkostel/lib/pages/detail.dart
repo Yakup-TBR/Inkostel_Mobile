@@ -1,22 +1,31 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:inkostel/pages/carikos.dart';
+import 'package:inkostel/pages/jualkos.dart';
+import 'package:inkostel/pages/simpan.dart';
+import 'package:inkostel/pages/tes.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 void main() {
   runApp(detail());
 }
 
-class detail extends StatelessWidget {
+class detail extends StatefulWidget {
+  @override
+  _detailState createState() => _detailState();
+}
+
+class _detailState extends State<detail> {
+  bool isSimpanPressed = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SizedBox(
-            width: constraints
-                .maxWidth, // Menggunakan maxWidth untuk membuat lebar responsif
+            width: constraints.maxWidth,
             child: Stack(
               children: [
                 Positioned(
@@ -43,7 +52,6 @@ class detail extends StatelessWidget {
                           'images/kamar.png',
                           'images/hapid.jpg',
                           'images/contoh.jpg',
-                          // Tambahkan gambar-gambar lainnya di sini
                         ].map((i) {
                           return Builder(
                             builder: (BuildContext context) {
@@ -67,11 +75,15 @@ class detail extends StatelessWidget {
                         left: 20,
                         child: GestureDetector(
                           onTap: () {
-                            // Tambahkan fungsi untuk kembali ke halaman sebelumnya
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const CariKos()),
+                            );
                           },
                           child: Container(
-                            width: 40,
-                            height: 40,
+                            width: 30,
+                            height: 30,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(10),
@@ -86,27 +98,35 @@ class detail extends StatelessWidget {
                       ),
                       Positioned(
                         top: 30,
-                        right: 20, // Mengatur posisi untuk tombol Simpan
+                        right: 20,
                         child: GestureDetector(
-                          onTap: () {
-                            // Tambahkan fungsi untuk menyimpan
+                          onTap: () {},
+                          onTapDown: (details) {
+                            setState(() {
+                              isSimpanPressed = !isSimpanPressed;
+                            });
+                          },
+                          onTapCancel: () {
+                            setState(() {
+                              isSimpanPressed = !isSimpanPressed;
+                            });
                           },
                           child: Container(
-                            width: 40,
-                            height: 40,
+                            width: 30,
+                            height: 30,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: const Icon(
-                              Icons.data_saver_on,
-                              size: 30,
-                              color: Color.fromRGBO(128, 128, 128, 1),
+                            child: Image.asset(
+                              'lib/icons/simpan.png',
+                              color: isSimpanPressed
+                                  ? Colors.blue
+                                  : Color.fromRGBO(128, 128, 128, 1),
                             ),
                           ),
                         ),
                       ),
-                      // Isi lainnya jika ada
                     ],
                   ),
                 ),
@@ -115,14 +135,14 @@ class detail extends StatelessWidget {
                   left: 0,
                   right: 0,
                   child: SlidingUpPanel(
-                    minHeight: 460,
+                    minHeight: 400,
                     maxHeight: 600,
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(24.0)),
                     renderPanelSheet: false,
                     panel: Container(
                       width: 360,
-                      height: 460,
+                      height: 400,
                       decoration: const BoxDecoration(
                         color: Color.fromARGB(255, 255, 255, 255),
                         borderRadius:
@@ -212,7 +232,6 @@ class detail extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                // Anda dapat menambahkan icon lain di sini jika diperlukan
                               ],
                             ),
                           ),
@@ -224,13 +243,12 @@ class detail extends StatelessWidget {
                                 Row(
                                   children: [
                                     Icon(
-                                      Icons.kitchen, // Ikon untuk "DAPUR"
+                                      Icons.kitchen,
                                       color: Color.fromRGBO(72, 255, 249, 1),
                                       size: 20,
                                     ),
                                     SizedBox(
-                                      width:
-                                          5, // Memberikan jarak antara ikon dan teks
+                                      width: 5,
                                     ),
                                     Text(
                                       'DAPUR',
@@ -244,18 +262,17 @@ class detail extends StatelessWidget {
                                   ],
                                 ),
                                 SizedBox(
-                                  width: 20, // Memberikan jarak antara dua teks
+                                  width: 20,
                                 ),
                                 Row(
                                   children: [
                                     Icon(
-                                      Icons.wifi, // Ikon untuk "WIFI"
+                                      Icons.wifi,
                                       color: Color.fromRGBO(72, 255, 249, 1),
                                       size: 20,
                                     ),
                                     SizedBox(
-                                      width:
-                                          10, // Memberikan jarak antara ikon dan teks
+                                      width: 10,
                                     ),
                                     Text(
                                       'WIFI',
@@ -268,15 +285,13 @@ class detail extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                // Anda dapat menambahkan teks kamar yang lain di sini
                               ],
                             ),
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: 20, left: 30),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment
-                                  .start, // Menyusun children dari Column ke kiri
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   'Deskripsi',
@@ -287,9 +302,7 @@ class detail extends StatelessWidget {
                                     color: Color.fromRGBO(67, 104, 80, 1),
                                   ),
                                 ),
-                                SizedBox(
-                                    height:
-                                        10), // Memberikan jarak antara dua teks
+                                SizedBox(height: 10),
                                 Text(
                                   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed faucibus tortor nec sapien bibendum, vitae ullamcorper nisi porta. Quisque in purus nunc. Phasellus vel diam luctus, fermentum justo et, congue leo. Sed a felis in ante eleifend rhoncus sed eu augue. Ut vitae nulla vel sem placerat venenatis vitae et nisl. Curabitur non massa vitae tellus luctus facilisis. Maecenas non justo vel quam accumsan bibendum sit amet nec nisi. Morbi id posuere eros. Fusce eu erat ac tortor congue vehicula. Vestibulum posuere ipsum a libero finibus tincidunt. Sed convallis convallis lacus, quis vehicula nisl feugiat quis. Curabitur dapibus quam et augue scelerisque, in tristique nulla tempor. Vestibulum cursus mauris non metus tristique, sed egestas elit aliquet. Vivamus ac lacus eget leo vehicula convallis. Vivamus nec tellus nec purus sagittis sodales.',
                                   style: TextStyle(
@@ -315,8 +328,7 @@ class detail extends StatelessWidget {
                   left: 0,
                   right: 0,
                   child: Container(
-                    color:
-                        Colors.white, // Memberikan latar belakang warna putih
+                    color: Colors.white,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -325,8 +337,7 @@ class detail extends StatelessWidget {
                           child: Align(
                             alignment: Alignment.bottomRight,
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment
-                                  .start, // Mengatur penempatan horizontal ke kiri
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   'Harga Sewa:',
@@ -336,7 +347,7 @@ class detail extends StatelessWidget {
                                     fontFamily: 'Poppins',
                                   ),
                                 ),
-                                SizedBox(height: 5), // Jarak antara dua teks
+                                SizedBox(height: 5),
                                 Text(
                                   '1 Juta/Bulan',
                                   style: TextStyle(
@@ -356,22 +367,19 @@ class detail extends StatelessWidget {
                             alignment: Alignment.bottomLeft,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                minimumSize: const Size(30,
-                                    50), // Menyesuaikan ukuran agar lebih lebar
+                                minimumSize: const Size(30, 50),
                                 backgroundColor:
                                     const Color.fromARGB(255, 71, 228, 243),
                               ),
                               child: const Row(
-                                mainAxisSize: MainAxisSize
-                                    .min, // Menyusun widget secara horizontal
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Icon(
                                     Icons.phone,
                                     color: Colors.white,
-                                    size: 18, // Ukuran ikon telepon
+                                    size: 18,
                                   ),
-                                  SizedBox(
-                                      width: 10), // Jarak antara ikon dan teks
+                                  SizedBox(width: 10),
                                   Text(
                                     'whatsapp',
                                     style: TextStyle(
@@ -394,6 +402,75 @@ class detail extends StatelessWidget {
             ),
           );
         },
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
+        selectedItemColor: const Color.fromARGB(255, 232, 255, 240),
+        unselectedItemColor: Colors.grey,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        selectedFontSize: 14,
+        unselectedFontSize: 14,
+        onTap: (int index) {
+          switch (index) {
+            case 0:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CariKos()),
+              );
+              break;
+            case 1:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Simpan()),
+              );
+              break;
+            case 2:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const JualKos()),
+              );
+              break;
+            case 3:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Tes()),
+              );
+              break;
+            default:
+          }
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'lib/icons/home.png',
+              height: 30,
+            ),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'lib/icons/simpan.png',
+              height: 30,
+            ),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'lib/icons/plus.png',
+              height: 30,
+            ),
+            label: 'Save',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'lib/icons/gear.png',
+              height: 30,
+            ),
+            label: 'Settings',
+          ),
+        ],
       ),
     );
   }
