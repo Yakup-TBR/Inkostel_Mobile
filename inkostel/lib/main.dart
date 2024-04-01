@@ -22,8 +22,9 @@ void main() async {
         channelGroupKey: "grup_notifikasi", channelGroupName: "Grup Notifikasi")
   ]);
 
-  bool isAllowedToSendNotifications = await  AwesomeNotifications().isNotificationAllowed();
-  if(!isAllowedToSendNotifications){
+  bool isAllowedToSendNotifications =
+      await AwesomeNotifications().isNotificationAllowed();
+  if (!isAllowedToSendNotifications) {
     AwesomeNotifications().requestPermissionToSendNotifications();
   }
   runApp(const MyApp());
@@ -45,6 +46,6 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           fontFamily: 'Poppins',
         ),
-        home: const SplashScreen());
+        home: const CariKos());
   }
 }
