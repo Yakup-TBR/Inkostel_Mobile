@@ -1,7 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:inkostel/pages/home.dart';
-import 'package:inkostel/pages/login.dart';
 import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/detail.dart';
 import 'package:inkostel/pages/jualkos.dart';
@@ -9,6 +9,7 @@ import 'package:inkostel/pages/profile.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/splash.dart';
 import 'package:inkostel/pages/tes.dart';
+import 'package:inkostel/views/splash.view.dart';
 
 void main() async {
   await AwesomeNotifications().initialize(null, [
@@ -31,7 +32,7 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -41,11 +42,10 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    //Ganti GetMaterialApp buat Run Login soalnya pakai Get.to
+    //Kalo mau balikin lagi tinggal ganti ke MaterialApp
+    return const GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          fontFamily: 'Poppins',
-        ),
-        home: const CariKos());
+        home: SplashView());
   }
 }
