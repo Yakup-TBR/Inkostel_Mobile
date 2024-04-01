@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/utils/global.color.dart';
 
 class ButtonGlobal extends StatelessWidget {
@@ -8,8 +9,10 @@ class ButtonGlobal extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // ignore: avoid_print
-        print('Login');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const Home()), // Gunakan kelas Home di sini
+        );
       },
       child: Container(
         alignment: Alignment.center,

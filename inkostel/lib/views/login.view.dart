@@ -24,7 +24,7 @@ class LoginView extends StatelessWidget {
                 Container(
                   alignment: Alignment.center,
                   child: Text(
-                    'Logo',
+                    'InKosTel',
                     style: TextStyle(
                       color: GlobalColors.mainColor,
                       fontSize: 35,

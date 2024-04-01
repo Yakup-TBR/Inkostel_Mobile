@@ -17,7 +17,7 @@ class SplashView extends StatelessWidget {
       backgroundColor: GlobalColors.mainColor,
       body: const Center(
         child: Text(
-          'Logo',
+          'InKosTel',
           style: TextStyle(
             color: Colors.white,
             fontSize: 30,
