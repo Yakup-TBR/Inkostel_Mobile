@@ -5,6 +5,7 @@ import 'package:inkostel/notification_controller.dart';
 import 'package:inkostel/pages/detail.dart';
 import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/jualkos.dart';
+import 'package:inkostel/pages/profile.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/tes.dart';
 import 'package:inkostel/main.dart';
@@ -71,10 +72,21 @@ class _CariKosState extends State<CariKos> {
                   ],
                 ),
                 padding: const EdgeInsets.all(11),
-                child: Image.asset(
-                  'lib/icons/orang.png',
-                  color: const Color.fromRGBO(100, 204, 197, 1),
-                ),
+                child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Profile()),
+                      );
+                    },
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Image.asset(
+                        'lib/icons/orang.png',
+                        color: const Color.fromRGBO(100, 204, 197, 1),
+                      ),
+                    ),
+                  ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 20),
