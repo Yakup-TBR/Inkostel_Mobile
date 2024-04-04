@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/pages/carikos.dart';
+import 'package:inkostel/pages/profile.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/tes.dart';
@@ -46,9 +47,20 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                   padding: const EdgeInsets.all(11),
-                  child: Image.asset(
-                    'lib/icons/orang.png',
-                    color: const Color.fromRGBO(100, 204, 197, 1),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Profile()),
+                      );
+                    },
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Image.asset(
+                        'lib/icons/orang.png',
+                        color: const Color.fromRGBO(100, 204, 197, 1),
+                      ),
+                    ),
                   ),
                 ),
                 Padding(

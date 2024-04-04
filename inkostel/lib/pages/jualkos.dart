@@ -44,9 +44,20 @@ class _JualKosState extends State<JualKos> {
                     ],
                   ),
                   padding: const EdgeInsets.all(11),
-                  child: Image.asset(
-                    'lib/icons/orang.png',
-                    color: const Color.fromRGBO(100, 204, 197, 1),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Profile()),
+                      );
+                    },
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Image.asset(
+                        'lib/icons/orang.png',
+                        color: const Color.fromRGBO(100, 204, 197, 1),
+                      ),
+                    ),
                   ),
                 ),
                 Padding(
