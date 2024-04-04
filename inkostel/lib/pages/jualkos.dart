@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
+import 'package:inkostel/pages/profile.dart';
+
 
 void main() {
   runApp(const JualKos());
