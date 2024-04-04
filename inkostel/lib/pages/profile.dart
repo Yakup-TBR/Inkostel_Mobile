@@ -24,31 +24,6 @@ class Profile extends StatelessWidget {
               SizedBox(height: 100), // Membuat ruang kosong di bagian bawah untuk memberi tempat pada tombol back
             ],
           ),
-          Positioned(
-            left: 10,
-            top: 10,
-            child: Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 234, 234, 234),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Center(
-                  child: Image.asset(
-                    'lib/icons/back.png',
-                    color: const Color.fromRGBO(100, 204, 197, 1),
-                    width: 20,
-                    height: 20,
-                  ),
-                ),
-              ),
-            ),
-          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -164,10 +139,10 @@ class Profile extends StatelessWidget {
         ),
         Positioned(
           left: 10,
-          top: 10,
+          top: 40,
           child: Container(
-            width: 30,
-            height: 30,
+            width: 40,
+            height: 40,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8.0),
@@ -189,10 +164,10 @@ class Profile extends StatelessWidget {
         ),
         Positioned(
           right: 10,
-          top: 10,
+          top: 40,
           child: Container(
-            width: 30,
-            height: 30,
+            width: 40,
+            height: 40,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8.0),
