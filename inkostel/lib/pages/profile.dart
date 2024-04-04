@@ -241,7 +241,7 @@ class Profile extends StatelessWidget {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(16),
-          child: Image.network(
+          child: Image.asset(
             'images/profile.png',
             width: profileSize,
             height: profileSize,
@@ -299,33 +299,6 @@ class Profile extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          // const SizedBox(height: 150), 
-          // ElevatedButton(
-          //   onPressed: () {
-          //     // Aksi ketika tombol ditekan
-          //     // Misalnya, menuju halaman edit profil
-          //   },
-          //   style: ButtonStyle(
-          //     backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF436850)), // Warna latar belakang
-          //     fixedSize: MaterialStateProperty.all<Size>(
-          //       const Size.fromWidth(500), 
-          //     ),
-          //   ),
-          //   child: const SizedBox(
-          //     width: double.infinity, 
-          //     height: 50, 
-          //     child: Center(
-          //       child: Text(
-          //         'Edit Profil',
-          //         style: TextStyle(
-          //           color: Colors.white, 
-          //           fontWeight: FontWeight.bold, 
-          //           fontSize: 25, 
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // )
         ],
         
       ),

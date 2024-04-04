@@ -49,17 +49,15 @@ class _HomeState extends State<Home> {
                   padding: const EdgeInsets.all(11),
                   child: GestureDetector(
                     onTap: () {
+                      // Tambahkan kode navigasi ke halaman profil di sini
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const Profile()),
+                        MaterialPageRoute(builder: (context) => Profile()),
                       );
                     },
-                    child: MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: Image.asset(
-                        'lib/icons/orang.png',
-                        color: const Color.fromRGBO(100, 204, 197, 1),
-                      ),
+                    child: Image.asset(
+                      'lib/icons/orang.png',
+                      color: const Color.fromRGBO(100, 204, 197, 1),
                     ),
                   ),
                 ),
