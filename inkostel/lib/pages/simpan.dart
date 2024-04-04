@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/jualkos.dart';
+import 'package:inkostel/pages/settings.dart';
+
 
 void main() {
   runApp(Simpan());
@@ -140,6 +142,12 @@ class _SimpanState extends State<Simpan> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const JualKos()),
+                );
+                break;
+                case 3:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Pengaturan()),
                 );
                 break;
               default:

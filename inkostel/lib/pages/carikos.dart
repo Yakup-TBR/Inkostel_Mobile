@@ -8,7 +8,7 @@ import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/tes.dart';
 import 'package:inkostel/main.dart';
 
-import 'detail.dart';
+
 
 void main() {
   runApp(const CariKos());

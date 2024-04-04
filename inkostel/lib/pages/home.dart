@@ -4,6 +4,8 @@ import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/tes.dart';
+import 'package:inkostel/pages/settings.dart';
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -271,6 +273,8 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
+                            const SizedBox(height: 10),
+
               // ---------- End Filter, Start Isi
               Expanded(
                 child: SingleChildScrollView(
@@ -278,7 +282,7 @@ class _HomeState extends State<Home> {
                     children: [
                       Padding(
                         padding:
-                            const EdgeInsets.only(top: 10, left: 25, right: 25),
+                            const EdgeInsets.only(left: 25, right: 25),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -447,10 +451,6 @@ class _HomeState extends State<Home> {
             switch (index) {
               case 0:
                 // Navigasi ke halaman Home
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Home()),
-                );
                 break;
               case 1:
                 // Navigasi ke halaman Search
@@ -470,7 +470,7 @@ class _HomeState extends State<Home> {
                 // Navigasi ke halaman Add
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Tes()),
+                  MaterialPageRoute(builder: (context) => const Pengaturan()),
                 );
                 break;
               default:
