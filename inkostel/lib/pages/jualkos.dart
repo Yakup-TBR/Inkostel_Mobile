@@ -62,7 +62,7 @@ class _JualKosState extends State<JualKos> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 20),
-                  child: Text('Hai, Supri Makmur',
+                  child: Text('Hai, Supri Basuki',
                       style: TextStyle(
                           fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
