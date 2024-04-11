@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/jualkos.dart';
@@ -174,7 +176,7 @@ class Profile extends StatelessWidget {
             ),
             child: GestureDetector(
               onTap: () {
-                Navigator.of(context).pop();
+                EditProfile(context); 
               },
               child: Center(
                 child: SvgPicture.asset(
@@ -277,6 +279,59 @@ class Profile extends StatelessWidget {
         ],
         
       ),
+    );
+  }
+  // ignore: non_constant_identifier_names
+  EditProfile(BuildContext context) {
+    TextEditingController nameController = TextEditingController();
+    TextEditingController numberController = TextEditingController();
+    TextEditingController descriptionController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Edit Profil'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(labelText: 'Nama'),
+              ),
+              TextField(
+                controller: numberController,
+                decoration: const InputDecoration(labelText: 'Nomor'),
+              ),
+              TextField(
+                controller: descriptionController,
+                decoration: const InputDecoration(labelText: 'Deskripsi'),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Batal'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Di sini Anda dapat menambahkan kode untuk menyimpan data yang diubah
+                String name = nameController.text;
+                String number = numberController.text;
+                String description = descriptionController.text;
+                // Lakukan sesuatu dengan data yang diubah
+                // ...
+                // Tutup dialog
+                Navigator.of(context).pop();
+              },
+              child: Text('Simpan'),
+            ),
+          ],
+        );
+      },
     );
   }
 
