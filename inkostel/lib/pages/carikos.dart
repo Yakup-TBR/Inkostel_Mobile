@@ -88,7 +88,7 @@ class _CariKosState extends State<CariKos> {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 20),
-                child: Text('Hai, Supri Makmur',
+                child: Text('Hai, Supri Basuki',
                     style: GoogleFonts.getFont('Poppins',
                         fontSize: 18, fontWeight: FontWeight.bold)),
               ),
