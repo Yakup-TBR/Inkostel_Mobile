@@ -1,13 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/profile.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/jualkos.dart';
-import 'package:inkostel/pages/settings.dart';
-
 
 class Pengaturan extends StatefulWidget {
   const Pengaturan({super.key});
@@ -120,7 +116,8 @@ class _PengaturanState extends State<Pengaturan> {
                 Expanded(
                   child: SingleChildScrollView(
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 25, left: 10, right: 10, bottom: 10),
+                      padding: const EdgeInsets.only(
+                          top: 25, left: 10, right: 10, bottom: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -170,19 +167,21 @@ class _PengaturanState extends State<Pengaturan> {
                                         decoration: BoxDecoration(
                                           color: const Color.fromRGBO(
                                               100, 204, 197, 1),
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                         padding: const EdgeInsets.all(3),
                                         child: Image.asset(
                                           'lib/icons/bulan.png',
-                                          color: const Color.fromRGBO(0, 0, 0, 1),
+                                          color:
+                                              const Color.fromRGBO(0, 0, 0, 1),
                                         ),
                                       ),
                                     ),
                                     const Text(
                                       'Dark Mode',
                                       style: TextStyle(
-                                        fontSize: 23,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w600,
                                         fontFamily: 'Poppins',
                                       ),
@@ -222,19 +221,21 @@ class _PengaturanState extends State<Pengaturan> {
                                         decoration: BoxDecoration(
                                           color: const Color.fromRGBO(
                                               100, 204, 197, 1),
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                         padding: const EdgeInsets.all(3),
                                         child: Image.asset(
                                           'lib/icons/about.png',
-                                          color: const Color.fromRGBO(0, 0, 0, 1),
+                                          color:
+                                              const Color.fromRGBO(0, 0, 0, 1),
                                         ),
                                       ),
                                     ),
                                     const Text(
                                       'Tentang Inkostel',
                                       style: TextStyle(
-                                        fontSize: 23,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w600,
                                         fontFamily: 'Poppins',
                                       ),
@@ -272,19 +273,21 @@ class _PengaturanState extends State<Pengaturan> {
                                         decoration: BoxDecoration(
                                           color: const Color.fromRGBO(
                                               100, 204, 197, 1),
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                         padding: const EdgeInsets.all(4),
                                         child: Image.asset(
                                           'lib/icons/tanggapan.png',
-                                          color: const Color.fromRGBO(0, 0, 0, 1),
+                                          color:
+                                              const Color.fromRGBO(0, 0, 0, 1),
                                         ),
                                       ),
                                     ),
                                     const Text(
                                       'Kirim Tanggapan',
                                       style: TextStyle(
-                                        fontSize: 23,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w600,
                                         fontFamily: 'Poppins',
                                       ),
@@ -340,19 +343,21 @@ class _PengaturanState extends State<Pengaturan> {
                                         decoration: BoxDecoration(
                                           color: const Color.fromRGBO(
                                               100, 204, 197, 1),
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                         padding: const EdgeInsets.all(3),
                                         child: Image.asset(
                                           'lib/icons/signout.png',
-                                          color: const Color.fromRGBO(0, 0, 0, 1),
+                                          color:
+                                              const Color.fromRGBO(0, 0, 0, 1),
                                         ),
                                       ),
                                     ),
                                     const Text(
                                       'Sign Out',
                                       style: TextStyle(
-                                        fontSize: 23,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w600,
                                         fontFamily: 'Poppins',
                                       ),
@@ -390,19 +395,21 @@ class _PengaturanState extends State<Pengaturan> {
                                         decoration: BoxDecoration(
                                           color: const Color.fromRGBO(
                                               100, 204, 197, 1),
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                         padding: const EdgeInsets.all(4),
                                         child: Image.asset(
                                           'lib/icons/emailChange.png',
-                                          color: const Color.fromRGBO(0, 0, 0, 1),
+                                          color:
+                                              const Color.fromRGBO(0, 0, 0, 1),
                                         ),
                                       ),
                                     ),
                                     const Text(
                                       'Ganti Email',
                                       style: TextStyle(
-                                        fontSize: 23,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w600,
                                         fontFamily: 'Poppins',
                                       ),
@@ -455,7 +462,7 @@ class _PengaturanState extends State<Pengaturan> {
                   );
                   break;
                 case 3:
-                  // Navigasi ke halaman Settings
+                // Navigasi ke halaman Settings
                 default:
               }
             },

@@ -4,9 +4,7 @@ import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/profile.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/jualkos.dart';
-import 'package:inkostel/pages/tes.dart';
 import 'package:inkostel/pages/settings.dart';
-
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -283,16 +281,14 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
-                            const SizedBox(height: 10),
-
+              const SizedBox(height: 10),
               // ---------- End Filter, Start Isi
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
                       Padding(
-                        padding:
-                            const EdgeInsets.only(left: 25, right: 25),
+                        padding: const EdgeInsets.only(left: 25, right: 25),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
