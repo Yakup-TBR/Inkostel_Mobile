@@ -6,9 +6,19 @@ import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/tes.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(detail());
+}
+
+final Uri _url = Uri.parse(
+    'https://www.google.com/maps/place/Universitas+Telkom/@-6.973007,107.6291105,17z/data=!3m1!4b1!4m6!3m5!1s0x2e68e9adf177bf8d:0x437398556f9fa03!8m2!3d-6.973007!4d107.6316854!16s%2Fm%2F0y6lbq_?entry=ttu');
+
+Future<void> _launchUrl() async {
+  if (!await launchUrl(_url)) {
+    throw Exception('Could not launch $_url');
+  }
 }
 
 class detail extends StatefulWidget {
@@ -18,14 +28,19 @@ class detail extends StatefulWidget {
 
 class _detailState extends State<detail> {
   bool isSimpanPressed = false;
+  final PanelController _panelController = PanelController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
+          double minHeight = constraints.maxHeight * 0.65;
+          double maxHeight = constraints.maxHeight * 0.8;
+
           return SizedBox(
             width: constraints.maxWidth,
+            height: constraints.maxHeight,
             child: Stack(
               children: [
                 Positioned(
@@ -122,7 +137,7 @@ class _detailState extends State<detail> {
                               'lib/icons/simpan.png',
                               color: isSimpanPressed
                                   ? Colors.blue
-                                  : Color.fromRGBO(128, 128, 128, 1),
+                                  : const Color.fromRGBO(128, 128, 128, 1),
                             ),
                           ),
                         ),
@@ -135,8 +150,8 @@ class _detailState extends State<detail> {
                   left: 0,
                   right: 0,
                   child: SlidingUpPanel(
-                    minHeight: 400,
-                    maxHeight: 600,
+                    minHeight: minHeight,
+                    maxHeight: maxHeight,
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(24.0)),
                     renderPanelSheet: false,
@@ -148,10 +163,10 @@ class _detailState extends State<detail> {
                         borderRadius:
                             BorderRadius.vertical(top: Radius.circular(24.0)),
                       ),
-                      child: const Column(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             child: Row(
                               children: [
                                 Padding(
@@ -208,34 +223,39 @@ class _detailState extends State<detail> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(
+                            padding: const EdgeInsets.only(
                                 top: 10, left: 22.0, right: 22.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.location_on,
-                                      color: Color.fromRGBO(72, 255, 249, 1),
-                                      size: 20,
-                                    ),
-                                    SizedBox(width: 5),
-                                    Text(
-                                      'Jln.Sukapura',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey,
+                            child: GestureDetector(
+                              onTap: () {
+                                _launchUrl();
+                              },
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.location_on,
+                                        color: Color.fromRGBO(72, 255, 249, 1),
+                                        size: 20,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                      SizedBox(width: 5),
+                                      Text(
+                                        'Jln.Sukapura',
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          Padding(
+                          const Padding(
                             padding: EdgeInsets.only(top: 10, left: 25),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -247,9 +267,7 @@ class _detailState extends State<detail> {
                                       color: Color.fromRGBO(72, 255, 249, 1),
                                       size: 20,
                                     ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
+                                    SizedBox(width: 5),
                                     Text(
                                       'DAPUR',
                                       style: TextStyle(
@@ -261,9 +279,7 @@ class _detailState extends State<detail> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(
-                                  width: 20,
-                                ),
+                                SizedBox(width: 20),
                                 Row(
                                   children: [
                                     Icon(
@@ -271,9 +287,7 @@ class _detailState extends State<detail> {
                                       color: Color.fromRGBO(72, 255, 249, 1),
                                       size: 20,
                                     ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
+                                    SizedBox(width: 10),
                                     Text(
                                       'WIFI',
                                       style: TextStyle(
@@ -288,7 +302,7 @@ class _detailState extends State<detail> {
                               ],
                             ),
                           ),
-                          Padding(
+                          const Padding(
                             padding: EdgeInsets.only(top: 20, left: 30),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -317,7 +331,7 @@ class _detailState extends State<detail> {
                               ],
                             ),
                           ),
-                          Spacer(),
+                          const Spacer(),
                         ],
                       ),
                     ),
