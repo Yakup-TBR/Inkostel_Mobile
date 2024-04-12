@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/jualkos.dart';
@@ -23,31 +25,6 @@ class Profile extends StatelessWidget {
               buildBottom(),
               SizedBox(height: 100), // Membuat ruang kosong di bagian bawah untuk memberi tempat pada tombol back
             ],
-          ),
-          Positioned(
-            left: 10,
-            top: 10,
-            child: Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 234, 234, 234),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Center(
-                  child: Image.asset(
-                    'lib/icons/back.png',
-                    color: const Color.fromRGBO(100, 204, 197, 1),
-                    width: 20,
-                    height: 20,
-                  ),
-                ),
-              ),
-            ),
           ),
         ],
       ),
@@ -164,10 +141,10 @@ class Profile extends StatelessWidget {
         ),
         Positioned(
           left: 10,
-          top: 10,
+          top: 40,
           child: Container(
-            width: 30,
-            height: 30,
+            width: 40,
+            height: 40,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8.0),
@@ -189,17 +166,17 @@ class Profile extends StatelessWidget {
         ),
         Positioned(
           right: 10,
-          top: 10,
+          top: 40,
           child: Container(
-            width: 30,
-            height: 30,
+            width: 40,
+            height: 40,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8.0),
             ),
             child: GestureDetector(
               onTap: () {
-                Navigator.of(context).pop();
+                EditProfile(context); 
               },
               child: Center(
                 child: SvgPicture.asset(
@@ -241,7 +218,7 @@ class Profile extends StatelessWidget {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(16),
-          child: Image.network(
+          child: Image.asset(
             'images/profile.png',
             width: profileSize,
             height: profileSize,
@@ -299,36 +276,62 @@ class Profile extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          // const SizedBox(height: 150), 
-          // ElevatedButton(
-          //   onPressed: () {
-          //     // Aksi ketika tombol ditekan
-          //     // Misalnya, menuju halaman edit profil
-          //   },
-          //   style: ButtonStyle(
-          //     backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF436850)), // Warna latar belakang
-          //     fixedSize: MaterialStateProperty.all<Size>(
-          //       const Size.fromWidth(500), 
-          //     ),
-          //   ),
-          //   child: const SizedBox(
-          //     width: double.infinity, 
-          //     height: 50, 
-          //     child: Center(
-          //       child: Text(
-          //         'Edit Profil',
-          //         style: TextStyle(
-          //           color: Colors.white, 
-          //           fontWeight: FontWeight.bold, 
-          //           fontSize: 25, 
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // )
         ],
         
       ),
+    );
+  }
+  // ignore: non_constant_identifier_names
+  EditProfile(BuildContext context) {
+    TextEditingController nameController = TextEditingController();
+    TextEditingController numberController = TextEditingController();
+    TextEditingController descriptionController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Edit Profil'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(labelText: 'Nama'),
+              ),
+              TextField(
+                controller: numberController,
+                decoration: const InputDecoration(labelText: 'Nomor'),
+              ),
+              TextField(
+                controller: descriptionController,
+                decoration: const InputDecoration(labelText: 'Deskripsi'),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Batal'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Di sini Anda dapat menambahkan kode untuk menyimpan data yang diubah
+                String name = nameController.text;
+                String number = numberController.text;
+                String description = descriptionController.text;
+                // Lakukan sesuatu dengan data yang diubah
+                // ...
+                // Tutup dialog
+                Navigator.of(context).pop();
+              },
+              child: Text('Simpan'),
+            ),
+          ],
+        );
+      },
     );
   }
 

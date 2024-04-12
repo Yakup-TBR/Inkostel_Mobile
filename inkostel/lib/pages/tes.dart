@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:inkostel/pages/carikos.dart';
+import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/jualkos.dart';
 
@@ -16,11 +16,11 @@ class Tes extends StatefulWidget {
 }
 
 class _TesState extends State<Tes> {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
       appBar: AppBar(
         // ----------Appbar
@@ -199,7 +199,6 @@ class _TesState extends State<Tes> {
                     // Isi
                     decoration: const BoxDecoration(
                         color: Color.fromARGB(255, 230, 71, 71)),
-                    child: const Text('Hitam dilarang login'),
                   ),
                 ],
               ),
@@ -218,40 +217,39 @@ class _TesState extends State<Tes> {
         selectedFontSize: 14,
         unselectedFontSize: 14,
         onTap: (int index) {
-  // Handle bottom navigation bar item tap here
-  switch (index) {
-    case 0:
-      // Navigasi ke halaman Home
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const CariKos()),
-      );
-      break;
-    case 1:
-      // Navigasi ke halaman Search
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const Simpan()),
-      );
-      break;
-    case 2:
-      // Navigasi ke halaman Save
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const JualKos()),
-      );
-      break;
-    case 3:
-      // Navigasi ke halaman Add
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const Tes()),
-      );
-      break;
-    default:
-  }
-},
-
+          // Handle bottom navigation bar item tap here
+          switch (index) {
+            case 0:
+              // Navigasi ke halaman Home
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Home()),
+              );
+              break;
+            case 1:
+              // Navigasi ke halaman Search
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Simpan()),
+              );
+              break;
+            case 2:
+              // Navigasi ke halaman Save
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const JualKos()),
+              );
+              break;
+            case 3:
+              // Navigasi ke halaman Add
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Tes()),
+              );
+              break;
+            default:
+          }
+        },
         items: [
           BottomNavigationBarItem(
             icon: Image.asset(
@@ -282,7 +280,6 @@ class _TesState extends State<Tes> {
             label: 'Settings',
           ),
         ],
-        
       ),
     ));
   }

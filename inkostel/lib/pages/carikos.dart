@@ -1,10 +1,16 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:inkostel/notification_controller.dart';
 import 'package:inkostel/pages/detail.dart';
+import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/jualkos.dart';
+import 'package:inkostel/pages/profile.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/tes.dart';
-import 'detail.dart';
+import 'package:inkostel/main.dart';
+
+
 
 void main() {
   runApp(const CariKos());
@@ -18,6 +24,19 @@ class CariKos extends StatefulWidget {
 }
 
 class _CariKosState extends State<CariKos> {
+  @override
+  void initState() {
+    AwesomeNotifications().setListeners(
+        onActionReceivedMethod: NotificationController.onActionReceivedMethod,
+        onNotificationCreatedMethod:
+            NotificationController.onNotificationCreateMethod,
+        onNotificationDisplayedMethod:
+            NotificationController.onNotificationDisplayMethod,
+        onDismissActionReceivedMethod:
+            NotificationController.onDissmissActionReceivedMethod);
+    super.initState();
+  }
+
   bool isFavorite1 = false;
   bool isFavorite2 = false;
   bool isFavorite3 = false;
@@ -53,14 +72,23 @@ class _CariKosState extends State<CariKos> {
                   ],
                 ),
                 padding: const EdgeInsets.all(11),
-                child: Image.asset(
-                  'lib/icons/orang.png',
-                  color: const Color.fromRGBO(100, 204, 197, 1),
-                ),
+                child: GestureDetector(
+                    onTap: () {
+                      // Tambahkan kode navigasi ke halaman profil di sini
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Profile()),
+                      );
+                    },
+                    child: Image.asset(
+                      'lib/icons/orang.png',
+                      color: const Color.fromRGBO(100, 204, 197, 1),
+                    ),
+                  ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 20),
-                child: Text('Hai, Supri Makmur',
+                child: Text('Hai, Supri Basuki',
                     style: GoogleFonts.getFont('Poppins',
                         fontSize: 18, fontWeight: FontWeight.bold)),
               ),
@@ -160,7 +188,7 @@ class _CariKosState extends State<CariKos> {
                 const Row()
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -171,7 +199,7 @@ class _CariKosState extends State<CariKos> {
                   style: ButtonStyle(
                     backgroundColor: MaterialStateColor.resolveWith((states) {
                       if (states.contains(MaterialState.pressed)) {
-                        return Color.fromRGBO(100, 204, 197,
+                        return const Color.fromRGBO(100, 204, 197,
                             1); // Ubah warna latar belakang menjadi biru ketika ditekan
                       }
                       return Colors
@@ -182,18 +210,18 @@ class _CariKosState extends State<CariKos> {
                         return Colors
                             .white; // Ubah warna teks menjadi putih ketika ditekan
                       }
-                      return Color.fromRGBO(100, 204, 197,
+                      return const Color.fromRGBO(100, 204, 197,
                           1); // Kembali ke warna teks aslinya saat tidak ditekan
                     }),
-                    side: MaterialStateProperty.all(BorderSide(
-                      color: const Color.fromRGBO(100, 204, 197,
+                    side: MaterialStateProperty.all(const BorderSide(
+                      color: Color.fromRGBO(100, 204, 197,
                           1), // Ubah warna border sesuai keinginan Anda
                       width: 1.0, // Atur lebar border
                     )),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: const Text(
+                  child: const Padding(
+                    padding: EdgeInsets.all(3.0),
+                    child: Text(
                       'Putra',
                       style: TextStyle(
                         fontSize: 20, // Sesuaikan ukuran font di sini
@@ -208,7 +236,7 @@ class _CariKosState extends State<CariKos> {
                   style: ButtonStyle(
                     backgroundColor: MaterialStateColor.resolveWith((states) {
                       if (states.contains(MaterialState.pressed)) {
-                        return Color.fromRGBO(100, 204, 197,
+                        return const Color.fromRGBO(100, 204, 197,
                             1); // Ubah warna latar belakang menjadi biru ketika ditekan
                       }
                       return Colors
@@ -219,18 +247,18 @@ class _CariKosState extends State<CariKos> {
                         return Colors
                             .white; // Ubah warna teks menjadi putih ketika ditekan
                       }
-                      return Color.fromRGBO(100, 204, 197,
+                      return const Color.fromRGBO(100, 204, 197,
                           1); // Kembali ke warna teks aslinya saat tidak ditekan
                     }),
-                    side: MaterialStateProperty.all(BorderSide(
-                      color: const Color.fromRGBO(100, 204, 197,
+                    side: MaterialStateProperty.all(const BorderSide(
+                      color: Color.fromRGBO(100, 204, 197,
                           1), // Ubah warna border sesuai keinginan Anda
                       width: 1.0, // Atur lebar border
                     )),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: const Text(
+                  child: const Padding(
+                    padding: EdgeInsets.all(3.0),
+                    child: Text(
                       'Putri',
                       style: TextStyle(
                         fontSize: 20, // Sesuaikan ukuran font di sini
@@ -245,7 +273,7 @@ class _CariKosState extends State<CariKos> {
                   style: ButtonStyle(
                     backgroundColor: MaterialStateColor.resolveWith((states) {
                       if (states.contains(MaterialState.pressed)) {
-                        return Color.fromRGBO(100, 204, 197,
+                        return const Color.fromRGBO(100, 204, 197,
                             1); // Ubah warna latar belakang menjadi biru ketika ditekan
                       }
                       return Colors
@@ -256,18 +284,18 @@ class _CariKosState extends State<CariKos> {
                         return Colors
                             .white; // Ubah warna teks menjadi putih ketika ditekan
                       }
-                      return Color.fromRGBO(100, 204, 197,
+                      return const Color.fromRGBO(100, 204, 197,
                           1); // Kembali ke warna teks aslinya saat tidak ditekan
                     }),
-                    side: MaterialStateProperty.all(BorderSide(
-                      color: const Color.fromRGBO(100, 204, 197,
+                    side: MaterialStateProperty.all(const BorderSide(
+                      color: Color.fromRGBO(100, 204, 197,
                           1), // Ubah warna border sesuai keinginan Anda
                       width: 1.0, // Atur lebar border
                     )),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: const Text(
+                  child: const Padding(
+                    padding: EdgeInsets.all(3.0),
+                    child: Text(
                       'Campur',
                       style: TextStyle(
                         fontSize: 20, // Sesuaikan ukuran font di sini
@@ -290,7 +318,7 @@ class _CariKosState extends State<CariKos> {
                       ),
                       child: Column(
                         children: [
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           Container(
                             width: 370,
                             height: 200,
@@ -309,11 +337,11 @@ class _CariKosState extends State<CariKos> {
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       border: Border.all(
-                                        color:
-                                            Color.fromARGB(109, 134, 146, 134),
+                                        color: const Color.fromARGB(
+                                            109, 134, 146, 134),
                                       ),
                                       borderRadius: BorderRadius.circular(20.0),
-                                      image: DecorationImage(
+                                      image: const DecorationImage(
                                         image: AssetImage('images/kamar.png'),
                                         fit: BoxFit.cover,
                                       ),
@@ -324,7 +352,7 @@ class _CariKosState extends State<CariKos> {
                                   top: 10,
                                   right: 10,
                                   child: Container(
-                                    padding: EdgeInsets.all(10),
+                                    padding: const EdgeInsets.all(10),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(20),
@@ -335,7 +363,7 @@ class _CariKosState extends State<CariKos> {
                                     ),
                                     child: Text(
                                       formatCurrency(8500000),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
@@ -347,11 +375,11 @@ class _CariKosState extends State<CariKos> {
                                   bottom: 35,
                                   left: 10,
                                   child: Container(
-                                    child: Text(
+                                    child: const Text(
                                       'Kost Putri Pondok Firdaus',
                                       style: TextStyle(
-                                        color: const Color.fromARGB(
-                                            255, 255, 255, 255),
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255),
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -365,23 +393,35 @@ class _CariKosState extends State<CariKos> {
                                     onTap: () {
                                       setState(() {
                                         isFavorite1 = !isFavorite1;
+                                        if (isFavorite1) {
+                                          AwesomeNotifications()
+                                              .createNotification(
+                                            content: NotificationContent(
+                                              id: 1,
+                                              channelKey: 'notif_simpan',
+                                              title: 'Kos Bla Bla Bla telah Disimpan!',
+                                              body: 'Ketuk untuk melihat',
+                                            ),
+                                          );
+                                        }
                                       });
                                     },
                                     child: Row(
                                       children: [
                                         Text(
                                           getDistanceText(900),
-                                          style: TextStyle(
-                                            color: const Color.fromARGB(
+                                          style: const TextStyle(
+                                            color: Color.fromARGB(
                                                 255, 255, 255, 255),
                                             fontSize: 17,
                                           ),
                                         ),
-                                        SizedBox(width: 5),
+                                        const SizedBox(width: 5),
                                         Image.asset(
                                           'lib/icons/simpan_active.png',
                                           color: isFavorite1
-                                              ? Color.fromRGBO(100, 204, 197, 1)
+                                              ? const Color.fromRGBO(
+                                                  100, 204, 197, 1)
                                               : Colors.white,
                                           width: 30,
                                           height: 30,
@@ -393,7 +433,7 @@ class _CariKosState extends State<CariKos> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           GestureDetector(
                             onTap: () {
                               Navigator.push(
@@ -409,10 +449,11 @@ class _CariKosState extends State<CariKos> {
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 border: Border.all(
-                                  color: Color.fromARGB(109, 134, 146, 134),
+                                  color:
+                                      const Color.fromARGB(109, 134, 146, 134),
                                 ),
                                 borderRadius: BorderRadius.circular(20.0),
-                                image: DecorationImage(
+                                image: const DecorationImage(
                                   image: AssetImage('images/kamar.png'),
                                   fit: BoxFit.cover,
                                 ),
@@ -423,7 +464,7 @@ class _CariKosState extends State<CariKos> {
                                     top: 10,
                                     right: 10,
                                     child: Container(
-                                      padding: EdgeInsets.all(10),
+                                      padding: const EdgeInsets.all(10),
                                       decoration: BoxDecoration(
                                         color: Colors
                                             .white, // Mengatur warna background menjadi putih penuh
@@ -437,7 +478,7 @@ class _CariKosState extends State<CariKos> {
                                       ),
                                       child: Text(
                                         formatCurrency(9000000),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color: Colors
                                               .black, // Mengatur warna teks
                                           fontSize: 16,
@@ -450,10 +491,10 @@ class _CariKosState extends State<CariKos> {
                                     bottom: 35,
                                     left: 10,
                                     child: Container(
-                                      child: Text(
+                                      child: const Text(
                                         'Kost Putra Pondok Firdaus',
                                         style: TextStyle(
-                                          color: const Color.fromARGB(
+                                          color: Color.fromARGB(
                                               255, 255, 255, 255),
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
@@ -468,23 +509,34 @@ class _CariKosState extends State<CariKos> {
                                       onTap: () {
                                         setState(() {
                                           isFavorite2 = !isFavorite2;
+                                          if (isFavorite2) {
+                                          AwesomeNotifications()
+                                              .createNotification(
+                                            content: NotificationContent(
+                                              id: 1,
+                                              channelKey: 'notif_simpan',
+                                              title: 'Kos Bla Bla Bla telah Disimpan!',
+                                              body: 'Ketuk untuk melihat',
+                                            ),
+                                          );
+                                        }
                                         });
                                       },
                                       child: Row(
                                         children: [
                                           Text(
                                             getDistanceText(5000),
-                                            style: TextStyle(
-                                              color: const Color.fromARGB(
+                                            style: const TextStyle(
+                                              color: Color.fromARGB(
                                                   255, 255, 255, 255),
                                               fontSize: 17,
                                             ),
                                           ),
-                                          SizedBox(width: 5),
+                                          const SizedBox(width: 5),
                                           Image.asset(
                                             'lib/icons/simpan_active.png',
                                             color: isFavorite2
-                                                ? Color.fromRGBO(
+                                                ? const Color.fromRGBO(
                                                     100, 204, 197, 1)
                                                 : Colors.white,
                                             width: 30,
@@ -498,7 +550,7 @@ class _CariKosState extends State<CariKos> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           GestureDetector(
                             onTap: () {
                               Navigator.push(
@@ -514,10 +566,11 @@ class _CariKosState extends State<CariKos> {
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 border: Border.all(
-                                  color: Color.fromARGB(109, 134, 146, 134),
+                                  color:
+                                      const Color.fromARGB(109, 134, 146, 134),
                                 ),
                                 borderRadius: BorderRadius.circular(20.0),
-                                image: DecorationImage(
+                                image: const DecorationImage(
                                   image: AssetImage('images/kamar.png'),
                                   fit: BoxFit.cover,
                                 ),
@@ -528,7 +581,7 @@ class _CariKosState extends State<CariKos> {
                                     top: 10,
                                     right: 10,
                                     child: Container(
-                                      padding: EdgeInsets.all(10),
+                                      padding: const EdgeInsets.all(10),
                                       decoration: BoxDecoration(
                                         color: Colors
                                             .white, // Mengatur warna background menjadi putih penuh
@@ -542,7 +595,7 @@ class _CariKosState extends State<CariKos> {
                                       ),
                                       child: Text(
                                         formatCurrency(7000000),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color: Colors
                                               .black, // Mengatur warna teks
                                           fontSize: 16,
@@ -555,10 +608,10 @@ class _CariKosState extends State<CariKos> {
                                     bottom: 35,
                                     left: 10,
                                     child: Container(
-                                      child: Text(
+                                      child: const Text(
                                         'Kost Putri Pondok Firdaus',
                                         style: TextStyle(
-                                          color: const Color.fromARGB(
+                                          color: Color.fromARGB(
                                               255, 255, 255, 255),
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
@@ -573,23 +626,34 @@ class _CariKosState extends State<CariKos> {
                                       onTap: () {
                                         setState(() {
                                           isFavorite3 = !isFavorite3;
+                                          if (isFavorite3) {
+                                          AwesomeNotifications()
+                                              .createNotification(
+                                            content: NotificationContent(
+                                              id: 1,
+                                              channelKey: 'notif_simpan',
+                                              title: 'Kos Bla Bla Bla telah Disimpan!',
+                                              body: 'Ketuk untuk melihat',
+                                            ),
+                                          );
+                                        }
                                         });
                                       },
                                       child: Row(
                                         children: [
                                           Text(
                                             getDistanceText(600),
-                                            style: TextStyle(
-                                              color: const Color.fromARGB(
+                                            style: const TextStyle(
+                                              color: Color.fromARGB(
                                                   255, 255, 255, 255),
                                               fontSize: 17,
                                             ),
                                           ),
-                                          SizedBox(width: 5),
+                                          const SizedBox(width: 5),
                                           Image.asset(
                                             'lib/icons/simpan_active.png',
                                             color: isFavorite3
-                                                ? Color.fromRGBO(
+                                                ? const Color.fromRGBO(
                                                     100, 204, 197, 1)
                                                 : Colors.white,
                                             width: 30,
@@ -603,7 +667,7 @@ class _CariKosState extends State<CariKos> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           GestureDetector(
                             onTap: () {
                               Navigator.push(
@@ -619,11 +683,12 @@ class _CariKosState extends State<CariKos> {
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 border: Border.all(
-                                  color: Color.fromARGB(109, 134, 146, 134),
+                                  color:
+                                      const Color.fromARGB(109, 134, 146, 134),
                                 ),
                                 borderRadius: BorderRadius.circular(20.0),
                                 image: DecorationImage(
-                                  image: AssetImage('images/kamar.png'),
+                                  image: const AssetImage('images/kamar.png'),
                                   colorFilter: ColorFilter.mode(
                                       Colors.black.withOpacity(0.2),
                                       BlendMode.darken),
@@ -636,7 +701,7 @@ class _CariKosState extends State<CariKos> {
                                     top: 10,
                                     right: 10,
                                     child: Container(
-                                      padding: EdgeInsets.all(10),
+                                      padding: const EdgeInsets.all(10),
                                       decoration: BoxDecoration(
                                         color: Colors.white,
                                         borderRadius: BorderRadius.circular(20),
@@ -647,7 +712,7 @@ class _CariKosState extends State<CariKos> {
                                       ),
                                       child: Text(
                                         formatCurrency(10000000),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color: Colors.black,
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
@@ -659,10 +724,10 @@ class _CariKosState extends State<CariKos> {
                                     bottom: 35,
                                     left: 10,
                                     child: Container(
-                                      child: Text(
+                                      child: const Text(
                                         'Kost Putra Pondok Firdaus',
                                         style: TextStyle(
-                                          color: const Color.fromARGB(
+                                          color: Color.fromARGB(
                                               255, 255, 255, 255),
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
@@ -677,23 +742,34 @@ class _CariKosState extends State<CariKos> {
                                       onTap: () {
                                         setState(() {
                                           isFavorite4 = !isFavorite4;
+                                          if (isFavorite4) {
+                                          AwesomeNotifications()
+                                              .createNotification(
+                                            content: NotificationContent(
+                                              id: 1,
+                                              channelKey: 'notif_simpan',
+                                              title: 'Kos Bla Bla Bla telah Disimpan!',
+                                              body: 'Ketuk untuk melihat',
+                                            ),
+                                          );
+                                        }
                                         });
                                       },
                                       child: Row(
                                         children: [
                                           Text(
                                             getDistanceText(6500),
-                                            style: TextStyle(
-                                              color: const Color.fromARGB(
+                                            style: const TextStyle(
+                                              color: Color.fromARGB(
                                                   255, 255, 255, 255),
                                               fontSize: 17,
                                             ),
                                           ),
-                                          SizedBox(width: 5),
+                                          const SizedBox(width: 5),
                                           Image.asset(
                                             'lib/icons/simpan_active.png',
                                             color: isFavorite4
-                                                ? Color.fromRGBO(
+                                                ? const Color.fromRGBO(
                                                     100, 204, 197, 1)
                                                 : Colors.white,
                                             width: 30,
@@ -734,7 +810,7 @@ class _CariKosState extends State<CariKos> {
               // Navigasi ke halaman Home
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const CariKos()),
+                MaterialPageRoute(builder: (context) => const Home()),
               );
               break;
             case 1:
@@ -765,7 +841,7 @@ class _CariKosState extends State<CariKos> {
         items: [
           BottomNavigationBarItem(
             icon: Image.asset(
-              'lib/icons/home.png',
+              'lib/icons/home_active.png',
               height: 30,
             ),
             label: 'Home',
@@ -786,7 +862,7 @@ class _CariKosState extends State<CariKos> {
           ),
           BottomNavigationBarItem(
             icon: Image.asset(
-              'lib/icons/gear_active.png',
+              'lib/icons/gear.png',
               height: 30,
             ),
             label: 'Settings',

@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:inkostel/pages/home.dart';
+import 'package:inkostel/pages/jualkos.dart';
+import 'package:inkostel/pages/settings.dart';
+
 
 void main() {
-  runApp(Simpan());
+  runApp(const Simpan());
 }
 
 class Simpan extends StatefulWidget {
-  const Simpan({Key? key}) : super(key: key);
+  const Simpan({super.key});
 
   @override
   _SimpanState createState() => _SimpanState();
 }
 
 class _SimpanState extends State<Simpan> {
-  bool isFavorite1 = false;
-  bool isFavorite2 = false;
-  bool isFavorite3 = false;
-  bool isFavorite4 = false;
+  bool isFavorite1 = true;
+  bool isFavorite2 = true;
+  bool isFavorite3 = true;
+  bool isFavorite4 = true;
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +29,12 @@ class _SimpanState extends State<Simpan> {
         backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
         appBar: AppBar(
           backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
-          toolbarHeight: 90,
+          toolbarHeight: 65,
           title: Padding(
             padding: const EdgeInsets.only(left: 15),
             child: Row(
               children: [
-                _buildProfileImage(),
+                _buildBackbutton(),
                 Padding(
                   padding: const EdgeInsets.only(left: 70),
                   child: Text(
@@ -110,12 +114,80 @@ class _SimpanState extends State<Simpan> {
             ),
           ],
         ),
-        bottomNavigationBar: _buildBottomNavigationBar(),
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
+          selectedItemColor: const Color.fromARGB(255, 232, 255, 240),
+          unselectedItemColor: Colors.grey,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          selectedFontSize: 14,
+          unselectedFontSize: 14,
+          onTap: (int index) {
+            switch (index) {
+              case 0:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Home()),
+                );
+                break;
+              case 1:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Simpan()),
+                );
+                break;
+              case 2:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const JualKos()),
+                );
+                break;
+                case 3:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Pengaturan()),
+                );
+                break;
+              default:
+            }
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'lib/icons/home.png',
+                height: 30,
+              ),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'lib/icons/simpan_active.png',
+                height: 30,
+              ),
+              label: 'Search',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'lib/icons/plus.png',
+                height: 30,
+              ),
+              label: 'Save',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'lib/icons/gear.png',
+                height: 30,
+              ),
+              label: 'Settings',
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildProfileImage() {
+  Widget _buildBackbutton() {
     return Container(
       width: 40,
       height: 40,
@@ -131,45 +203,14 @@ class _SimpanState extends State<Simpan> {
           ),
         ],
       ),
-      padding: const EdgeInsets.all(11),
-      child: Image.asset(
-        'lib/icons/back.png',
-        color: const Color.fromRGBO(100, 204, 197, 1),
-      ),
-    );
-  }
-
-  Widget _buildElevatedButton(String label) {
-    return ElevatedButton(
-      onPressed: () {
-        // Action when button is pressed
-      },
-      style: ButtonStyle(
-        backgroundColor: MaterialStateColor.resolveWith((states) {
-          return states.contains(MaterialState.pressed)
-              ? const Color.fromRGBO(100, 204, 197, 1)
-              : Colors.white;
-        }),
-        foregroundColor: MaterialStateColor.resolveWith((states) {
-          return states.contains(MaterialState.pressed)
-              ? Colors.white
-              : const Color.fromRGBO(100, 204, 197, 1);
-        }),
-        side: MaterialStateProperty.all(
-          const BorderSide(
-            color: Color.fromRGBO(100, 204, 197, 1),
-            width: 1.0,
-          ),
+      child: IconButton(
+        icon: Image.asset(
+          'lib/icons/back.png',
+          color: const Color.fromRGBO(100, 204, 197, 1),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(3.0),
-        child: Text(
-          label,
-          style: const TextStyle(
-            fontSize: 20,
-          ),
-        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
       ),
     );
   }
@@ -273,54 +314,6 @@ class _SimpanState extends State<Simpan> {
           const SizedBox(height: 2),
         ],
       ),
-    );
-  }
-
-  Widget _buildBottomNavigationBar() {
-    return BottomNavigationBar(
-      showSelectedLabels: false,
-      showUnselectedLabels: false,
-      backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
-      selectedItemColor: const Color.fromARGB(255, 232, 255, 240),
-      unselectedItemColor: Colors.grey,
-      selectedFontSize: 14,
-      unselectedFontSize: 14,
-      type: BottomNavigationBarType.fixed,
-      items: <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Image.asset(
-            'lib/icons/home.png',
-            height: 30,
-          ),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Image.asset(
-            'lib/icons/search.png',
-            color: const Color.fromARGB(159, 252, 252, 252),
-            height: 30,
-          ),
-          label: 'Search',
-        ),
-        BottomNavigationBarItem(
-          icon: Image.asset(
-            'lib/icons/simpan.png',
-            height: 30,
-          ),
-          label: 'Save',
-        ),
-        BottomNavigationBarItem(
-          icon: Image.asset(
-            'lib/icons/plus.png',
-            height: 30,
-          ),
-          label: 'Add',
-        ),
-      ],
-      onTap: (int index) {
-        // Handle bottom navigation bar item tap here
-        // You can navigate to different screens or perform any other actions
-      },
     );
   }
 
