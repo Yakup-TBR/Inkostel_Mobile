@@ -4,7 +4,6 @@ import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/settings.dart';
 
-
 void main() {
   runApp(const Simpan());
 }
@@ -143,7 +142,7 @@ class _SimpanState extends State<Simpan> {
                   MaterialPageRoute(builder: (context) => const JualKos()),
                 );
                 break;
-                case 3:
+              case 3:
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const Pengaturan()),
@@ -299,10 +298,13 @@ class _SimpanState extends State<Simpan> {
                       const SizedBox(width: 5),
                       GestureDetector(
                         onTap: onTap,
-                        child: Icon(
-                          Icons.favorite,
-                          color: isFavorite ? Colors.red : Colors.white,
-                          size: 30,
+                        child: Image.asset(
+                          'lib/icons/simpan_active.png',
+                          color: isFavorite
+                              ? const Color.fromRGBO(100, 204, 197, 1)
+                              : Colors.white,
+                          width: 30,
+                          height: 30,
                         ),
                       ),
                     ],
