@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/pages/carikos.dart';
+import 'package:inkostel/pages/detail.dart';
 import 'package:inkostel/pages/profile.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/jualkos.dart';
@@ -50,7 +51,8 @@ class _HomeState extends State<Home> {
                       // Tambahkan kode navigasi ke halaman profil di sini
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Profile()),
+                        MaterialPageRoute(
+                            builder: (context) => const Profile()),
                       );
                     },
                     child: Image.asset(
@@ -518,98 +520,103 @@ class _HomeState extends State<Home> {
   }
 
   Widget buildCard() => Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10),
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      child: GestureDetector(
+        onTap: () {
+           Navigator.push(context, MaterialPageRoute(builder: (context) => detail()));
+        },
         child: Container(
-            // Widget Card Kos
-            width: 230,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(
-                color: const Color.fromARGB(109, 134, 146, 134),
-              ),
-              borderRadius: BorderRadius.circular(20.0),
-              image: DecorationImage(
-                image: const AssetImage('images/kamar.png'),
-                colorFilter: ColorFilter.mode(
-                    Colors.black.withOpacity(0.2), BlendMode.darken),
-                fit: BoxFit.cover,
-              ),
+          // Widget Card Kos
+          width: 230,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+              color: const Color.fromARGB(109, 134, 146, 134),
             ),
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Colors.black.withOpacity(0.5),
-                          width: 0,
-                        ),
+            borderRadius: BorderRadius.circular(20.0),
+            image: DecorationImage(
+              image: const AssetImage('images/kamar.png'),
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.2), BlendMode.darken),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: Colors.black.withOpacity(0.5),
+                        width: 0,
                       ),
-                      child: RichText(
-                        text: const TextSpan(
-                          children: [
-                            TextSpan(
-                              text: '1 Juta /',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
+                    ),
+                    child: RichText(
+                      text: const TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '1 Juta /',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
                             ),
-                            TextSpan(
-                              text: ' Bln',
-                              style: TextStyle(
-                                color: Colors
-                                    .grey, // Atur warna yang diinginkan untuk bagian "Juta / Bln"
-                                fontSize: 15,
-                                fontWeight: FontWeight
-                                    .normal, // Jika diperlukan, ubah berat font sesuai kebutuhan
-                              ),
+                          ),
+                          TextSpan(
+                            text: ' Bln',
+                            style: TextStyle(
+                              color: Colors
+                                  .grey, // Atur warna yang diinginkan untuk bagian "Juta / Bln"
+                              fontSize: 15,
+                              fontWeight: FontWeight
+                                  .normal, // Jika diperlukan, ubah berat font sesuai kebutuhan
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
-                const Spacer(),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 15, bottom: 15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          "Kos Mak Cik",
-                          style: GoogleFonts.getFont(
-                            'Poppins',
-                            fontSize: 25,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                          ),
+              ),
+              const Spacer(),
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15, bottom: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "Kos Mak Cik",
+                        style: GoogleFonts.getFont(
+                          'Poppins',
+                          fontSize: 25,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
                         ),
-                        Text(
-                          "Sukapura, DeyeuhKolot",
-                          style: GoogleFonts.getFont(
-                            'Poppins',
-                            fontSize: 13,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w300,
-                          ),
+                      ),
+                      Text(
+                        "Sukapura, DeyeuhKolot",
+                        style: GoogleFonts.getFont(
+                          'Poppins',
+                          fontSize: 13,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w300,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            )),
-      );
+              ),
+            ],
+          ),
+        ),
+      ));
 }
