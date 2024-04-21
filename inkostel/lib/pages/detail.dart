@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/jualkos.dart';
+import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/tes.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -459,7 +460,7 @@ class _detailState extends State<detail> {
             case 3:
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Tes()),
+                MaterialPageRoute(builder: (context) => const Pengaturan()),
               );
               break;
             default:
