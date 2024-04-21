@@ -668,10 +668,12 @@ class _FilterDialogState extends State<FilterDialog> {
       return "< 5 Juta";
     } else if (value >= 500 && value < 1000) {
       return "5 - 7 Juta";
-    } else if (value >= 1000 && value < 2000) {
+    } else if (value >= 1000 && value < 1500) {
       return "7 - 10 Juta";
+    } else if (value >= 1500 && value < 2000) {
+      return "10 - 15 Juta";
     } else {
-      return "> 10 Juta";
+      return "> 15 Juta";
     }
   }
 
