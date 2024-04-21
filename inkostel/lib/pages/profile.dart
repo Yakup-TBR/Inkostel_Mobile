@@ -1,5 +1,6 @@
 // ignore_for_file: unused_local_variable
-
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/jualkos.dart';
@@ -188,6 +189,7 @@ class Profile extends StatelessWidget {
             ),
           ),
         ),
+        
       ],
     );
   }
@@ -295,6 +297,13 @@ class Profile extends StatelessWidget {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
+              ElevatedButton(
+                onPressed: () {
+                  showImageSourceDialog(context);
+                },
+                child: Text('Ubah Gambar Profil'),
+              ),
+              SizedBox(height: 20), 
               TextField(
                 controller: nameController,
                 decoration: const InputDecoration(labelText: 'Nama'),
@@ -318,13 +327,9 @@ class Profile extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                // Di sini Anda dapat menambahkan kode untuk menyimpan data yang diubah
                 String name = nameController.text;
                 String number = numberController.text;
                 String description = descriptionController.text;
-                // Lakukan sesuatu dengan data yang diubah
-                // ...
-                // Tutup dialog
                 Navigator.of(context).pop();
               },
               child: Text('Simpan'),
@@ -333,6 +338,61 @@ class Profile extends StatelessWidget {
         );
       },
     );
+  }
+
+  //Method untuk menampilkan dialog pilihan sumber gambar
+  void showImageSourceDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Pilih Sumber Gambar'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Galeri'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _getImageFromGallery(context);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.camera_alt),
+                title: Text('Kamera'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _getImageFromCamera(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  //Method untuk mengambil gambar dari galeri
+  void _getImageFromGallery(BuildContext context) async {
+    final picker = ImagePicker();
+    // ignore: deprecated_member_use
+    final pickedImage = await picker.getImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      File imageFile = File(pickedImage.path);
+      //Menggunakan imageFile untuk menampilkan gambar atau menyimpannya
+    }
+  }
+
+  //Method untuk mengambil gambar dari kamera
+  void _getImageFromCamera(BuildContext context) async {
+    final picker = ImagePicker();
+    // ignore: deprecated_member_use
+    final pickedImage = await picker.getImage(source: ImageSource.camera);
+    if (pickedImage != null) {
+      File imageFile = File(pickedImage.path);
+      //Menggunakan imageFile untuk menampilkan gambar atau menyimpannya
+    }
   }
 
 }

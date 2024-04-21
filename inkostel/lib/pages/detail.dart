@@ -15,9 +15,17 @@ void main() {
 final Uri _url = Uri.parse(
     'https://www.google.com/maps/place/Universitas+Telkom/@-6.973007,107.6291105,17z/data=!3m1!4b1!4m6!3m5!1s0x2e68e9adf177bf8d:0x437398556f9fa03!8m2!3d-6.973007!4d107.6316854!16s%2Fm%2F0y6lbq_?entry=ttu');
 
+final Uri _wa = Uri.parse('https://wa.me/62895621670003');
+
 Future<void> _launchUrl() async {
   if (!await launchUrl(_url)) {
     throw Exception('Could not launch $_url');
+  }
+}
+
+Future<void> _launchwa() async {
+  if (!await launchUrl(_wa)) {
+    throw Exception('Could not launch $_wa');
   }
 }
 
@@ -378,7 +386,6 @@ class _detailState extends State<detail> {
                           padding:
                               const EdgeInsets.only(bottom: 20.0, right: 30),
                           child: Align(
-                            alignment: Alignment.bottomLeft,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 minimumSize: const Size(30, 50),
@@ -404,7 +411,9 @@ class _detailState extends State<detail> {
                                   ),
                                 ],
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                _launchwa();
+                              },
                             ),
                           ),
                         ),

@@ -10,8 +10,6 @@ import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/tes.dart';
 import 'package:inkostel/main.dart';
 
-
-
 void main() {
   runApp(const CariKos());
 }
@@ -73,18 +71,18 @@ class _CariKosState extends State<CariKos> {
                 ),
                 padding: const EdgeInsets.all(11),
                 child: GestureDetector(
-                    onTap: () {
-                      // Tambahkan kode navigasi ke halaman profil di sini
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Profile()),
-                      );
-                    },
-                    child: Image.asset(
-                      'lib/icons/orang.png',
-                      color: const Color.fromRGBO(100, 204, 197, 1),
-                    ),
+                  onTap: () {
+                    // Tambahkan kode navigasi ke halaman profil di sini
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Profile()),
+                    );
+                  },
+                  child: Image.asset(
+                    'lib/icons/orang.png',
+                    color: const Color.fromRGBO(100, 204, 197, 1),
                   ),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 20),
@@ -399,7 +397,8 @@ class _CariKosState extends State<CariKos> {
                                             content: NotificationContent(
                                               id: 1,
                                               channelKey: 'notif_simpan',
-                                              title: 'Kos Bla Bla Bla telah Disimpan!',
+                                              title:
+                                                  'Kos Bla Bla Bla telah Disimpan!',
                                               body: 'Ketuk untuk melihat',
                                             ),
                                           );
@@ -510,16 +509,17 @@ class _CariKosState extends State<CariKos> {
                                         setState(() {
                                           isFavorite2 = !isFavorite2;
                                           if (isFavorite2) {
-                                          AwesomeNotifications()
-                                              .createNotification(
-                                            content: NotificationContent(
-                                              id: 1,
-                                              channelKey: 'notif_simpan',
-                                              title: 'Kos Bla Bla Bla telah Disimpan!',
-                                              body: 'Ketuk untuk melihat',
-                                            ),
-                                          );
-                                        }
+                                            AwesomeNotifications()
+                                                .createNotification(
+                                              content: NotificationContent(
+                                                id: 1,
+                                                channelKey: 'notif_simpan',
+                                                title:
+                                                    'Kos Bla Bla Bla telah Disimpan!',
+                                                body: 'Ketuk untuk melihat',
+                                              ),
+                                            );
+                                          }
                                         });
                                       },
                                       child: Row(
@@ -627,16 +627,17 @@ class _CariKosState extends State<CariKos> {
                                         setState(() {
                                           isFavorite3 = !isFavorite3;
                                           if (isFavorite3) {
-                                          AwesomeNotifications()
-                                              .createNotification(
-                                            content: NotificationContent(
-                                              id: 1,
-                                              channelKey: 'notif_simpan',
-                                              title: 'Kos Bla Bla Bla telah Disimpan!',
-                                              body: 'Ketuk untuk melihat',
-                                            ),
-                                          );
-                                        }
+                                            AwesomeNotifications()
+                                                .createNotification(
+                                              content: NotificationContent(
+                                                id: 1,
+                                                channelKey: 'notif_simpan',
+                                                title:
+                                                    'Kos Bla Bla Bla telah Disimpan!',
+                                                body: 'Ketuk untuk melihat',
+                                              ),
+                                            );
+                                          }
                                         });
                                       },
                                       child: Row(
@@ -743,16 +744,17 @@ class _CariKosState extends State<CariKos> {
                                         setState(() {
                                           isFavorite4 = !isFavorite4;
                                           if (isFavorite4) {
-                                          AwesomeNotifications()
-                                              .createNotification(
-                                            content: NotificationContent(
-                                              id: 1,
-                                              channelKey: 'notif_simpan',
-                                              title: 'Kos Bla Bla Bla telah Disimpan!',
-                                              body: 'Ketuk untuk melihat',
-                                            ),
-                                          );
-                                        }
+                                            AwesomeNotifications()
+                                                .createNotification(
+                                              content: NotificationContent(
+                                                id: 1,
+                                                channelKey: 'notif_simpan',
+                                                title:
+                                                    'Kos Bla Bla Bla telah Disimpan!',
+                                                body: 'Ketuk untuk melihat',
+                                              ),
+                                            );
+                                          }
                                         });
                                       },
                                       child: Row(
