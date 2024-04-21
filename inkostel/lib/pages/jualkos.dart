@@ -209,6 +209,12 @@ class _JualKosState extends State<JualKos> {
                           ),
                         ),
                         const SizedBox(height: 10),
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: 'Harga',
+                          ),
+                        ),
+                        const SizedBox(height: 10),
                         // Add image upload functionality
                         ElevatedButton(
                           onPressed: () {
