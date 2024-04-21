@@ -215,13 +215,14 @@ class _JualKosState extends State<JualKos> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        // Add image upload functionality
-                        ElevatedButton(
-                          onPressed: () {
-                            // Action when image upload button is pressed
-                          },
-                          child: const Text('Upload Foto Kostan'),
-                        ),
+// Add image upload functionality
+ElevatedButton(
+  onPressed: () {
+    _getImageFromGallery(context); // Panggil method _getImageFromGallery saat tombol ditekan
+  },
+  child: const Text('Upload Foto Kostan'),
+),
+
                         const SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {
