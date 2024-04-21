@@ -661,16 +661,17 @@ class _FilterDialogState extends State<FilterDialog> {
   bool isChecked200Meters = false;
   bool isChecked500Meters = false;
   bool isChecked1KM = false;
+  bool isCheckedLebih1KM = false;
 
   String _getLabel(double value) {
     if (value < 500) {
-      return "< 500 Meter";
+      return "< 5 Juta";
     } else if (value >= 500 && value < 1000) {
-      return "500 Meter - 1 KM";
+      return "5 - 7 Juta";
     } else if (value >= 1000 && value < 2000) {
-      return "1 KM - 2 KM";
+      return "7 - 10 Juta";
     } else {
-      return "> 2 KM";
+      return "> 10 Juta";
     }
   }
 
@@ -699,44 +700,63 @@ class _FilterDialogState extends State<FilterDialog> {
               ),
             ),
             CheckboxListTile(
-              title: const Text('100 Meter'),
-              value: false,
+              title: const Text('Kurang 100 Meter'),
+              value: isChecked100Meters,
               onChanged: (bool? value) {
                 setState(() {
                   isChecked100Meters = value!;
                 });
               },
+              activeColor: const Color.fromRGBO(100, 204, 197, 1),
+              checkColor: Colors.white,
             ),
             CheckboxListTile(
-              title: const Text('200 Meter'),
-              value: false,
+              title: const Text('100 - 300 Meter'),
+              value: isChecked200Meters,
               onChanged: (bool? value) {
                 setState(() {
                   isChecked200Meters = value!;
                 });
               },
+              activeColor: const Color.fromRGBO(100, 204, 197, 1),
+              checkColor: Colors.white,
             ),
             CheckboxListTile(
-              title: const Text('500 Meter'),
-              value: false,
+              title: const Text('300 - 500 Meter'),
+              value: isChecked500Meters,
               onChanged: (bool? value) {
                 setState(() {
                   isChecked500Meters = value!;
                 });
               },
+              activeColor: const Color.fromRGBO(100, 204, 197, 1),
+              checkColor: Colors.white,
             ),
             CheckboxListTile(
-              title: const Text('1 KM'),
-              value: false,
+              title: const Text('500 - 1 KM'),
+              value: isChecked1KM,
               onChanged: (bool? value) {
                 setState(() {
                   isChecked1KM = value!;
                 });
               },
+              activeColor: const Color.fromRGBO(100, 204, 197, 1),
+              checkColor: Colors.white,
+            ),
+            CheckboxListTile(
+              title: const Text('Lebih dari 1 KM'),
+              value: isCheckedLebih1KM,
+              onChanged: (bool? value) {
+                setState(() {
+                  isCheckedLebih1KM = value!;
+                });
+              },
+              activeColor: const Color.fromRGBO(100, 204, 197, 1),
+              checkColor: Colors.white,
             ),
             const SizedBox(height: 20),
             const Text(
-              'Harga',
+              'Harga Pertahun',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
@@ -752,6 +772,7 @@ class _FilterDialogState extends State<FilterDialog> {
                   _currentSliderValue = value;
                 });
               },
+              activeColor: const Color.fromRGBO(100, 204, 197, 1),
             ),
             const SizedBox(height: 20),
             Row(
@@ -761,7 +782,14 @@ class _FilterDialogState extends State<FilterDialog> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Tutup'),
+                  child: Text(
+                    'Tutup',
+                    style: GoogleFonts.getFont(
+                      'Poppins',
+                      fontSize: 17,
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
               ],
             ),
