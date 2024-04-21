@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/views/login.view.dart';
 
 class SplashScreen extends StatefulWidget {

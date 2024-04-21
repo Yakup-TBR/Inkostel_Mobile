@@ -14,7 +14,21 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
+String getLabel(double value) {
+  if (value < 500) {
+    return "< 500 Meter";
+  } else if (value >= 500 && value < 1000) {
+    return "500 Meter - 1 KM";
+  } else if (value >= 1000 && value < 2000) {
+    return "1 KM - 2 KM";
+  } else {
+    return "> 2 KM";
+  }
+}
+
 class _HomeState extends State<Home> {
+  double currentSliderValue = 0.0;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -136,30 +150,40 @@ class _HomeState extends State<Home> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 20, right: 20),
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 255, 255, 255),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: const Color.fromRGBO(100, 204, 197, 1),
-                          width: 0.5,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color.fromARGB(31, 106, 106, 106)
-                                .withOpacity(0.6),
-                            spreadRadius: 0,
-                            blurRadius: 2,
-                            offset: const Offset(0, 2), // Atur posisi shadow
+                    child: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const FilterDialog();
+                          },
+                        );
+                      },
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: const Color.fromRGBO(100, 204, 197, 1),
+                            width: 0.5,
                           ),
-                        ],
-                      ),
-                      padding: const EdgeInsets.all(7),
-                      child: Image.asset(
-                        'lib/icons/filter.png',
-                        color: const Color.fromRGBO(100, 204, 197, 1),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color.fromARGB(31, 106, 106, 106)
+                                  .withOpacity(0.6),
+                              spreadRadius: 0,
+                              blurRadius: 2,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(7),
+                        child: Image.asset(
+                          'lib/icons/filter.png',
+                          color: const Color.fromRGBO(100, 204, 197, 1),
+                        ),
                       ),
                     ),
                   ),
@@ -523,7 +547,8 @@ class _HomeState extends State<Home> {
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: GestureDetector(
         onTap: () {
-           Navigator.push(context, MaterialPageRoute(builder: (context) => detail()));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => detail()));
         },
         child: Container(
           // Widget Card Kos
@@ -619,4 +644,130 @@ class _HomeState extends State<Home> {
           ),
         ),
       ));
+}
+
+// Class Filter Dialog dibuat stateful
+class FilterDialog extends StatefulWidget {
+  const FilterDialog({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _FilterDialogState createState() => _FilterDialogState();
+}
+
+class _FilterDialogState extends State<FilterDialog> {
+  double _currentSliderValue = 0.0;
+  bool isChecked100Meters = false;
+  bool isChecked200Meters = false;
+  bool isChecked500Meters = false;
+  bool isChecked1KM = false;
+
+  String _getLabel(double value) {
+    if (value < 500) {
+      return "< 500 Meter";
+    } else if (value >= 500 && value < 1000) {
+      return "500 Meter - 1 KM";
+    } else if (value >= 1000 && value < 2000) {
+      return "1 KM - 2 KM";
+    } else {
+      return "> 2 KM";
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Filter',
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Jarak',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            CheckboxListTile(
+              title: const Text('100 Meter'),
+              value: false,
+              onChanged: (bool? value) {
+                setState(() {
+                  isChecked100Meters = value!;
+                });
+              },
+            ),
+            CheckboxListTile(
+              title: const Text('200 Meter'),
+              value: false,
+              onChanged: (bool? value) {
+                setState(() {
+                  isChecked200Meters = value!;
+                });
+              },
+            ),
+            CheckboxListTile(
+              title: const Text('500 Meter'),
+              value: false,
+              onChanged: (bool? value) {
+                setState(() {
+                  isChecked500Meters = value!;
+                });
+              },
+            ),
+            CheckboxListTile(
+              title: const Text('1 KM'),
+              value: false,
+              onChanged: (bool? value) {
+                setState(() {
+                  isChecked1KM = value!;
+                });
+              },
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Harga',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Slider(
+              value: _currentSliderValue,
+              max: 2000,
+              divisions: 4,
+              label: _getLabel(_currentSliderValue),
+              onChanged: (double value) {
+                setState(() {
+                  _currentSliderValue = value;
+                });
+              },
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Tutup'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

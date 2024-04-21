@@ -347,8 +347,6 @@ class _PengaturanState extends State<Pengaturan> {
                       TextButton(
                         onPressed: () {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => LoginView()));
-                          // Lakukan tindakan sign out atau navigasi ke halaman lain
-                          // Misalnya: Navigator.push(context, MaterialPageRoute(builder: (context) => HalamanLain()));
                         },
                         child: const Text('Ya',
                         style: TextStyle(color: Colors.red),),
