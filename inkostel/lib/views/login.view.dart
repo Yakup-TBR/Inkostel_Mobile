@@ -3,6 +3,7 @@ import 'package:inkostel/utils/global.color.dart';
 import 'package:inkostel/views/widgets/button.global.dart';
 import 'package:inkostel/views/widgets/social.login.dart';
 import 'package:inkostel/views/widgets/text.form.global.dart';
+import 'package:inkostel/views/signup.view.dart';
 
 class LoginView extends StatelessWidget {
   LoginView({Key? key}) : super(key: key);
@@ -70,6 +71,12 @@ class LoginView extends StatelessWidget {
               'Don\'t have an account? ',
             ),
             InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SignUpView()),
+                );
+              },
               child: Text(
                 'Register Here',
                 style: TextStyle(
