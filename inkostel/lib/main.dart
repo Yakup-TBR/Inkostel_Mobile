@@ -5,6 +5,7 @@ import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/detail.dart';
 import 'package:inkostel/pages/jualkos.dart';
+import 'package:inkostel/pages/percobaan.dart';
 import 'package:inkostel/pages/profile.dart';
 import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
@@ -45,7 +46,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     //Ganti GetMaterialApp buat Run Login soalnya pakai Get.to
     //Kalo mau balikin lagi tinggal ganti ke MaterialApp
-    return const MaterialApp(
+    return MaterialApp(
         home: Home());
   }
 }
