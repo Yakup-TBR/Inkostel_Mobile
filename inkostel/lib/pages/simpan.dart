@@ -4,26 +4,71 @@ import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/settings.dart';
 
-
 void main() {
   runApp(const Simpan());
 }
 
 class Simpan extends StatefulWidget {
-  const Simpan({super.key});
+  const Simpan({Key? key}) : super(key: key);
 
   @override
   _SimpanState createState() => _SimpanState();
 }
 
 class _SimpanState extends State<Simpan> {
+
+  
   bool isFavorite1 = true;
   bool isFavorite2 = true;
   bool isFavorite3 = true;
   bool isFavorite4 = true;
 
+  final List<Map<String, dynamic>> kosData = [
+    {
+      'imagePath': 'images/kamar.png',
+      'price': 8500000,
+      'name': 'Kost Putri Pondok Firdaus',
+      'distance': 900,
+    },
+    {
+      'imagePath': 'images/kamar.png',
+      'price': 9000000,
+      'name': 'Kost Putra Pondok Firdaus',
+      'distance': 5000,
+    },
+    {
+      'imagePath': 'images/kamar.png',
+      'price': 7000000,
+      'name': 'Kost Putri Pondok Firdaus',
+      'distance': 600,
+    },
+    {
+      'imagePath': 'images/kamar.png',
+      'price': 10000000,
+      'name': 'Kost Putra Pondok Firdaus',
+      'distance': 6500,
+    },
+    {
+      'imagePath': 'images/kamar.png',
+      'price': 10000000,
+      'name': 'Kost Putra Pondok Firdaus',
+      'distance': 6500,
+    },
+    {
+      'imagePath': 'images/kamar.png',
+      'price': 6000000,
+      'name': 'Kost Putra Pondok Firdaus',
+      'distance': 6500,
+    },
+  ];
+
+  int _currentPage = 0;
+  int _itemsPerPage = 2;
+
   @override
   Widget build(BuildContext context) {
+    final int _totalPages = (kosData.length / _itemsPerPage).ceil();
+
     return MaterialApp(
       home: Scaffold(
         backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
@@ -55,131 +100,193 @@ class _SimpanState extends State<Simpan> {
               children: [
                 const SizedBox(height: 0),
                 Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        _buildListItem(
-                          imagePath: 'images/kamar.png',
-                          price: 8500000,
-                          name: 'Kost Putri Pondok Firdaus',
-                          distance: 900,
-                          isFavorite: isFavorite1,
-                          onTap: () {
-                            setState(() {
+                  child: ListView.builder(
+                    itemCount: _itemsPerPage,
+                    itemBuilder: (context, index) {
+                      final int itemIndex =
+                          _currentPage * _itemsPerPage + index;
+                      if (itemIndex >= kosData.length) {
+                        return const SizedBox.shrink();
+                      }
+                      final kos = kosData[itemIndex];
+                      return _buildListItem(
+                        imagePath: kos['imagePath'],
+                        price: kos['price'],
+                        name: kos['name'],
+                        distance: kos['distance'],
+                        isFavorite: index == 0 ? isFavorite1 : isFavorite2,
+                        onTap: () {
+                          setState(() {
+                            if (index == 0) {
                               isFavorite1 = !isFavorite1;
-                            });
-                          },
-                        ),
-                        _buildListItem(
-                          imagePath: 'images/kamar.png',
-                          price: 9000000,
-                          name: 'Kost Putra Pondok Firdaus',
-                          distance: 5000,
-                          isFavorite: isFavorite2,
-                          onTap: () {
-                            setState(() {
+                            } else {
                               isFavorite2 = !isFavorite2;
-                            });
-                          },
+                            }
+                          });
+                        },
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List<Widget>.generate(
+                    (_totalPages > 4) ? 4 : _totalPages,
+                    (int pageIndex) {
+                      int displayPageIndex;
+                      if (_totalPages <= 5 || _currentPage <= 2) {
+                        displayPageIndex = pageIndex;
+                      } else if (_currentPage >= _totalPages - 3) {
+                        displayPageIndex = _totalPages - 4 + pageIndex;
+                      } else {
+                        displayPageIndex = _currentPage - 2 + pageIndex;
+                      }
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _currentPage = displayPageIndex;
+                          });
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.fromLTRB(5, 5, 5, 72.5),
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: _currentPage == displayPageIndex
+                                ? Color.fromRGBO(100, 204, 197, 1)
+                                : Colors.grey,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Text(
+                            (displayPageIndex + 1).toString(),
+                            style: const TextStyle(color: Colors.white),
+                          ),
                         ),
-                        _buildListItem(
-                          imagePath: 'images/kamar.png',
-                          price: 7000000,
-                          name: 'Kost Putri Pondok Firdaus',
-                          distance: 600,
-                          isFavorite: isFavorite3,
-                          onTap: () {
-                            setState(() {
-                              isFavorite3 = !isFavorite3;
-                            });
-                          },
-                        ),
-                        _buildListItem(
-                          imagePath: 'images/kamar.png',
-                          price: 10000000,
-                          name: 'Kost Putra Pondok Firdaus',
-                          distance: 6500,
-                          isFavorite: isFavorite4,
-                          onTap: () {
-                            setState(() {
-                              isFavorite4 = !isFavorite4;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 ),
               ],
             ),
-          ],
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
-          selectedItemColor: const Color.fromARGB(255, 232, 255, 240),
-          unselectedItemColor: Colors.grey,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          selectedFontSize: 14,
-          unselectedFontSize: 14,
-          onTap: (int index) {
-            switch (index) {
-              case 0:
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Home()),
-                );
-                break;
-              case 1:
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Simpan()),
-                );
-                break;
-              case 2:
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const JualKos()),
-                );
-                break;
-                case 3:
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Pengaturan()),
-                );
-                break;
-              default:
-            }
-          },
-          items: [
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'lib/icons/home.png',
-                height: 30,
+            Positioned(
+              left: 113,
+              bottom: 70,
+              child: GestureDetector(
+                onTap: (_currentPage > 0)
+                    ? () {
+                        setState(() {
+                          _currentPage--;
+                        });
+                      }
+                    : null,
+                child: Container(
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Icon(Icons.arrow_back_ios_new),
+                ),
               ),
-              label: 'Home',
             ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'lib/icons/simpan_active.png',
-                height: 30,
+            Positioned(
+              right: 113,
+              bottom: 70,
+              child: GestureDetector(
+                onTap: (_currentPage < _totalPages - 1)
+                    ? () {
+                        setState(() {
+                          _currentPage++;
+                        });
+                      }
+                    : null,
+                child: Container(
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Icon(Icons.arrow_forward_ios),
+                ),
               ),
-              label: 'Search',
             ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'lib/icons/plus.png',
-                height: 30,
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
+                backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
+                selectedItemColor: const Color.fromARGB(255, 232, 255, 240),
+                unselectedItemColor: Colors.grey,
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
+                selectedFontSize: 14,
+                unselectedFontSize: 14,
+                onTap: (int index) {
+                  switch (index) {
+                    case 0:
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Home()),
+                      );
+                      break;
+                    case 1:
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Simpan()),
+                      );
+                      break;
+                    case 2:
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const JualKos()),
+                      );
+                      break;
+                    case 3:
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Pengaturan()),
+                      );
+                      break;
+                    default:
+                  }
+                },
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Image.asset(
+                      'lib/icons/home.png',
+                      height: 30,
+                    ),
+                    label: 'Home',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Image.asset(
+                      'lib/icons/simpan_active.png',
+                      height: 30,
+                    ),
+                    label: 'Search',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Image.asset(
+                      'lib/icons/plus.png',
+                      height: 30,
+                    ),
+                    label: 'Save',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Image.asset(
+                      'lib/icons/gear.png',
+                      height: 30,
+                    ),
+                    label: 'Settings',
+                  ),
+                ],
               ),
-              label: 'Save',
-            ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'lib/icons/gear.png',
-                height: 30,
-              ),
-              label: 'Settings',
             ),
           ],
         ),
@@ -299,10 +406,13 @@ class _SimpanState extends State<Simpan> {
                       const SizedBox(width: 5),
                       GestureDetector(
                         onTap: onTap,
-                        child: Icon(
-                          Icons.favorite,
-                          color: isFavorite ? Colors.red : Colors.white,
-                          size: 30,
+                        child: Image.asset(
+                          'lib/icons/simpan_active.png',
+                          color: isFavorite
+                              ? const Color.fromRGBO(100, 204, 197, 1)
+                              : Colors.white,
+                          width: 30,
+                          height: 30,
                         ),
                       ),
                     ],
