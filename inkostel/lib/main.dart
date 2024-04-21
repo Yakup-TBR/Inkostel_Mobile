@@ -11,6 +11,7 @@ import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/splash.dart';
 import 'package:inkostel/pages/tes.dart';
+import 'package:inkostel/views/login.view.dart';
 import 'package:inkostel/views/splash.view.dart';
 
 void main() async {
@@ -47,6 +48,6 @@ class _MyAppState extends State<MyApp> {
     //Ganti GetMaterialApp buat Run Login soalnya pakai Get.to
     //Kalo mau balikin lagi tinggal ganti ke MaterialApp
     return MaterialApp(
-        home: Home());
+        home: SplashScreen());
   }
 }

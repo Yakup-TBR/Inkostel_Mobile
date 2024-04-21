@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:inkostel/views/login.view.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/profile.dart';
@@ -13,6 +16,8 @@ class Pengaturan extends StatefulWidget {
 }
 
 class _PengaturanState extends State<Pengaturan> {
+  bool isDarkMode = false;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -93,7 +98,8 @@ class _PengaturanState extends State<Pengaturan> {
                                   // Tambahkan kode navigasi ke halaman profil di sini
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => const Profile()),
+                                    MaterialPageRoute(
+                                        builder: (context) => const Profile()),
                                   );
                                 },
                                 child: Image.asset(
@@ -139,55 +145,61 @@ class _PengaturanState extends State<Pengaturan> {
                               ),
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              // Aksi yang akan dijalankan ketika widget ditekan
-                            },
-                            child: Container(
-                              // ---- Dark Mode
-                              width: double.infinity,
-                              decoration: const BoxDecoration(
-                                color: Color.fromRGBO(235, 233, 233, 1),
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(15),
-                                  topLeft: Radius.circular(15),
-                                ),
+                          Container(
+                            // ---- Dark Mode
+                            width: double.infinity,
+                            decoration: const BoxDecoration(
+                              color: Color.fromRGBO(235, 233, 233, 1),
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(15),
+                                topLeft: Radius.circular(15),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 10, left: 30, right: 24, bottom: 10),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 20),
-                                      child: Container(
-                                        width: 40,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                          color: const Color.fromRGBO(
-                                              100, 204, 197, 1),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        padding: const EdgeInsets.all(3),
-                                        child: Image.asset(
-                                          'lib/icons/bulan.png',
-                                          color:
-                                              const Color.fromRGBO(0, 0, 0, 1),
-                                        ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 10, left: 30, right: 24, bottom: 10),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 20),
+                                    child: Container(
+                                      width: 40,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromRGBO(
+                                            100, 204, 197, 1),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      padding: const EdgeInsets.all(3),
+                                      child: Image.asset(
+                                        'lib/icons/bulan.png',
+                                        color: const Color.fromRGBO(0, 0, 0, 1),
                                       ),
                                     ),
-                                    const Text(
-                                      'Dark Mode',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600,
-                                        fontFamily: 'Poppins',
+                                  ),
+                                  const Text(
+                                    'Dark Mode',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Switch(
+                                        value: isDarkMode,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            isDarkMode = value;
+                                          });
+                                        },
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -318,6 +330,33 @@ class _PengaturanState extends State<Pengaturan> {
                           GestureDetector(
                             onTap: () {
                               // Lakukan Sign Out
+                              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Konfirmasi Sign Out'),
+                    content: Text('Apakah Anda yakin ingin keluar?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Tutup dialog
+                        },
+                        child: const Text('Tidak',
+                        style: TextStyle(color: Colors.black),),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => LoginView()));
+                          // Lakukan tindakan sign out atau navigasi ke halaman lain
+                          // Misalnya: Navigator.push(context, MaterialPageRoute(builder: (context) => HalamanLain()));
+                        },
+                        child: const Text('Ya',
+                        style: TextStyle(color: Colors.red),),
+                      ),
+                    ],
+                  );
+                },
+              );
                             },
                             child: Container(
                               // ---- Sign Out
