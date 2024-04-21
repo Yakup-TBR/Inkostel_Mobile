@@ -376,6 +376,7 @@ class Profile extends StatelessWidget {
   //Method untuk mengambil gambar dari galeri
   void _getImageFromGallery(BuildContext context) async {
     final picker = ImagePicker();
+    // ignore: deprecated_member_use
     final pickedImage = await picker.getImage(source: ImageSource.gallery);
     if (pickedImage != null) {
       
@@ -387,6 +388,7 @@ class Profile extends StatelessWidget {
   //Method untuk mengambil gambar dari kamera
   void _getImageFromCamera(BuildContext context) async {
     final picker = ImagePicker();
+    // ignore: deprecated_member_use
     final pickedImage = await picker.getImage(source: ImageSource.camera);
     if (pickedImage != null) {
       File imageFile = File(pickedImage.path);
