@@ -94,14 +94,15 @@ class _detailState extends State<detail> {
                         }).toList(),
                       ),
                       Positioned(
-                        top: 30,
+                        top: 55,
                         left: 20,
                         child: GestureDetector(
                           onTap: () {
+                            print('Tombol ditekan'); // Debugging
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const CariKos()),
+                                  builder: (context) => CariKos()),
                             );
                           },
                           child: Container(
@@ -120,7 +121,7 @@ class _detailState extends State<detail> {
                         ),
                       ),
                       Positioned(
-                        top: 30,
+                        top: 55,
                         right: 20,
                         child: GestureDetector(
                           onTap: () {},
