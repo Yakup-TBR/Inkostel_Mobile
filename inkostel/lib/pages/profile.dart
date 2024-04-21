@@ -379,7 +379,6 @@ class Profile extends StatelessWidget {
     // ignore: deprecated_member_use
     final pickedImage = await picker.getImage(source: ImageSource.gallery);
     if (pickedImage != null) {
-      
       File imageFile = File(pickedImage.path);
       //Menggunakan imageFile untuk menampilkan gambar atau menyimpannya
     }
