@@ -4,7 +4,6 @@ import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/profile.dart';
 
-
 void main() {
   runApp(const JualKos());
 }
@@ -63,8 +62,8 @@ class _JualKosState extends State<JualKos> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20),
                   child: Text('Hai, Supri Basuki',
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold)),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
               ],
             ),
@@ -149,8 +148,7 @@ class _JualKosState extends State<JualKos> {
                                   .withOpacity(0.6),
                               spreadRadius: 0,
                               blurRadius: 2,
-                              offset:
-                                  const Offset(0, 2), // Atur posisi shadow
+                              offset: const Offset(0, 2), // Atur posisi shadow
                             ),
                           ],
                         ),
@@ -174,7 +172,8 @@ class _JualKosState extends State<JualKos> {
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+                        color:
+                            const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
                         spreadRadius: 0,
                         blurRadius: 4,
                         offset: const Offset(0, 1), // Atur posisi shadow
@@ -182,8 +181,8 @@ class _JualKosState extends State<JualKos> {
                     ],
                   ),
                   child: Padding(
-                    padding:
-                        const EdgeInsets.only(top: 20, left: 24, right: 24, bottom: 35),
+                    padding: const EdgeInsets.only(
+                        top: 20, left: 24, right: 24, bottom: 35),
                     child: Column(
                       children: [
                         Text('Daftarkan kostan Anda sekarang!',
@@ -216,12 +215,12 @@ class _JualKosState extends State<JualKos> {
                         ),
                         const SizedBox(height: 10),
 // Add image upload functionality
-ElevatedButton(
-  onPressed: () {
-    _getImageFromGallery(context); // Panggil method _getImageFromGallery saat tombol ditekan
-  },
-  child: const Text('Upload Foto Kostan'),
-),
+                        ElevatedButton(
+                          onPressed: () {
+                            // _getImageFromGallery(context); // Panggil method _getImageFromGallery saat tombol ditekan
+                          },
+                          child: const Text('Upload Foto Kostan'),
+                        ),
 
                         const SizedBox(height: 10),
                         ElevatedButton(
@@ -237,7 +236,8 @@ ElevatedButton(
                 const SizedBox(height: 20),
                 Container(
                   // Isi
-                  decoration: const BoxDecoration(color: Color.fromARGB(255, 230, 71, 71)),
+                  decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 230, 71, 71)),
                 ),
               ],
             ),
