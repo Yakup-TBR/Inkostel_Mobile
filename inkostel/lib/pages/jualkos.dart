@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart'; // Import intl package
 import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/profile.dart';
-
 
 void main() {
   runApp(const JualKos());
@@ -17,6 +21,38 @@ class JualKos extends StatefulWidget {
 }
 
 class _JualKosState extends State<JualKos> {
+  // Define a list of facilities
+  List<String> facilities = [
+    'AC',
+    'WiFi',
+    'Kulkas',
+    'Tempat Parkir',
+    'Kamar Mandi Dalam'
+  ];
+
+  // Maintain the state of each checkbox
+  Map<String, bool> facilityValues = {
+    'AC': false,
+    'WiFi': false,
+    'Kulkas': false,
+    'Tempat Parkir': false,
+    'Kamar Mandi Dalam': false,
+  };
+
+  // Formatter for price text field
+  final priceFormatter = NumberTextInputFormatter();
+  File? _imageFile;
+
+  // Function to handle selecting an image from the gallery
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    setState(() {
+      if (pickedFile != null) {
+        _imageFile = File(pickedFile.path);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -63,8 +99,8 @@ class _JualKosState extends State<JualKos> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20),
                   child: Text('Hai, Supri Basuki',
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold)),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
               ],
             ),
@@ -76,94 +112,6 @@ class _JualKosState extends State<JualKos> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 30),
-                        child: Container(
-                          height: 45,
-                          decoration: BoxDecoration(
-                            color: const Color.fromRGBO(254, 251, 246, 1),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Cari Kos Disini..',
-                              suffixIcon: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Image.asset(
-                                  'lib/icons/search.png',
-                                  color: const Color.fromRGBO(100, 204, 197, 1),
-                                  width: 20,
-                                  height: 20,
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                              focusedBorder: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30)),
-                                borderSide: BorderSide(
-                                  width: 0.8,
-                                  color: Color.fromRGBO(100, 204, 197, 1),
-                                ),
-                              ),
-                              disabledBorder: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30)),
-                                borderSide: BorderSide(
-                                  width: 0.5,
-                                  color: Color.fromRGBO(100, 204, 197, 1),
-                                ),
-                              ), // Tidak ada perubahan ? Opsional dihapus nanti
-                              enabledBorder: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30)),
-                                borderSide: BorderSide(
-                                  width: 0.8,
-                                  color: Color.fromRGBO(100, 204, 197, 1),
-                                ),
-                              ),
-                              contentPadding:
-                                  const EdgeInsets.only(left: 20, top: 8),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 255, 255, 255),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: const Color.fromRGBO(100, 204, 197, 1),
-                            width: 0.5,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color.fromARGB(31, 106, 106, 106)
-                                  .withOpacity(0.6),
-                              spreadRadius: 0,
-                              blurRadius: 2,
-                              offset:
-                                  const Offset(0, 2), // Atur posisi shadow
-                            ),
-                          ],
-                        ),
-                        padding: const EdgeInsets.all(7),
-                        child: Image.asset(
-                          'lib/icons/filter.png',
-                          color: const Color.fromRGBO(100, 204, 197, 1),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                  ],
-                ),
                 const SizedBox(height: 20),
                 Container(
                   // ---------Pop up Gagal Login
@@ -174,7 +122,8 @@ class _JualKosState extends State<JualKos> {
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+                        color:
+                            const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
                         spreadRadius: 0,
                         blurRadius: 4,
                         offset: const Offset(0, 1), // Atur posisi shadow
@@ -182,8 +131,8 @@ class _JualKosState extends State<JualKos> {
                     ],
                   ),
                   child: Padding(
-                    padding:
-                        const EdgeInsets.only(top: 20, left: 24, right: 24, bottom: 35),
+                    padding: const EdgeInsets.only(
+                        top: 20, left: 24, right: 24, bottom: 35),
                     child: Column(
                       children: [
                         Text('Daftarkan kostan Anda sekarang!',
@@ -191,38 +140,105 @@ class _JualKosState extends State<JualKos> {
                             style: TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 20),
+                        // TextFormField for Nama Kostan with prefix icon
                         TextFormField(
                           decoration: const InputDecoration(
                             labelText: 'Nama Kostan',
                           ),
                         ),
                         const SizedBox(height: 10),
+                        // TextFormField for Nomor Telepon with prefix text
                         TextFormField(
                           decoration: const InputDecoration(
                             labelText: 'Nomor Telepon',
+                            prefixText: '+62 ', // Add the prefix text
                           ),
                         ),
                         const SizedBox(height: 10),
+                        // TextFormField for Alamat with prefix icon
                         TextFormField(
                           decoration: const InputDecoration(
                             labelText: 'Alamat',
                           ),
                         ),
                         const SizedBox(height: 10),
+                        // TextFormField for Harga with prefix icon
                         TextFormField(
+                          inputFormatters: [priceFormatter], // Apply formatter
+                          keyboardType: TextInputType.number, // Set keyboard type
                           decoration: const InputDecoration(
                             labelText: 'Harga',
                           ),
                         ),
                         const SizedBox(height: 10),
-// Add image upload functionality
-ElevatedButton(
-  onPressed: () {
-    _getImageFromGallery(context); // Panggil method _getImageFromGallery saat tombol ditekan
-  },
-  child: const Text('Upload Foto Kostan'),
-),
-
+                        // Add the title "Fasilitas"
+                        Text(
+                          'Fasilitas',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        // Add facility checkboxes
+                        ...facilities.map((facility) => CheckboxListTile(
+                          title: Text(facility),
+                          value: facilityValues[facility],
+                          onChanged: (newValue) {
+                            setState(() {
+                              facilityValues[facility] = newValue!;
+                            });
+                          },
+                        )),
+                        const SizedBox(height: 10),
+                        // Add ImagePicker
+                        Column(
+                          children: [
+                            const Text(
+                              'Tambah Tampilan Kost',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 5),
+                            GestureDetector(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return SafeArea(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          ListTile(
+                                            leading: const Icon(Icons.photo_library),
+                                            title: const Text('Choose from gallery'),
+                                            onTap: () {
+                                              _pickImage(ImageSource.gallery);
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                          ListTile(
+                                            leading: const Icon(Icons.photo_camera),
+                                            title: const Text('Take a picture'),
+                                            onTap: () {
+                                              _pickImage(ImageSource.camera);
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              child: _imageFile == null
+                                  ? Icon(Icons.add_a_photo)
+                                  : Image.file(_imageFile!),
+                            ),
+                          ],
+                        ),
                         const SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {
@@ -237,7 +253,8 @@ ElevatedButton(
                 const SizedBox(height: 20),
                 Container(
                   // Isi
-                  decoration: const BoxDecoration(color: Color.fromARGB(255, 230, 71, 71)),
+                  decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 230, 71, 71)),
                 ),
               ],
             ),
@@ -264,20 +281,13 @@ ElevatedButton(
                 );
                 break;
               case 1:
-                // Navigasi ke halaman Search
+                // Navigasi ke halaman Save
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const Simpan()),
                 );
                 break;
               case 2:
-                // Navigasi ke halaman Save
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const JualKos()),
-                );
-                break;
-              case 3:
                 // Navigasi ke halaman Add
                 Navigator.push(
                   context,
@@ -300,13 +310,6 @@ ElevatedButton(
                 'lib/icons/simpan.png',
                 height: 30,
               ),
-              label: 'Search',
-            ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'lib/icons/plus_active.png',
-                height: 30,
-              ),
               label: 'Save',
             ),
             BottomNavigationBarItem(
@@ -319,6 +322,20 @@ ElevatedButton(
           ],
         ),
       ),
+    );
+  }
+}
+
+// Custom TextInputFormatter for formatting price
+class NumberTextInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    final regEx = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
+    String newString = newValue.text.replaceAll(regEx, r'$1.');
+    return TextEditingValue(
+      text: 'Rp. ${NumberFormat('#,###').format(int.parse(newString))}', // Format the number
+      selection: TextSelection.collapsed(offset: newString.length + 4),
     );
   }
 }
