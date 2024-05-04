@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "960484760276",
+    "project_id": "inkostel-6d01d",
+    "storage_bucket": "inkostel-6d01d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:960484760276:android:868249f6184acf3f9b3941",
+        "android_client_info": {
+          "package_name": "com.example.inkostel"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWqfEhTa9so7WsI7XQXRDoEQoSWrkR_8M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
