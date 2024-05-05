@@ -2,25 +2,34 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:inkostel/service/database.dart';
 import 'package:intl/intl.dart'; // Import intl package
 import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/profile.dart';
+import 'package:random_string/random_string.dart';
 
 void main() {
   runApp(const JualKos());
 }
 
 class JualKos extends StatefulWidget {
-  const JualKos({Key? key}) : super(key: key);
+  const JualKos({super.key});
 
   @override
   State<JualKos> createState() => _JualKosState();
 }
 
 class _JualKosState extends State<JualKos> {
+  // Text Editing Controller tiap textField
+  TextEditingController namaKosController = new TextEditingController();
+  TextEditingController nomorTelponController = new TextEditingController();
+  TextEditingController alamatKosController = new TextEditingController();
+  TextEditingController hargaPertahunController = new TextEditingController();
+
   // Define a list of facilities
   List<String> facilities = [
     'AC',
@@ -40,7 +49,7 @@ class _JualKosState extends State<JualKos> {
   };
 
   // Formatter for price text field
-  final priceFormatter = NumberTextInputFormatter();
+  // final priceFormatter = NumberTextInputFormatter();
   File? _imageFile;
 
   // Function to handle selecting an image from the gallery
@@ -87,7 +96,8 @@ class _JualKosState extends State<JualKos> {
                       // Tambahkan kode navigasi ke halaman profil di sini
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Profile()),
+                        MaterialPageRoute(
+                            builder: (context) => const Profile()),
                       );
                     },
                     child: Image.asset(
@@ -96,8 +106,8 @@ class _JualKosState extends State<JualKos> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
+                const Padding(
+                  padding: EdgeInsets.only(left: 20),
                   child: Text('Hai, Supri Basuki',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
@@ -135,13 +145,14 @@ class _JualKosState extends State<JualKos> {
                         top: 20, left: 24, right: 24, bottom: 35),
                     child: Column(
                       children: [
-                        Text('Daftarkan kostan Anda sekarang!',
+                        const Text('Daftarkan kostan Anda sekarang!',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 20),
                         // TextFormField for Nama Kostan with prefix icon
                         TextFormField(
+                          controller: namaKosController,
                           decoration: const InputDecoration(
                             labelText: 'Nama Kostan',
                           ),
@@ -149,6 +160,7 @@ class _JualKosState extends State<JualKos> {
                         const SizedBox(height: 10),
                         // TextFormField for Nomor Telepon with prefix text
                         TextFormField(
+                          controller: nomorTelponController,
                           decoration: const InputDecoration(
                             labelText: 'Nomor Telepon',
                             prefixText: '+62 ', // Add the prefix text
@@ -157,6 +169,7 @@ class _JualKosState extends State<JualKos> {
                         const SizedBox(height: 10),
                         // TextFormField for Alamat with prefix icon
                         TextFormField(
+                          controller: alamatKosController,
                           decoration: const InputDecoration(
                             labelText: 'Alamat',
                           ),
@@ -164,15 +177,17 @@ class _JualKosState extends State<JualKos> {
                         const SizedBox(height: 10),
                         // TextFormField for Harga with prefix icon
                         TextFormField(
-                          inputFormatters: [priceFormatter], // Apply formatter
-                          keyboardType: TextInputType.number, // Set keyboard type
+                          controller: hargaPertahunController,
+                          // inputFormatters: [priceFormatter], // Apply formatter
+                          keyboardType:
+                              TextInputType.number, // Set keyboard type
                           decoration: const InputDecoration(
                             labelText: 'Harga',
                           ),
                         ),
                         const SizedBox(height: 10),
                         // Add the title "Fasilitas"
-                        Text(
+                        const Text(
                           'Fasilitas',
                           style: TextStyle(
                             fontSize: 20,
@@ -182,14 +197,14 @@ class _JualKosState extends State<JualKos> {
                         const SizedBox(height: 10),
                         // Add facility checkboxes
                         ...facilities.map((facility) => CheckboxListTile(
-                          title: Text(facility),
-                          value: facilityValues[facility],
-                          onChanged: (newValue) {
-                            setState(() {
-                              facilityValues[facility] = newValue!;
-                            });
-                          },
-                        )),
+                              title: Text(facility),
+                              value: facilityValues[facility],
+                              onChanged: (newValue) {
+                                setState(() {
+                                  facilityValues[facility] = newValue!;
+                                });
+                              },
+                            )),
                         const SizedBox(height: 10),
                         // Add ImagePicker
                         Column(
@@ -212,15 +227,18 @@ class _JualKosState extends State<JualKos> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
                                           ListTile(
-                                            leading: const Icon(Icons.photo_library),
-                                            title: const Text('Choose from gallery'),
+                                            leading:
+                                                const Icon(Icons.photo_library),
+                                            title: const Text(
+                                                'Choose from gallery'),
                                             onTap: () {
                                               _pickImage(ImageSource.gallery);
                                               Navigator.pop(context);
                                             },
                                           ),
                                           ListTile(
-                                            leading: const Icon(Icons.photo_camera),
+                                            leading:
+                                                const Icon(Icons.photo_camera),
                                             title: const Text('Take a picture'),
                                             onTap: () {
                                               _pickImage(ImageSource.camera);
@@ -234,15 +252,35 @@ class _JualKosState extends State<JualKos> {
                                 );
                               },
                               child: _imageFile == null
-                                  ? Icon(Icons.add_a_photo)
+                                  ? const Icon(Icons.add_a_photo)
                                   : Image.file(_imageFile!),
                             ),
                           ],
                         ),
                         const SizedBox(height: 10),
                         ElevatedButton(
-                          onPressed: () {
-                            // Action when submit button is pressed
+                          onPressed: () async {
+                            String Id = randomAlphaNumeric(8);
+
+                            Map<String, dynamic> kosDataMap = {
+                              "Kos ID": Id,
+                              "Nama Kos": namaKosController.text,
+                              "Nomor Telepon": nomorTelponController.text,
+                              "Alamat Kos": alamatKosController.text,
+                              "Harga Pertahun": hargaPertahunController.text,
+                            };
+                            await DatabaseMethods()
+                                .addKosDetails(kosDataMap, Id)
+                                .then((value) {
+                              Fluttertoast.showToast(
+                                  msg: "Berhasil Mengirim, Data Kos Anda Akan diverifikasi oleh Admin",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Color.fromARGB(255, 16, 173, 89),
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                            });
                           },
                           child: const Text('Submit'),
                         ),
@@ -326,16 +364,17 @@ class _JualKosState extends State<JualKos> {
   }
 }
 
-// Custom TextInputFormatter for formatting price
-class NumberTextInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    final regEx = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
-    String newString = newValue.text.replaceAll(regEx, r'$1.');
-    return TextEditingValue(
-      text: 'Rp. ${NumberFormat('#,###').format(int.parse(newString))}', // Format the number
-      selection: TextSelection.collapsed(offset: newString.length + 4),
-    );
-  }
-}
+// // Custom TextInputFormatter for formatting price
+// class NumberTextInputFormatter extends TextInputFormatter {
+//   @override
+//   TextEditingValue formatEditUpdate(
+//       TextEditingValue oldValue, TextEditingValue newValue) {
+//     final regEx = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
+//     String newString = newValue.text.replaceAll(regEx, r'$1.');
+//     return TextEditingValue(
+//       text:
+//           'Rp. ${NumberFormat('#,###').format(int.parse(newString))}', // Format the number
+//       selection: TextSelection.collapsed(offset: newString.length + 4),
+//     );
+//   }
+// }

@@ -9,15 +9,14 @@ void main() {
 }
 
 class Simpan extends StatefulWidget {
-  const Simpan({Key? key}) : super(key: key);
+  const Simpan({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _SimpanState createState() => _SimpanState();
 }
 
 class _SimpanState extends State<Simpan> {
-
-  
   bool isFavorite1 = true;
   bool isFavorite2 = true;
   bool isFavorite3 = true;
@@ -63,11 +62,11 @@ class _SimpanState extends State<Simpan> {
   ];
 
   int _currentPage = 0;
-  int _itemsPerPage = 2;
+  final int _itemsPerPage = 2;
 
   @override
   Widget build(BuildContext context) {
-    final int _totalPages = (kosData.length / _itemsPerPage).ceil();
+    final int totalPages = (kosData.length / _itemsPerPage).ceil();
 
     return MaterialApp(
       home: Scaffold(
@@ -128,19 +127,19 @@ class _SimpanState extends State<Simpan> {
                     },
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List<Widget>.generate(
-                    (_totalPages > 4) ? 4 : _totalPages,
+                    (totalPages > 4) ? 4 : totalPages,
                     (int pageIndex) {
                       int displayPageIndex;
-                      if (_totalPages <= 5 || _currentPage <= 2) {
+                      if (totalPages <= 5 || _currentPage <= 2) {
                         displayPageIndex = pageIndex;
-                      } else if (_currentPage >= _totalPages - 3) {
-                        displayPageIndex = _totalPages - 4 + pageIndex;
+                      } else if (_currentPage >= totalPages - 3) {
+                        displayPageIndex = totalPages - 4 + pageIndex;
                       } else {
                         displayPageIndex = _currentPage - 2 + pageIndex;
                       }
@@ -155,7 +154,7 @@ class _SimpanState extends State<Simpan> {
                           padding: const EdgeInsets.all(5),
                           decoration: BoxDecoration(
                             color: _currentPage == displayPageIndex
-                                ? Color.fromRGBO(100, 204, 197, 1)
+                                ? const Color.fromRGBO(100, 204, 197, 1)
                                 : Colors.grey,
                             borderRadius: BorderRadius.circular(5),
                           ),
@@ -182,12 +181,12 @@ class _SimpanState extends State<Simpan> {
                       }
                     : null,
                 child: Container(
-                  padding: EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: Icon(Icons.arrow_back_ios_new),
+                  child: const Icon(Icons.arrow_back_ios_new),
                 ),
               ),
             ),
@@ -195,7 +194,7 @@ class _SimpanState extends State<Simpan> {
               right: 113,
               bottom: 70,
               child: GestureDetector(
-                onTap: (_currentPage < _totalPages - 1)
+                onTap: (_currentPage < totalPages - 1)
                     ? () {
                         setState(() {
                           _currentPage++;
@@ -203,12 +202,12 @@ class _SimpanState extends State<Simpan> {
                       }
                     : null,
                 child: Container(
-                  padding: EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: Icon(Icons.arrow_forward_ios),
+                  child: const Icon(Icons.arrow_forward_ios),
                 ),
               ),
             ),
