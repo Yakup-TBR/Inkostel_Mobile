@@ -1,6 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:inkostel/pages/validation.dart';
 import 'firebase_options.dart';
 import 'package:get/get.dart';
 import 'package:inkostel/pages/home.dart';
@@ -57,6 +58,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     //Ganti GetMaterialApp buat Run Login soalnya pakai Get.to
     //Kalo mau balikin lagi tinggal ganti ke MaterialApp
-    return MaterialApp(home: SplashScreen());
+    return MaterialApp(home: Validation());
   }
 }

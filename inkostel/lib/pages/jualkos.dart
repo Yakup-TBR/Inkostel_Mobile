@@ -276,7 +276,7 @@ class _JualKosState extends State<JualKos> {
                                   msg: "Berhasil Mengirim, Data Kos Anda Akan diverifikasi oleh Admin",
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.CENTER,
-                                  timeInSecForIosWeb: 1,
+                                  timeInSecForIosWeb: 3,
                                   backgroundColor: Color.fromARGB(255, 16, 173, 89),
                                   textColor: Colors.white,
                                   fontSize: 16.0);
