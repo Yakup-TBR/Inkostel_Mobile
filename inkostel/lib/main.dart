@@ -17,9 +17,13 @@ import 'package:inkostel/views/login.view.dart';
 import 'package:inkostel/views/splash.view.dart';
 
 void main() async {
+  // Inisiasi database
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-);
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // Notifikasi Simpan
   await AwesomeNotifications().initialize(null, [
     NotificationChannel(
         channelGroupKey: "grup_notifikasi",
@@ -36,6 +40,7 @@ void main() async {
   if (!isAllowedToSendNotifications) {
     AwesomeNotifications().requestPermissionToSendNotifications();
   }
+
   runApp(const MyApp());
 }
 
@@ -52,7 +57,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     //Ganti GetMaterialApp buat Run Login soalnya pakai Get.to
     //Kalo mau balikin lagi tinggal ganti ke MaterialApp
-    return MaterialApp(
-        home: SplashScreen());
+    return MaterialApp(home: SplashScreen());
   }
 }
