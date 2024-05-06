@@ -21,6 +21,18 @@ class CariKos extends StatefulWidget {
   _CariKosState createState() => _CariKosState();
 }
 
+String getLabel(double value) {
+  if (value < 500) {
+    return "< 500 Meter";
+  } else if (value >= 500 && value < 1000) {
+    return "500 Meter - 1 KM";
+  } else if (value >= 1000 && value < 2000) {
+    return "1 KM - 2 KM";
+  } else {
+    return "> 2 KM";
+  }
+}
+
 class _CariKosState extends State<CariKos> {
   @override
   void initState() {
@@ -102,7 +114,7 @@ class _CariKosState extends State<CariKos> {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 30),
+                    padding: const EdgeInsets.only(left: 22),
                     child: Container(
                       height: 45,
                       decoration: BoxDecoration(
@@ -155,34 +167,44 @@ class _CariKosState extends State<CariKos> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 255, 255, 255),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: const Color.fromRGBO(100, 204, 197, 1),
-                        width: 0.5,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color.fromARGB(31, 106, 106, 106)
-                              .withOpacity(0.6),
-                          spreadRadius: 0,
-                          blurRadius: 2,
-                          offset: const Offset(0, 2), // Atur posisi shadow
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const FilterDialog();
+                          },
+                        );
+                      },
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: const Color.fromRGBO(100, 204, 197, 1),
+                            width: 0.5,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color.fromARGB(31, 106, 106, 106)
+                                  .withOpacity(0.6),
+                              spreadRadius: 0,
+                              blurRadius: 2,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    padding: const EdgeInsets.all(7),
-                    child: Image.asset(
-                      'lib/icons/filter.png',
-                      color: const Color.fromRGBO(100, 204, 197, 1),
+                        padding: const EdgeInsets.all(7),
+                        child: Image.asset(
+                          'lib/icons/filter.png',
+                          color: const Color.fromRGBO(100, 204, 197, 1),
+                        ),
+                      ),
                     ),
                   ),
-                ),
                 const Row()
               ],
             ),
@@ -910,5 +932,161 @@ class _CariKosState extends State<CariKos> {
       // Untuk jarak di bawah 1000 meter, kembalikan sebagai meter
       return '${distance} meter';
     }
+  }
+}
+
+// Class Filter Dialog dibuat stateful
+class FilterDialog extends StatefulWidget {
+  const FilterDialog({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _FilterDialogState createState() => _FilterDialogState();
+}
+
+class _FilterDialogState extends State<FilterDialog> {
+  double _currentSliderValue = 0.0;
+  bool isChecked100Meters = false;
+  bool isChecked200Meters = false;
+  bool isChecked500Meters = false;
+  bool isChecked1KM = false;
+  bool isCheckedLebih1KM = false;
+
+  String _getLabel(double value) {
+    if (value < 500) {
+      return "< 5 Juta";
+    } else if (value >= 500 && value < 1000) {
+      return "5 - 7 Juta";
+    } else if (value >= 1000 && value < 1500) {
+      return "7 - 10 Juta";
+    } else if (value >= 1500 && value < 2000) {
+      return "10 - 15 Juta";
+    } else {
+      return "> 15 Juta";
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Filter',
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Jarak',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            CheckboxListTile(
+              title: const Text('Kurang 100 Meter'),
+              value: isChecked100Meters,
+              onChanged: (bool? value) {
+                setState(() {
+                  isChecked100Meters = value!;
+                });
+              },
+              activeColor: const Color.fromRGBO(100, 204, 197, 1),
+              checkColor: Colors.white,
+            ),
+            CheckboxListTile(
+              title: const Text('100 - 300 Meter'),
+              value: isChecked200Meters,
+              onChanged: (bool? value) {
+                setState(() {
+                  isChecked200Meters = value!;
+                });
+              },
+              activeColor: const Color.fromRGBO(100, 204, 197, 1),
+              checkColor: Colors.white,
+            ),
+            CheckboxListTile(
+              title: const Text('300 - 500 Meter'),
+              value: isChecked500Meters,
+              onChanged: (bool? value) {
+                setState(() {
+                  isChecked500Meters = value!;
+                });
+              },
+              activeColor: const Color.fromRGBO(100, 204, 197, 1),
+              checkColor: Colors.white,
+            ),
+            CheckboxListTile(
+              title: const Text('500 - 1 KM'),
+              value: isChecked1KM,
+              onChanged: (bool? value) {
+                setState(() {
+                  isChecked1KM = value!;
+                });
+              },
+              activeColor: const Color.fromRGBO(100, 204, 197, 1),
+              checkColor: Colors.white,
+            ),
+            CheckboxListTile(
+              title: const Text('Lebih dari 1 KM'),
+              value: isCheckedLebih1KM,
+              onChanged: (bool? value) {
+                setState(() {
+                  isCheckedLebih1KM = value!;
+                });
+              },
+              activeColor: const Color.fromRGBO(100, 204, 197, 1),
+              checkColor: Colors.white,
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Harga Pertahun',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Slider(
+              value: _currentSliderValue,
+              max: 2000,
+              divisions: 4,
+              label: _getLabel(_currentSliderValue),
+              onChanged: (double value) {
+                setState(() {
+                  _currentSliderValue = value;
+                });
+              },
+              activeColor: const Color.fromRGBO(100, 204, 197, 1),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    'Tutup',
+                    style: GoogleFonts.getFont(
+                      'Poppins',
+                      fontSize: 17,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

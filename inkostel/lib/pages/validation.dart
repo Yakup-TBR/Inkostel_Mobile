@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp( Validation());
+  runApp(Validation());
 }
 
 class Validation extends StatelessWidget {
-   Validation({Key? key});
+  Validation({Key? key});
 
   @override
   Widget build(BuildContext context) {
-  
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromRGBO(173,188,159, 1),
-
+          backgroundColor: const Color.fromRGBO(173, 188, 159, 1),
           title: Row(
             children: [
               InkWell(
@@ -46,8 +44,7 @@ class Validation extends StatelessWidget {
             ],
           ),
         ),
-
-        backgroundColor: const Color.fromRGBO(173,188,159, 1),
+        backgroundColor: const Color.fromRGBO(173, 188, 159, 1),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -55,26 +52,29 @@ class Validation extends StatelessWidget {
               padding: const EdgeInsets.all(20.0),
               child: Row(
                 children: [
-                   Expanded(
+                  Expanded(
                     flex: 2,
                     child: TextField(
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(vertical: 1, horizontal: 10),
-                      hintText: 'Cari Kos Disini..',
-                      suffixIcon: const Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                        borderSide: const BorderSide(color: Colors.white), // Belum berubah
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 1, horizontal: 10),
+                        hintText: 'Cari Kos Disini..',
+                        suffixIcon: const Icon(Icons.search),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                          borderSide: const BorderSide(
+                              color: Colors.white), // Belum berubah
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                        hintStyle:
+                            const TextStyle(color: Colors.grey, fontSize: 14.0),
                       ),
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      hintStyle: const TextStyle(color: Colors.grey, fontSize: 14.0),
                     ),
                   ),
-                  ),
                   Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Container(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Container(
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
@@ -85,7 +85,8 @@ class Validation extends StatelessWidget {
                             color: Colors.grey.withOpacity(0.5),
                             spreadRadius: 2, // Penyebaran shadow
                             blurRadius: 3, // Blur radius shadow
-                            offset: const Offset(0, 3), // Offset shadow (horizontal, vertical)
+                            offset: const Offset(
+                                0, 3), // Offset shadow (horizontal, vertical)
                           ),
                         ],
                       ),
@@ -98,7 +99,7 @@ class Validation extends StatelessWidget {
                     ),
                   ),
                 ],
-              ), 
+              ),
             ),
             Expanded(
               child: Stack(
@@ -121,7 +122,6 @@ class Validation extends StatelessWidget {
                       },
                     ),
                   ),
-                  
                   Align(alignment: Alignment.bottomCenter, child: _navBar())
                 ],
               ),
@@ -132,16 +132,11 @@ class Validation extends StatelessWidget {
     );
   }
 
-  List<IconData> navIcons = [
-    Icons.home,
-    Icons.search,
-    Icons.save,
-    Icons.add
-  ];
+  List<IconData> navIcons = [Icons.home, Icons.search, Icons.save, Icons.add];
 
   int selectedIndex = 0;
 
-  Widget _navBar(){
+  Widget _navBar() {
     return Container(
       height: 65,
       margin: const EdgeInsets.only(
@@ -150,14 +145,13 @@ class Validation extends StatelessWidget {
         bottom: 24,
       ),
       decoration: BoxDecoration(
-        color: const Color.fromRGBO(67,104,80, 1),
+        color: const Color.fromRGBO(67, 104, 80, 1),
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
-            color: const Color.fromARGB(255, 47, 47, 47).withAlpha(25),
-            blurRadius: 20,
-            spreadRadius: 10
-          )
+              color: const Color.fromARGB(255, 47, 47, 47).withAlpha(25),
+              blurRadius: 20,
+              spreadRadius: 10)
         ],
       ),
       child: Row(
@@ -165,16 +159,16 @@ class Validation extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: navIcons.map((icon) {
           int index = navIcons.indexOf(icon);
-          bool isSeleted = selectedIndex ==index;
+          bool isSeleted = selectedIndex == index;
           return Material(
-            child: Container(
-              decoration: const BoxDecoration(
-                  color:  Color.fromRGBO(67,104,80, 1),
-              ),  
-              child: Icon(icon,
-              color: isSeleted?Colors.blue:Colors.grey,)
-            )
-          );
+              child: Container(
+                  decoration: const BoxDecoration(
+                    color: Color.fromRGBO(67, 104, 80, 1),
+                  ),
+                  child: Icon(
+                    icon,
+                    color: isSeleted ? Colors.blue : Colors.grey,
+                  )));
         }).toList(),
       ),
     );

@@ -1,7 +1,5 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:inkostel/service/database.dart';
@@ -11,6 +9,7 @@ import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/profile.dart';
 import 'package:random_string/random_string.dart';
+import 'package:inkostel/service/image_service.dart';
 
 void main() {
   runApp(const JualKos());
@@ -24,11 +23,24 @@ class JualKos extends StatefulWidget {
 }
 
 class _JualKosState extends State<JualKos> {
+  Future<void> _saveImageLocally(File imageFile) async {
+    final imagePath = await saveImageLocally(imageFile);
+    print('Image saved locally at $imagePath');
+  }
+
+  Future<void> _uploadImageToFirebase(String imagePath) async {
+    final String imageName = 'kost_image.jpg'; // Nama gambar yang akan diunggah
+    final imageUrl = await uploadImageToFirebase(imagePath, imageName);
+    print('Image uploaded to Firebase. URL: $imageUrl');
+    // Di sini Anda dapat melakukan apa pun yang Anda inginkan dengan URL gambar, misalnya menyimpannya di database Firebase
+  }
+
   // Text Editing Controller tiap textField
   TextEditingController namaKosController = new TextEditingController();
   TextEditingController nomorTelponController = new TextEditingController();
   TextEditingController alamatKosController = new TextEditingController();
   TextEditingController hargaPertahunController = new TextEditingController();
+  TextEditingController hargaPerbulanController = new TextEditingController();
 
   // Define a list of facilities
   List<String> facilities = [
@@ -52,6 +64,7 @@ class _JualKosState extends State<JualKos> {
   // final priceFormatter = NumberTextInputFormatter();
   File? _imageFile;
 
+  // Function to handle selecting an image from the gallery
   // Function to handle selecting an image from the gallery
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
@@ -182,7 +195,16 @@ class _JualKosState extends State<JualKos> {
                           keyboardType:
                               TextInputType.number, // Set keyboard type
                           decoration: const InputDecoration(
-                            labelText: 'Harga',
+                            labelText: 'Harga Pertahun (Wajib diisi)',
+                          ),
+                        ),
+                        TextFormField(
+                          controller: hargaPerbulanController,
+                          // inputFormatters: [priceFormatter], // Apply formatter
+                          keyboardType:
+                              TextInputType.number, // Set keyboard type
+                          decoration: const InputDecoration(
+                            labelText: 'Harga Perbulan (Opsional)',
                           ),
                         ),
                         const SizedBox(height: 10),
@@ -219,37 +241,7 @@ class _JualKosState extends State<JualKos> {
                             const SizedBox(height: 5),
                             GestureDetector(
                               onTap: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return SafeArea(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          ListTile(
-                                            leading:
-                                                const Icon(Icons.photo_library),
-                                            title: const Text(
-                                                'Choose from gallery'),
-                                            onTap: () {
-                                              _pickImage(ImageSource.gallery);
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                          ListTile(
-                                            leading:
-                                                const Icon(Icons.photo_camera),
-                                            title: const Text('Take a picture'),
-                                            onTap: () {
-                                              _pickImage(ImageSource.camera);
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                );
+                                _showImagePicker(); // Panggil fungsi untuk menampilkan pemilih gambar
                               },
                               child: _imageFile == null
                                   ? const Icon(Icons.add_a_photo)
@@ -262,22 +254,39 @@ class _JualKosState extends State<JualKos> {
                           onPressed: () async {
                             String Id = randomAlphaNumeric(8);
 
+                            // Upload image to Firebase Storage
+                            String imagePath =
+                                _imageFile != null ? _imageFile!.path : '';
+                            String imageUrl = '';
+                            if (imagePath.isNotEmpty) {
+                              imageUrl = await uploadImageToFirebase(
+                                  imagePath, 'kost_image.jpg');
+                            }
+
+                            // Update kosDataMap with imageUrl
                             Map<String, dynamic> kosDataMap = {
                               "Kos ID": Id,
                               "Nama Kos": namaKosController.text,
                               "Nomor Telepon": nomorTelponController.text,
                               "Alamat Kos": alamatKosController.text,
                               "Harga Pertahun": hargaPertahunController.text,
+                              "Harga Perbulan": hargaPerbulanController.text,
+                              "Fasilitas": facilityValues,
+                              "ImageURL": imageUrl,
                             };
+
+                            // Tambahkan data kos ke Firebase Database
                             await DatabaseMethods()
                                 .addKosDetails(kosDataMap, Id)
                                 .then((value) {
                               Fluttertoast.showToast(
-                                  msg: "Berhasil Mengirim, Data Kos Anda Akan diverifikasi oleh Admin",
+                                  msg:
+                                      "Berhasil Mengirim, Data Kos Anda Akan diverifikasi oleh Admin",
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.CENTER,
                                   timeInSecForIosWeb: 3,
-                                  backgroundColor: Color.fromARGB(255, 16, 173, 89),
+                                  backgroundColor:
+                                      Color.fromARGB(255, 16, 173, 89),
                                   textColor: Colors.white,
                                   fontSize: 16.0);
                             });
@@ -362,7 +371,41 @@ class _JualKosState extends State<JualKos> {
       ),
     );
   }
+
+  // Fungsi di ikon kamera untuk ambil gambar
+  // Function to show the image picker modal bottom sheet
+  void _showImagePicker() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Choose from gallery'),
+                onTap: () {
+                  _pickImage(ImageSource.gallery);
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('Take a picture'),
+                onTap: () {
+                  _pickImage(ImageSource.camera);
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
+
 
 // // Custom TextInputFormatter for formatting price
 // class NumberTextInputFormatter extends TextInputFormatter {

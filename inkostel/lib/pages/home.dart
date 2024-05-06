@@ -93,7 +93,7 @@ class _HomeState extends State<Home> {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 30),
+                      padding: const EdgeInsets.only(left: 22, right: 22),
                       child: Container(
                         height: 45,
                         decoration: BoxDecoration(
@@ -144,45 +144,6 @@ class _HomeState extends State<Home> {
                             contentPadding:
                                 const EdgeInsets.only(left: 20, top: 8),
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20),
-                    child: GestureDetector(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return const FilterDialog();
-                          },
-                        );
-                      },
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 255, 255, 255),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: const Color.fromRGBO(100, 204, 197, 1),
-                            width: 0.5,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color.fromARGB(31, 106, 106, 106)
-                                  .withOpacity(0.6),
-                              spreadRadius: 0,
-                              blurRadius: 2,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        padding: const EdgeInsets.all(7),
-                        child: Image.asset(
-                          'lib/icons/filter.png',
-                          color: const Color.fromRGBO(100, 204, 197, 1),
                         ),
                       ),
                     ),
