@@ -14,6 +14,11 @@ class Profile extends StatelessWidget {
   final double coverHeight = 170;
   final double profileSize = 110;
 
+  final String name = 'Supri Basuki';
+  final String username = '@supribasuki';
+  final String number = '+62 - 8123 - 5643 - 8923';
+  final String email = 'supribasuki@gmail.com';
+  final String description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -241,7 +246,7 @@ class Profile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Supri Basuki',
+            name,
             style: GoogleFonts.getFont(
               'Poppins',
               fontSize: 36,
@@ -250,7 +255,7 @@ class Profile extends StatelessWidget {
             ),
           ),
           Text(
-            '@supribasuki',
+            username,
             style: GoogleFonts.getFont(
               'Poppins',
               fontSize: 18,
@@ -258,7 +263,7 @@ class Profile extends StatelessWidget {
             ),
           ),
           Text(
-            '+62 - 8123 - 5643 - 8923',
+            number,
             style: GoogleFonts.getFont(
               'Poppins',
               fontSize: 18,
@@ -266,16 +271,16 @@ class Profile extends StatelessWidget {
             ),
           ),
           Text(
-            'supribasuki@gmail.com',
+            email,
             style: GoogleFonts.getFont(
               'Poppins',
               fontSize: 18,
               color: Colors.grey,
             ),
           ),
-          const SizedBox(height: 30), 
+          const SizedBox(height: 30),
           Text(
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+            description,
             style: GoogleFonts.getFont(
               'Poppins',
               fontSize: 18,
@@ -284,15 +289,15 @@ class Profile extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ],
-        
       ),
     );
   }
+
   // ignore: non_constant_identifier_names
-  EditProfile(BuildContext context) {
-    TextEditingController nameController = TextEditingController();
-    TextEditingController numberController = TextEditingController();
-    TextEditingController descriptionController = TextEditingController();
+  void EditProfile(BuildContext context) {
+    TextEditingController nameController = TextEditingController(text: name);
+    TextEditingController numberController = TextEditingController(text: number.replaceAll('+62', ''));
+    TextEditingController descriptionController = TextEditingController(text: description);
 
     showDialog(
       context: context,
@@ -302,24 +307,48 @@ class Profile extends StatelessWidget {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              ElevatedButton(
+              OutlinedButton(
                 onPressed: () {
                   showImageSourceDialog(context);
                 },
-                child: Text('Ubah Gambar Profil'),
+                child: Text(
+                  'Ubah Gambar Profil',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 76, 165, 175), // Warna teks hijau
+                  ),
+                ),
+                style: ButtonStyle(
+                  side: MaterialStateProperty.resolveWith<BorderSide>((states) {
+                    // Menetapkan ketebalan outline dan warna abu-abu
+                    return BorderSide(color: Colors.grey, width: 1);
+                  }),
+                ),
               ),
-              SizedBox(height: 20), 
+              const SizedBox(height: 20),
               TextField(
                 controller: nameController,
-                decoration: const InputDecoration(labelText: 'Nama'),
+                decoration: const InputDecoration(
+                  labelText: 'Nama',
+                  labelStyle: TextStyle(color: Color.fromARGB(255, 76, 165, 175)), // Warna teks hijau
+                ),
               ),
+              const SizedBox(height: 20),
               TextField(
                 controller: numberController,
-                decoration: const InputDecoration(labelText: 'Nomor'),
+                decoration: const InputDecoration(
+                  labelText: 'Nomor',
+                  // Tambahkan teks +62 secara otomatis sebagai prefix
+                  prefixText: '+62 ',
+                  labelStyle: TextStyle(color: Color.fromARGB(255, 76, 165, 175)), 
+                ),
               ),
+              const SizedBox(height: 20),
               TextField(
                 controller: descriptionController,
-                decoration: const InputDecoration(labelText: 'Deskripsi'),
+                decoration: const InputDecoration(
+                  labelText: 'Deskripsi',
+                  labelStyle: TextStyle(color: Color.fromARGB(255, 76, 165, 175)), // Warna teks hijau
+                ),
               ),
             ],
           ),
@@ -328,16 +357,27 @@ class Profile extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Batal'),
+              child: Text(
+                'Batal',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 76, 165, 175), // Warna teks hijau
+                ),
+              ),
             ),
             TextButton(
               onPressed: () {
-                String name = nameController.text;
-                String number = numberController.text;
-                String description = descriptionController.text;
+                String newName = nameController.text;
+                String newNumber = '+62' + numberController.text; // Gabungkan dengan prefix +62
+                String newDescription = descriptionController.text;
+                // Update data user here
                 Navigator.of(context).pop();
               },
-              child: Text('Simpan'),
+              child: Text(
+                'Simpan',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 76, 165, 175), // Warna teks hijau
+                ),
+              ),
             ),
           ],
         );
