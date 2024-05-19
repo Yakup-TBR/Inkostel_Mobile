@@ -45,29 +45,57 @@ String getLabel(double value) {
 }
 
 class _CariKosState extends State<CariKos> {
+  // Untuk Lazy load
+  int _batchSize = 3;
+  int _currentBatch = 0;
+  ScrollController _scrollController = ScrollController();
+  bool _isLoadingMore = false;
+
   List<Kost> _kostList = [];
   bool _isLoading = true;
 
-  Future<void> _fetchData() async {
+  Future<void> _fetchData({bool loadMore = false}) async {
+    setState(() {
+      if (loadMore)
+        _isLoadingMore = true;
+      else
+        _isLoading = true;
+    });
+
     List<Kost> fetchedKostList = await CariKos.fetchData();
     setState(() {
-      _kostList = fetchedKostList;
+      if (loadMore) {
+        _kostList.addAll(fetchedKostList
+            .skip(_currentBatch * _batchSize)
+            .take(_batchSize)
+            .toList());
+        _isLoadingMore = false;
+      } else {
+        _kostList = fetchedKostList.take(_batchSize).toList();
+        _isLoading = false;
+      }
+      _currentBatch++;
     });
   }
 
   @override
-  void initState() {
-    AwesomeNotifications().setListeners(
-        onActionReceivedMethod: NotificationController.onActionReceivedMethod,
-        onNotificationCreatedMethod:
-            NotificationController.onNotificationCreateMethod,
-        onNotificationDisplayedMethod:
-            NotificationController.onNotificationDisplayMethod,
-        onDismissActionReceivedMethod:
-            NotificationController.onDissmissActionReceivedMethod);
-    super.initState();
-    _fetchData();
-  }
+void initState() {
+  AwesomeNotifications().setListeners(
+      onActionReceivedMethod: NotificationController.onActionReceivedMethod,
+      onNotificationCreatedMethod: NotificationController.onNotificationCreateMethod,
+      onNotificationDisplayedMethod: NotificationController.onNotificationDisplayMethod,
+      onDismissActionReceivedMethod: NotificationController.onDissmissActionReceivedMethod);
+
+  super.initState();
+  _fetchData();
+
+  _scrollController.addListener(() {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent && !_isLoadingMore) {
+      _fetchData(loadMore: true);
+    }
+  });
+}
+
 
   bool isFavorite1 = false;
   bool isFavorite2 = false;
@@ -348,151 +376,142 @@ class _CariKosState extends State<CariKos> {
               ],
             ),
             Expanded(
-              child: _kostList.isEmpty
-                  ? const Center(child: CircularProgressIndicator())
-                  : ListView.builder(
-                      itemCount: _kostList.length,
-                      itemBuilder: (context, index) {
-                        // ignore: non_constant_identifier_names
-                        final Kost = _kostList[index];
-                        return Container(
-                          width: double.infinity,
-                          margin: const EdgeInsets.all(1),
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 255, 255, 255),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Column(
-                            children: [
-                              Visibility(
-                                visible: false,
-                                child: Text(
-                                  Kost.kosId,
-                                ),
+  child: _kostList.isEmpty
+      ? const Center(child: CircularProgressIndicator())
+      : ListView.builder(
+          controller: _scrollController,
+          itemCount: _kostList.length + 1,
+          itemBuilder: (context, index) {
+            if (index == _kostList.length) {
+              return _isLoadingMore ? const Center(child: CircularProgressIndicator()) : Container();
+            }
+            final Kost kost = _kostList[index];
+            return Container(
+              width: double.infinity,
+              margin: const EdgeInsets.all(1),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 255, 255, 255),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                children: [
+                  Visibility(
+                    visible: false,
+                    child: Text(kost.kosId),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: 370,
+                    height: 200,
+                    child: Stack(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => detail(),
                               ),
-                              const SizedBox(height: 20),
-                              SizedBox(
-                                width: 370,
-                                height: 200,
-                                child: Stack(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => detail(),
-                                          ),
-                                        );
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                            color: const Color.fromARGB(
-                                                109, 134, 146, 134),
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                          image: DecorationImage(
-                                            image: NetworkImage(Kost.imageUrl),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 10,
-                                      right: 10,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          border: Border.all(
-                                            color:
-                                                Colors.black.withOpacity(0.5),
-                                            width: 1,
-                                          ),
-                                        ),
-                                        child: Text(
-                                          Kost.hargaPertahun,
-                                          style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      bottom: 35,
-                                      left: 10,
-                                      child: Text(
-                                        Kost.namaKost,
-                                        style: const TextStyle(
-                                          color: Color.fromARGB(
-                                              255, 255, 255, 255),
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      bottom: 10,
-                                      left: 10,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            isFavorite1 = !isFavorite1;
-                                            if (isFavorite1) {
-                                              AwesomeNotifications()
-                                                  .createNotification(
-                                                content: NotificationContent(
-                                                  id: 1,
-                                                  channelKey: 'notif_simpan',
-                                                  title:
-                                                      'Kos ${Kost.namaKost} telah Disimpan!',
-                                                  body: 'Ketuk untuk melihat',
-                                                ),
-                                              );
-                                            }
-                                          });
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              getDistanceText(900),
-                                              style: const TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 255, 255, 255),
-                                                fontSize: 17,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 5),
-                                            Image.asset(
-                                              'lib/icons/simpan_active.png',
-                                              color: isFavorite1
-                                                  ? const Color.fromRGBO(
-                                                      100, 204, 197, 1)
-                                                  : Colors.white,
-                                              width: 30,
-                                              height: 30,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                color: const Color.fromARGB(109, 134, 146, 134),
                               ),
-                            ],
+                              borderRadius: BorderRadius.circular(20.0),
+                              image: DecorationImage(
+                                image: NetworkImage(kost.imageUrl),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
-                        );
-                      },
+                        ),
+                        Positioned(
+                          top: 10,
+                          right: 10,
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: Colors.black.withOpacity(0.5),
+                                width: 1,
+                              ),
+                            ),
+                            child: Text(
+                              kost.hargaPertahun,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 35,
+                          left: 10,
+                          child: Text(
+                            kost.namaKost,
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 255, 255, 255),
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 10,
+                          left: 10,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isFavorite1 = !isFavorite1;
+                                if (isFavorite1) {
+                                  AwesomeNotifications().createNotification(
+                                    content: NotificationContent(
+                                      id: 1,
+                                      channelKey: 'notif_simpan',
+                                      title: 'Kos ${kost.namaKost} telah Disimpan!',
+                                      body: 'Ketuk untuk melihat',
+                                    ),
+                                  );
+                                }
+                              });
+                            },
+                            child: Row(
+                              children: [
+                                Text(
+                                  getDistanceText(900),
+                                  style: const TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                    fontSize: 17,
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                                Image.asset(
+                                  'lib/icons/simpan_active.png',
+                                  color: isFavorite1 ? const Color.fromRGBO(100, 204, 197, 1) : Colors.white,
+                                  width: 30,
+                                  height: 30,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-            ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+)
+,
           ]),
         ],
       ),
