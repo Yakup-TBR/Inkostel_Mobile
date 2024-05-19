@@ -120,40 +120,39 @@ class Profile extends StatelessWidget {
           margin: EdgeInsets.only(bottom: bottom),
           child: buildCoverImage(),
         ),
-        
         Positioned(
-          bottom: 0, 
+          bottom: 0,
           left: 0,
           right: 0,
           child: Container(
-            height: coverHeight / 2 , 
+            height: coverHeight / 2,
             decoration: const BoxDecoration(
-              color: Colors.white, 
+              color: Colors.white,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(18.0), 
-                topRight: Radius.circular(18.0), 
+                topLeft: Radius.circular(18.0),
+                topRight: Radius.circular(18.0),
               ),
             ),
           ),
         ),
         Positioned(
-          top: top, 
-          child: buildProfileImageWithShadow(),
+          top: top,
+          child: buildProfileImageWithShadow(context),
         ),
         Positioned(
           left: 10,
           top: 40,
-          child: Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop();
-              },
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8.0),
+              ),
               child: Center(
                 child: Image.asset(
                   'lib/icons/back.png',
@@ -165,34 +164,10 @@ class Profile extends StatelessWidget {
             ),
           ),
         ),
-        Positioned(
-          right: 10,
-          top: 40,
-          child: Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: GestureDetector(
-              onTap: () {
-                EditProfile(context); 
-              },
-              child: Center(
-                child: SvgPicture.asset(
-                  "lib/icons/pen.svg",
-                  width: 20,
-                  height: 20,
-                ),
-              ),
-            ),
-          ),
-        ),
-        
       ],
     );
   }
+
 
   Widget buildCoverImage() => Container(
         color: Colors.grey,
@@ -204,30 +179,60 @@ class Profile extends StatelessWidget {
         ),
       );
 
-  Widget buildProfileImageWithShadow() => Container(
-        width: profileSize,
-        height: profileSize,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              spreadRadius: 2,
-              blurRadius: 4,
-              offset: Offset(0, 2),
+  Widget buildProfileImageWithShadow(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          width: profileSize,
+          height: profileSize,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                spreadRadius: 2,
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Image.asset(
+              'images/profile.png',
+              width: profileSize,
+              height: profileSize,
+              fit: BoxFit.cover,
             ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Image.asset(
-            'images/profile.png',
-            width: profileSize,
-            height: profileSize,
-            fit: BoxFit.cover,
           ),
         ),
-      );
+        Positioned(
+          bottom: 0,
+          right: 0,
+          child: GestureDetector(
+            onTap: () {
+              EditProfile(context); // Function to handle profile edit
+            },
+            child: Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Center(
+                child: SvgPicture.asset(
+                  "lib/icons/pen.svg",
+                  width: 20,
+                  height: 20,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
   Widget buildBottom() {
     return Container(
