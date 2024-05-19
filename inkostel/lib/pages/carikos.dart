@@ -7,6 +7,7 @@ import 'package:inkostel/pages/detail.dart';
 import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/profile.dart';
+import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/tes.dart';
 // import 'package:inkostel/main.dart';
@@ -533,7 +534,7 @@ class _CariKosState extends State<CariKos> {
               // Navigasi ke halaman Add
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Tes()),
+                MaterialPageRoute(builder: (context) => const Pengaturan()),
               );
               break;
             default:
