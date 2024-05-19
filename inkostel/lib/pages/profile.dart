@@ -357,7 +357,7 @@ class Profile extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(
+              child: const Text(
                 'Batal',
                 style: TextStyle(
                   color: Color.fromARGB(255, 76, 165, 175), // Warna teks hijau
@@ -372,7 +372,7 @@ class Profile extends StatelessWidget {
                 // Update data user here
                 Navigator.of(context).pop();
               },
-              child: Text(
+              child: const Text(
                 'Simpan',
                 style: TextStyle(
                   color: Color.fromARGB(255, 76, 165, 175), // Warna teks hijau
