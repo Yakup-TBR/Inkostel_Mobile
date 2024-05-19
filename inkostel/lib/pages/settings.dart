@@ -189,7 +189,7 @@ class _PengaturanState extends State<Pengaturan> {
                                       'lib/icons/bulan.png',
                                       color: isDarkMode
                                           ? Colors.white
-                                          : Color.fromARGB(255, 118, 113, 113),
+                                          : const Color.fromRGBO(0, 0, 0, 1),
                                     ),
                                   ),
                                 ),
