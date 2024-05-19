@@ -38,7 +38,8 @@ class _JualKosState extends State<JualKos> {
   // Text Editing Controller tiap textField
   TextEditingController namaKosController = new TextEditingController();
   TextEditingController nomorTelponController = new TextEditingController();
-  TextEditingController alamatKosController = new TextEditingController();
+  TextEditingController alamatKos1Controller = new TextEditingController();
+  TextEditingController alamatlinkController = new TextEditingController();
   TextEditingController hargaPertahunController = new TextEditingController();
   TextEditingController hargaPerbulanController = new TextEditingController();
 
@@ -60,11 +61,13 @@ class _JualKosState extends State<JualKos> {
     'Kamar Mandi Dalam': false,
   };
 
+  // Variable to store selected distance
+  String? selectedDistance;
+
   // Formatter for price text field
   // final priceFormatter = NumberTextInputFormatter();
   File? _imageFile;
 
-  // Function to handle selecting an image from the gallery
   // Function to handle selecting an image from the gallery
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
@@ -181,11 +184,49 @@ class _JualKosState extends State<JualKos> {
                         ),
                         const SizedBox(height: 10),
                         // TextFormField for Alamat with prefix icon
-                        TextFormField(
-                          controller: alamatKosController,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: alamatKos1Controller,
+                                decoration: const InputDecoration(
+                                  labelText: 'Alamat',
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: TextFormField(
+                                controller: alamatlinkController,
+                                decoration: const InputDecoration(
+                                  labelText: 'Link Map',
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        // Dropdown for Jarak
+                        DropdownButtonFormField<String>(
                           decoration: const InputDecoration(
-                            labelText: 'Alamat',
+                            labelText: 'Jarak',
                           ),
+                          value: selectedDistance,
+                          items: const [
+                            DropdownMenuItem(
+                              value: '100-500 M',
+                              child: Text('100-500 M'),
+                            ),
+                            DropdownMenuItem(
+                              value: '500-1000 M',
+                              child: Text('500-1000 M'),
+                            ),
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              selectedDistance = value;
+                            });
+                          },
                         ),
                         const SizedBox(height: 10),
                         // TextFormField for Harga with prefix icon
@@ -231,21 +272,38 @@ class _JualKosState extends State<JualKos> {
                         // Add ImagePicker
                         Column(
                           children: [
-                            const Text(
-                              'Tambah Tampilan Kost',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                            const SizedBox(height: 10),
+                            GestureDetector(
+                              onTap: _showImagePicker,
+                              child: Container(
+                                color: Colors.grey[200],
+                                height: 200,
+                                width: double.infinity,
+                                child: _imageFile != null
+                                    ? Image.file(_imageFile!,
+                                        fit: BoxFit.cover)
+                                    : const Icon(Icons.camera_alt,
+                                        color: Colors.grey),
                               ),
                             ),
-                            const SizedBox(height: 5),
-                            GestureDetector(
-                              onTap: () {
-                                _showImagePicker(); // Panggil fungsi untuk menampilkan pemilih gambar
+                            const SizedBox(height: 10),
+                            ElevatedButton(
+                              onPressed: () async {
+                                if (_imageFile != null) {
+                                  await _saveImageLocally(_imageFile!);
+                                }
                               },
-                              child: _imageFile == null
-                                  ? const Icon(Icons.add_a_photo)
-                                  : Image.file(_imageFile!),
+                              child: const Text('Save Image Locally'),
+                            ),
+                            const SizedBox(height: 10),
+                            ElevatedButton(
+                              onPressed: () async {
+                                if (_imageFile != null) {
+                                  await _uploadImageToFirebase(
+                                      _imageFile!.path);
+                                }
+                              },
+                              child: const Text('Upload Image to Firebase'),
                             ),
                           ],
                         ),
@@ -268,11 +326,14 @@ class _JualKosState extends State<JualKos> {
                               "Kos ID": Id,
                               "Nama Kos": namaKosController.text,
                               "Nomor Telepon": nomorTelponController.text,
-                              "Alamat Kos": alamatKosController.text,
+                              "Alamat Kos": alamatKos1Controller.text +
+                                  ' ' +
+                                  alamatlinkController.text,
                               "Harga Pertahun": hargaPertahunController.text,
                               "Harga Perbulan": hargaPerbulanController.text,
                               "Fasilitas": facilityValues,
                               "ImageURL": imageUrl,
+                              "Jarak": selectedDistance,
                             };
 
                             // Tambahkan data kos ke Firebase Database
@@ -405,19 +466,3 @@ class _JualKosState extends State<JualKos> {
     );
   }
 }
-
-
-// // Custom TextInputFormatter for formatting price
-// class NumberTextInputFormatter extends TextInputFormatter {
-//   @override
-//   TextEditingValue formatEditUpdate(
-//       TextEditingValue oldValue, TextEditingValue newValue) {
-//     final regEx = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
-//     String newString = newValue.text.replaceAll(regEx, r'$1.');
-//     return TextEditingValue(
-//       text:
-//           'Rp. ${NumberFormat('#,###').format(int.parse(newString))}', // Format the number
-//       selection: TextSelection.collapsed(offset: newString.length + 4),
-//     );
-//   }
-// }
