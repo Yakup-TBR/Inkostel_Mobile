@@ -4,12 +4,16 @@ import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/settings.dart';
 
+
+
 void main() {
   runApp(const Simpan());
 }
 
 class Simpan extends StatefulWidget {
   const Simpan({super.key});
+  
+
 
   @override
   // ignore: library_private_types_in_public_api

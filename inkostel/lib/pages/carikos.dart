@@ -10,6 +10,8 @@ import 'package:inkostel/pages/profile.dart';
 import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/tes.dart';
+import 'package:random_string/random_string.dart';
+import 'package:inkostel/service/image_service.dart';
 // import 'package:inkostel/main.dart';
 import 'package:inkostel/service/kost_model.dart';
 
@@ -457,7 +459,7 @@ void initState() {
                           child: Text(
                             kost.namaKost,
                             style: const TextStyle(
-                              color: Color.fromARGB(255, 255, 255, 255),
+                              color: Color.fromARGB(255, 0, 0, 0),
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
