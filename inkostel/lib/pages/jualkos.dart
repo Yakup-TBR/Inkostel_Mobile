@@ -42,6 +42,7 @@ class _JualKosState extends State<JualKos> {
   TextEditingController alamatlinkController = new TextEditingController();
   TextEditingController hargaPertahunController = new TextEditingController();
   TextEditingController hargaPerbulanController = new TextEditingController();
+  TextEditingController deskripsiController = new TextEditingController();
 
   // Define a list of facilities
   List<String> facilities = [
@@ -269,41 +270,33 @@ class _JualKosState extends State<JualKos> {
                               },
                             )),
                         const SizedBox(height: 10),
+                        // Add the description form field
+                        TextFormField(
+                          controller: deskripsiController,
+                          decoration: const InputDecoration(
+                            labelText: 'Deskripsi Kostan',
+                          ),
+                          maxLines: 2,
+                        ),
+                        const SizedBox(height: 10),
                         // Add ImagePicker
-                        Column(
+                          Column(
                           children: [
-                            const SizedBox(height: 10),
-                            GestureDetector(
-                              onTap: _showImagePicker,
-                              child: Container(
-                                color: Colors.grey[200],
-                                height: 200,
-                                width: double.infinity,
-                                child: _imageFile != null
-                                    ? Image.file(_imageFile!,
-                                        fit: BoxFit.cover)
-                                    : const Icon(Icons.camera_alt,
-                                        color: Colors.grey),
+                            const Text(
+                              'Tambah Tampilan Kost',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(height: 10),
-                            ElevatedButton(
-                              onPressed: () async {
-                                if (_imageFile != null) {
-                                  await _saveImageLocally(_imageFile!);
-                                }
+                            const SizedBox(height: 5),
+                            GestureDetector(
+                              onTap: () {
+                                _showImagePicker(); // Panggil fungsi untuk menampilkan pemilih gambar
                               },
-                              child: const Text('Save Image Locally'),
-                            ),
-                            const SizedBox(height: 10),
-                            ElevatedButton(
-                              onPressed: () async {
-                                if (_imageFile != null) {
-                                  await _uploadImageToFirebase(
-                                      _imageFile!.path);
-                                }
-                              },
-                              child: const Text('Upload Image to Firebase'),
+                              child: _imageFile == null
+                                  ? const Icon(Icons.add_a_photo)
+                                  : Image.file(_imageFile!),
                             ),
                           ],
                         ),
@@ -332,6 +325,7 @@ class _JualKosState extends State<JualKos> {
                               "Harga Pertahun": hargaPertahunController.text,
                               "Harga Perbulan": hargaPerbulanController.text,
                               "Fasilitas": facilityValues,
+                              "Deskripsi": deskripsiController.text,
                               "ImageURL": imageUrl,
                               "Jarak": selectedDistance,
                             };
