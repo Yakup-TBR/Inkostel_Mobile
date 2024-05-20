@@ -12,20 +12,6 @@ class DatabaseMethods {
   Stream<QuerySnapshot> getKosStream() {
     return FirebaseFirestore.instance.collection("Kos").snapshots();
   }
-
-  //Database Simpan
-  // Fungsi untuk menambahkan data ke tabel Simpan dengan idUser
-  Future addSimpanDetails(Map<String, dynamic> simpanDataMap, String idUser) async {
-    return await FirebaseFirestore.instance
-        .collection("Simpan_Kos")
-        .doc(idUser)  
-        .set(simpanDataMap);
-  }
-
-  // Fungsi untuk mendapatkan data dari tabel Simpan
-  Stream<QuerySnapshot> getSimpanStream() {
-    return FirebaseFirestore.instance.collection("Simpan_Kos").snapshots();
-  }
 }
 
 // Database Users

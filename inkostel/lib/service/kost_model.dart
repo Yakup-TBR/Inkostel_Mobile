@@ -5,12 +5,14 @@ class Kost {
   final String hargaPertahun;
   final String imageUrl;
   final String kosId;
+  bool isFavorite;
 
   Kost({
     required this.namaKost,
     required this.hargaPertahun,
     required this.imageUrl,
     required this.kosId,
+    this.isFavorite = false,
   });
 
   factory Kost.fromFirestore(DocumentSnapshot doc) {
@@ -20,8 +22,21 @@ class Kost {
       hargaPertahun: data['Harga Pertahun'] ?? '',
       imageUrl: data['ImageURL'] ?? '',
       kosId: data['Kos ID'] ?? '',
+      isFavorite: data['isFavorite'] ?? false,
     );
   }
 
-  static fromDocumentSnapshot(QueryDocumentSnapshot<Object?> doc) {}
+  void toggleFavoriteStatus() {
+    isFavorite = !isFavorite;
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      'Nama Kos': namaKost,
+      'Harga Pertahun': hargaPertahun,
+      'ImageURL': imageUrl,
+      'Kos ID': kosId,
+      'isFavorite': isFavorite,
+    };
+  }
 }
