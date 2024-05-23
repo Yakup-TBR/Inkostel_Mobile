@@ -32,10 +32,10 @@ class Kost {
 
   Map<String, dynamic> toFirestore() {
     return {
-      'Nama Kos': namaKost,
-      'Harga Pertahun': hargaPertahun,
-      'ImageURL': imageUrl,
-      'Kos ID': kosId,
+      // 'Nama Kos': namaKost,
+      // 'Harga Pertahun': hargaPertahun,
+      // 'ImageURL': imageUrl,
+      // 'Kos ID': kosId,
       'isFavorite': isFavorite,
     };
   }
