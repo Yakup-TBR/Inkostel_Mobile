@@ -2,13 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Kost {
   final String namaKost;
-  final String hargaPertahun;
+  final String jarakKost;
+  final int hargaPertahun;
   final String imageUrl;
   final String kosId;
   bool isFavorite;
 
   Kost({
     required this.namaKost,
+    required this.jarakKost,
     required this.hargaPertahun,
     required this.imageUrl,
     required this.kosId,
@@ -19,6 +21,7 @@ class Kost {
     Map data = doc.data() as Map<String, dynamic>;
     return Kost(
       namaKost: data['Nama Kos'] ?? '',
+      jarakKost: data['Jarak'] ?? '',
       hargaPertahun: data['Harga Pertahun'] ?? '',
       imageUrl: data['ImageURL'] ?? '',
       kosId: data['Kos ID'] ?? '',

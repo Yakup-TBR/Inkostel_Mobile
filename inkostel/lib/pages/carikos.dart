@@ -30,7 +30,6 @@ class CariKos extends StatefulWidget {
   }
 
   @override
-  // ignore: library_private_types_in_public_api
   _CariKosState createState() => _CariKosState();
 }
 
@@ -47,41 +46,21 @@ String getLabel(double value) {
 }
 
 class _CariKosState extends State<CariKos> {
-  // Untuk Lazy load
+  List<Kost> _allKosts = [];
+  List<Kost> _displayedKosts = [];
+  bool _isLoading = true;
+  bool _isLoadingMore = false;
   int _batchSize = 3;
   int _currentBatch = 0;
   ScrollController _scrollController = ScrollController();
-  bool _isLoadingMore = false;
+  String _selectedCategory = '';
 
-  List<Kost> _kostList = [];
-  bool _isLoading = true;
-
-  Future<void> _fetchData({bool loadMore = false}) async {
-    setState(() {
-      if (loadMore)
-        _isLoadingMore = true;
-      else
-        _isLoading = true;
-    });
-
-    List<Kost> fetchedKostList = await CariKos.fetchData();
-    setState(() {
-      if (loadMore) {
-        _kostList.addAll(fetchedKostList
-            .skip(_currentBatch * _batchSize)
-            .take(_batchSize)
-            .toList());
-        _isLoadingMore = false;
-      } else {
-        _kostList = fetchedKostList.take(_batchSize).toList();
-        _isLoading = false;
-      }
-      _currentBatch++;
-    });
-  }
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
+    super.initState();
+    _fetchInitialData();
     AwesomeNotifications().setListeners(
         onActionReceivedMethod: NotificationController.onActionReceivedMethod,
         onNotificationCreatedMethod:
@@ -91,14 +70,74 @@ class _CariKosState extends State<CariKos> {
         onDismissActionReceivedMethod:
             NotificationController.onDissmissActionReceivedMethod);
 
-    super.initState();
-    _fetchData();
-
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
               _scrollController.position.maxScrollExtent &&
           !_isLoadingMore) {
-        _fetchData(loadMore: true);
+        _loadMoreData();
+      }
+    });
+  }
+
+  Future<void> _fetchInitialData() async {
+    List<Kost> fetchedKostList = await CariKos.fetchData();
+    setState(() {
+      _allKosts = fetchedKostList;
+      _currentBatch = 0;
+      _displayedKosts = _allKosts.take(_batchSize).toList();
+      _isLoading = false;
+    });
+  }
+
+  Future<void> _loadMoreData() async {
+    if (_currentBatch * _batchSize >= _allKosts.length) return;
+
+    setState(() {
+      _isLoadingMore = true;
+    });
+
+    await Future.delayed(const Duration(seconds: 1));
+
+    setState(() {
+      _currentBatch++;
+      int nextBatchEnd = _currentBatch * _batchSize;
+      List<Kost> newBatch = _allKosts
+          .skip((_currentBatch - 1) * _batchSize)
+          .take(_batchSize)
+          .toList();
+      _displayedKosts.addAll(newBatch.where((kost) => !_displayedKosts
+          .any((displayedKost) => displayedKost.kosId == kost.kosId)));
+      _isLoadingMore = false;
+    });
+  }
+
+  Future<void> _searchKostNames() async {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      if (query.isEmpty) {
+        _displayedKosts =
+            _allKosts.take((_currentBatch + 1) * _batchSize).toList();
+      } else {
+        _displayedKosts = _allKosts.where((kost) {
+          return kost.namaKost.toLowerCase().contains(query);
+        }).toList();
+      }
+    });
+  }
+
+  void _filterKosts(String category) {
+    setState(() {
+      _selectedCategory = category;
+      if (_selectedCategory == '') {
+        _displayedKosts =
+            _allKosts.take((_currentBatch + 1) * _batchSize).toList();
+      } else {
+        _displayedKosts = _allKosts
+            .where((kost) => kost.namaKost
+                .toLowerCase()
+                .contains(_selectedCategory.toLowerCase()))
+            .take((_currentBatch + 1) * _batchSize)
+            .toList();
       }
     });
   }
@@ -173,20 +212,28 @@ class _CariKosState extends State<CariKos> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: TextField(
+                        controller: _searchController,
                         decoration: InputDecoration(
                           hintStyle: GoogleFonts.getFont(
                             'Poppins',
                             fontSize: 16,
                           ),
+
                           hintText: 'Cari Kos Disini..',
                           suffixIcon: Padding(
                             padding: const EdgeInsets.all(10.0),
-                            child: Image.asset(
-                              'lib/icons/search.png',
-                              color: const Color.fromRGBO(100, 204, 197, 1),
-                              width: 20,
-                              height: 20,
-                              fit: BoxFit.fill,
+                            child: InkWell(
+                              onTap: () {
+                                // Call the search function here
+                                _searchKostNames();
+                              },
+                              child: Image.asset(
+                                'lib/icons/search.png',
+                                color: const Color.fromRGBO(100, 204, 197, 1),
+                                width: 20,
+                                height: 20,
+                                fit: BoxFit.fill,
+                              ),
                             ),
                           ),
                           focusedBorder: const OutlineInputBorder(
@@ -264,9 +311,7 @@ class _CariKosState extends State<CariKos> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
-                  onPressed: () {
-                    // Action when nearest button is pressed
-                  },
+                  onPressed: () => _filterKosts('putra'),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateColor.resolveWith((states) {
                       if (states.contains(MaterialState.pressed)) {
@@ -301,9 +346,7 @@ class _CariKosState extends State<CariKos> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    // Action when cheapest button is pressed
-                  },
+                  onPressed: () => _filterKosts('putri'),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateColor.resolveWith((states) {
                       if (states.contains(MaterialState.pressed)) {
@@ -338,9 +381,7 @@ class _CariKosState extends State<CariKos> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    // Action when recommended button is pressed
-                  },
+                  onPressed: () => _filterKosts('campur'),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateColor.resolveWith((states) {
                       if (states.contains(MaterialState.pressed)) {
@@ -377,19 +418,20 @@ class _CariKosState extends State<CariKos> {
               ],
             ),
             Expanded(
-                child: _kostList.isEmpty
+                child: _isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : ListView.builder(
                         controller: _scrollController,
-                        itemCount: _kostList.length + 1,
+                        // itemCount: _kostList.length + 1,
+                        itemCount: _displayedKosts.length + 1,
                         itemBuilder: (context, index) {
-                          if (index == _kostList.length) {
+                          if (index == _displayedKosts.length) {
                             return _isLoadingMore
                                 ? const Center(
                                     child: CircularProgressIndicator())
                                 : Container();
                           }
-                          final Kost kost = _kostList[index];
+                          final Kost kost = _displayedKosts[index];
                           return Container(
                             width: double.infinity,
                             margin: const EdgeInsets.all(1),
@@ -451,7 +493,7 @@ class _CariKosState extends State<CariKos> {
                                             ),
                                           ),
                                           child: Text(
-                                            kost.hargaPertahun,
+                                            formatCurrency(kost.hargaPertahun),
                                             style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 16,
@@ -475,6 +517,18 @@ class _CariKosState extends State<CariKos> {
                                       Positioned(
                                         bottom: 10,
                                         left: 10,
+                                        child: Text(
+                                          kost.jarakKost,
+                                          style: const TextStyle(
+                                            color: Color.fromARGB(255, 0, 0, 0),
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        bottom: 10,
+                                        right: 10,
                                         child: GestureDetector(
                                           onTap: () async {
                                             setState(() {
@@ -610,7 +664,7 @@ class _CariKosState extends State<CariKos> {
     ));
   }
 
-// Fungsi untuk mengonversi harga
+  // Fungsi untuk mengonversi harga
   String formatCurrency(int amount) {
     if (amount >= 1000000) {
       double result = amount / 1000000;
@@ -628,23 +682,6 @@ class _CariKosState extends State<CariKos> {
       }
     } else {
       return 'Rp $amount';
-    }
-  }
-
-  // Fungsi untuk mengonversi jarak
-  String getDistanceText(int distance) {
-    if (distance >= 1000) {
-      double km = distance / 1000;
-      // Jika nilai jarak adalah bilangan bulat, kembalikan sebagai kilometer tanpa desimal
-      if (distance % 1000 == 0) {
-        return '${km.toInt()} km';
-      } else {
-        // Jika nilai jarak memiliki desimal, tampilkan satu angka di belakang koma
-        return '${km.toStringAsFixed(1)} km';
-      }
-    } else {
-      // Untuk jarak di bawah 1000 meter, kembalikan sebagai meter
-      return '$distance meter';
     }
   }
 }
