@@ -280,7 +280,7 @@ class _JualKosState extends State<JualKos> {
                         ),
                         const SizedBox(height: 10),
                         // Add ImagePicker
-                          Column(
+                        Column(
                           children: [
                             const Text(
                               'Tambah Tampilan Kost',
@@ -322,8 +322,12 @@ class _JualKosState extends State<JualKos> {
                               "Alamat Kos": alamatKos1Controller.text +
                                   ' ' +
                                   alamatlinkController.text,
-                              "Harga Pertahun": hargaPertahunController.text,
-                              "Harga Perbulan": hargaPerbulanController.text,
+                              "Harga Pertahun":
+                                  int.tryParse(hargaPertahunController.text) ??
+                                      0,
+                              "Harga Perbulan":
+                                  int.tryParse(hargaPerbulanController.text) ??
+                                      0,
                               "Fasilitas": facilityValues,
                               "Deskripsi": deskripsiController.text,
                               "ImageURL": imageUrl,
