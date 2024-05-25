@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/Detailk.dart';
 import 'package:inkostel/pages/profile.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/settings.dart';
+import 'package:inkostel/service/kost_model.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
+
+    static Future<List<Kost>> fetchData() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection("Kos") // Ganti dengan nama koleksi yang sesuai
+        .get();
+    return querySnapshot.docs.map((doc) => Kost.fromFirestore(doc)).toList();
+  }
 
   @override
   State<Home> createState() => _HomeState();
@@ -547,7 +556,7 @@ class _HomeState extends State<Home> {
                       text: const TextSpan(
                         children: [
                           TextSpan(
-                            text: '1 Juta /',
+                            text: 'Harganya',
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 15,
@@ -580,7 +589,7 @@ class _HomeState extends State<Home> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "Kos Mak Cik",
+                        "NamaKos",
                         style: GoogleFonts.getFont(
                           'Poppins',
                           fontSize: 25,
@@ -589,7 +598,7 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                       Text(
-                        "Sukapura, DeyeuhKolot",
+                        "Alamat",
                         style: GoogleFonts.getFont(
                           'Poppins',
                           fontSize: 13,
