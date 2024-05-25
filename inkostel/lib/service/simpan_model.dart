@@ -6,6 +6,7 @@ class Simpan {
   final String imageUrl;
   final String kosId;
   final String userId;
+  final String alamat;
 
   Simpan({
     required this.namaKost,
@@ -13,6 +14,7 @@ class Simpan {
     required this.imageUrl,
     required this.kosId,
     required this.userId,
+    required this.alamat,
   });
 
   factory Simpan.fromFirestore(DocumentSnapshot doc) {
@@ -23,6 +25,7 @@ class Simpan {
       imageUrl: data['ImageURL'] ?? '',
       kosId: data['Kos ID'] ?? '',
       userId: data['User ID'] ?? '',
+      alamat: data['Alamat Kos'] ?? '',
     );
   }
 

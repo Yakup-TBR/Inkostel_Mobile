@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/notification_controller.dart';
-import 'package:inkostel/pages/detail.dart';
+import 'package:inkostel/pages/Detailk.dart';
 import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/profile.dart';
@@ -139,6 +139,17 @@ class _CariKosState extends State<CariKos> {
             .take((_currentBatch + 1) * _batchSize)
             .toList();
       }
+    });
+  }
+
+  void _toggleFilter(String filter) {
+    setState(() {
+      if (_selectedCategory == filter) {
+        _selectedCategory = '';
+      } else {
+        _selectedCategory = filter;
+      }
+      _filterKosts(_selectedCategory);
     });
   }
 
@@ -311,107 +322,80 @@ class _CariKosState extends State<CariKos> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
-                  onPressed: () => _filterKosts('putra'),
+                  onPressed: () => _toggleFilter('putra'),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateColor.resolveWith((states) {
-                      if (states.contains(MaterialState.pressed)) {
-                        return const Color.fromRGBO(100, 204, 197,
-                            1); // Ubah warna latar belakang menjadi biru ketika ditekan
-                      }
-                      return Colors
-                          .white; // Kembali ke warna latar belakang putih saat tidak ditekan
+                      return _selectedCategory == 'putra'
+                          ? const Color.fromRGBO(100, 204, 197, 1)
+                          : Colors.white;
                     }),
                     foregroundColor: MaterialStateColor.resolveWith((states) {
-                      if (states.contains(MaterialState.pressed)) {
-                        return Colors
-                            .white; // Ubah warna teks menjadi putih ketika ditekan
-                      }
-                      return const Color.fromRGBO(100, 204, 197,
-                          1); // Kembali ke warna teks aslinya saat tidak ditekan
+                      return _selectedCategory == 'putra'
+                          ? Colors.white
+                          : const Color.fromRGBO(100, 204, 197, 1);
                     }),
                     side: MaterialStateProperty.all(const BorderSide(
-                      color: Color.fromRGBO(100, 204, 197,
-                          1), // Ubah warna border sesuai keinginan Anda
-                      width: 1.0, // Atur lebar border
+                      color: Color.fromRGBO(100, 204, 197, 1),
+                      width: 1.0,
                     )),
                   ),
                   child: const Padding(
                     padding: EdgeInsets.all(3.0),
                     child: Text(
                       'Putra',
-                      style: TextStyle(
-                        fontSize: 20, // Sesuaikan ukuran font di sini
-                      ),
+                      style: TextStyle(fontSize: 20),
                     ),
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () => _filterKosts('putri'),
+                  onPressed: () => _toggleFilter('putri'),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateColor.resolveWith((states) {
-                      if (states.contains(MaterialState.pressed)) {
-                        return const Color.fromRGBO(100, 204, 197,
-                            1); // Ubah warna latar belakang menjadi biru ketika ditekan
-                      }
-                      return Colors
-                          .white; // Kembali ke warna latar belakang putih saat tidak ditekan
+                      return _selectedCategory == 'putri'
+                          ? const Color.fromRGBO(100, 204, 197, 1)
+                          : Colors.white;
                     }),
                     foregroundColor: MaterialStateColor.resolveWith((states) {
-                      if (states.contains(MaterialState.pressed)) {
-                        return Colors
-                            .white; // Ubah warna teks menjadi putih ketika ditekan
-                      }
-                      return const Color.fromRGBO(100, 204, 197,
-                          1); // Kembali ke warna teks aslinya saat tidak ditekan
+                      return _selectedCategory == 'putri'
+                          ? Colors.white
+                          : const Color.fromRGBO(100, 204, 197, 1);
                     }),
                     side: MaterialStateProperty.all(const BorderSide(
-                      color: Color.fromRGBO(100, 204, 197,
-                          1), // Ubah warna border sesuai keinginan Anda
-                      width: 1.0, // Atur lebar border
+                      color: Color.fromRGBO(100, 204, 197, 1),
+                      width: 1.0,
                     )),
                   ),
                   child: const Padding(
                     padding: EdgeInsets.all(3.0),
                     child: Text(
                       'Putri',
-                      style: TextStyle(
-                        fontSize: 20, // Sesuaikan ukuran font di sini
-                      ),
+                      style: TextStyle(fontSize: 20),
                     ),
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () => _filterKosts('campur'),
+                  onPressed: () => _toggleFilter('campur'),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateColor.resolveWith((states) {
-                      if (states.contains(MaterialState.pressed)) {
-                        return const Color.fromRGBO(100, 204, 197,
-                            1); // Ubah warna latar belakang menjadi biru ketika ditekan
-                      }
-                      return Colors
-                          .white; // Kembali ke warna latar belakang putih saat tidak ditekan
+                      return _selectedCategory == 'campur'
+                          ? const Color.fromRGBO(100, 204, 197, 1)
+                          : Colors.white;
                     }),
                     foregroundColor: MaterialStateColor.resolveWith((states) {
-                      if (states.contains(MaterialState.pressed)) {
-                        return Colors
-                            .white; // Ubah warna teks menjadi putih ketika ditekan
-                      }
-                      return const Color.fromRGBO(100, 204, 197,
-                          1); // Kembali ke warna teks aslinya saat tidak ditekan
+                      return _selectedCategory == 'campur'
+                          ? Colors.white
+                          : const Color.fromRGBO(100, 204, 197, 1);
                     }),
                     side: MaterialStateProperty.all(const BorderSide(
-                      color: Color.fromRGBO(100, 204, 197,
-                          1), // Ubah warna border sesuai keinginan Anda
-                      width: 1.0, // Atur lebar border
+                      color: Color.fromRGBO(100, 204, 197, 1),
+                      width: 1.0,
                     )),
                   ),
                   child: const Padding(
                     padding: EdgeInsets.all(3.0),
                     child: Text(
                       'Campur',
-                      style: TextStyle(
-                        fontSize: 20, // Sesuaikan ukuran font di sini
-                      ),
+                      style: TextStyle(fontSize: 20),
                     ),
                   ),
                 ),
@@ -456,7 +440,7 @@ class _CariKosState extends State<CariKos> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => detail(),
+                                              builder: (context) => Detail(kosId: kost.kosId),
                                             ),
                                           );
                                         },

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/pages/carikos.dart';
-import 'package:inkostel/pages/detail.dart';
+import 'package:inkostel/pages/Detailk.dart';
 import 'package:inkostel/pages/profile.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/jualkos.dart';
@@ -509,7 +509,7 @@ class _HomeState extends State<Home> {
       child: GestureDetector(
         onTap: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => detail()));
+              context, MaterialPageRoute(builder: (context) => Detail(kosId: '',)));
         },
         child: Container(
           // Widget Card Kos

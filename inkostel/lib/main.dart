@@ -6,7 +6,7 @@ import 'firebase_options.dart';
 import 'package:get/get.dart';
 import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/carikos.dart';
-import 'package:inkostel/pages/detail.dart';
+import 'package:inkostel/pages/Detailk.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/percobaan.dart';
 import 'package:inkostel/pages/profile.dart';

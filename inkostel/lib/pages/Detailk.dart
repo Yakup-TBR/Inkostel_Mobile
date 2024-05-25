@@ -1,16 +1,25 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
-import 'package:inkostel/pages/tes.dart';
+import 'package:inkostel/service/kost_model.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
-  runApp(detail());
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Detail(kosId: 'kosId'),
+    );
+  }
 }
 
 final Uri _url = Uri.parse(
@@ -30,17 +39,55 @@ Future<void> _launchwa() async {
   }
 }
 
-class detail extends StatefulWidget {
+class Detail extends StatefulWidget {
+  final String kosId;
+
+  const Detail({required this.kosId, Key? key}) : super(key: key);
+
   @override
-  _detailState createState() => _detailState();
+  _DetailState createState() => _DetailState();
 }
 
-class _detailState extends State<detail> {
+class _DetailState extends State<Detail> {
+  Kost? _kos;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchKost();
+  }
+
+  Future<void> _fetchKost() async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('Kos')
+        .doc(widget.kosId)
+        .get();
+    setState(() {
+      _kos = Kost.fromFirestore(snapshot);
+      _isLoading = false;
+    });
+  }
+
+  Future<void> _reloadKost() async {
+    setState(() {
+      _isLoading = true;
+    });
+    await _fetchKost();
+  }
+
   bool isSimpanPressed = false;
   final PanelController _panelController = PanelController();
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return Scaffold(
+        appBar: AppBar(title: Text('Loading...')),
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -99,7 +146,6 @@ class _detailState extends State<detail> {
                         left: 20,
                         child: GestureDetector(
                           onTap: () {
-                            print('Tombol ditekan'); // Debugging
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -176,18 +222,19 @@ class _detailState extends State<detail> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          const SizedBox(
+                          SizedBox(
                             child: Row(
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.only(top: 50, left: 22.0),
+                                  padding: const EdgeInsets.only(
+                                      top: 50, left: 22.0),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'KOS PONDOK HUTAN',
-                                        style: TextStyle(
+                                        _kos!.namaKost,
+                                        style: const TextStyle(
                                           fontFamily: 'Poppins',
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
@@ -197,8 +244,8 @@ class _detailState extends State<detail> {
                                     ],
                                   ),
                                 ),
-                                Spacer(),
-                                Padding(
+                                const Spacer(),
+                                const Padding(
                                   padding:
                                       EdgeInsets.only(top: 50, right: 15.0),
                                   child: Row(
@@ -236,10 +283,8 @@ class _detailState extends State<detail> {
                             padding: const EdgeInsets.only(
                                 top: 10, left: 22.0, right: 22.0),
                             child: GestureDetector(
-                              onTap: () {
-                                _launchUrl();
-                              },
-                              child: const Row(
+                              onTap: _launchUrl,
+                              child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Row(
@@ -251,7 +296,7 @@ class _detailState extends State<detail> {
                                       ),
                                       SizedBox(width: 5),
                                       Text(
-                                        'Jln.Sukapura',
+                                        _kos!.alamat,
                                         style: TextStyle(
                                           fontFamily: 'Poppins',
                                           fontSize: 20,
@@ -413,9 +458,7 @@ class _detailState extends State<detail> {
                                   ),
                                 ],
                               ),
-                              onPressed: () {
-                                _launchwa();
-                              },
+                              onPressed: _launchwa,
                             ),
                           ),
                         ),

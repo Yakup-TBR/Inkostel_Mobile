@@ -6,6 +6,8 @@ class Kost {
   final int hargaPertahun;
   final String imageUrl;
   final String kosId;
+  final String alamat;
+
   bool isFavorite;
 
   Kost({
@@ -15,6 +17,7 @@ class Kost {
     required this.imageUrl,
     required this.kosId,
     this.isFavorite = false,
+    required this.alamat,
   });
 
   factory Kost.fromFirestore(DocumentSnapshot doc) {
@@ -26,6 +29,7 @@ class Kost {
       imageUrl: data['ImageURL'] ?? '',
       kosId: data['Kos ID'] ?? '',
       isFavorite: data['isFavorite'] ?? false,
+      alamat: data['Alamat Kos'] ?? '',
     );
   }
 
