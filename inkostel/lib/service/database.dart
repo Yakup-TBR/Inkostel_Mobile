@@ -12,6 +12,14 @@ class DatabaseMethods {
   Stream<QuerySnapshot> getKosStream() {
     return FirebaseFirestore.instance.collection("Kos").snapshots();
   }
+
+  //simpan
+  Future addSimpanDetails(Map<String, dynamic> simpanDataMap, String id) async {
+    return await FirebaseFirestore.instance
+        .collection("SimpanKos")
+        .doc(id)
+        .set(simpanDataMap);
+  }
 }
 
 // Database Users

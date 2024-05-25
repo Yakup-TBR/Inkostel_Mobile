@@ -440,7 +440,8 @@ class _CariKosState extends State<CariKos> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => Detail(kosId: kost.kosId),
+                                              builder: (context) =>
+                                                  Detail(kosId: kost.kosId),
                                             ),
                                           );
                                         },
@@ -531,11 +532,33 @@ class _CariKosState extends State<CariKos> {
                                               }
                                             });
 
-                                            // Update status favorit di Firestore
+                                            // Perbarui status favorit di Firestore
                                             await FirebaseFirestore.instance
                                                 .collection('Kos')
                                                 .doc(kost.kosId)
                                                 .update(kost.toFirestore());
+
+                                            // Simpan detail Kost ke koleksi SimpanKos
+                                            if (kost.isFavorite) {
+                                              await FirebaseFirestore.instance
+                                                  .collection('SimpanKos')
+                                                  .doc(kost.kosId)
+                                                  .set({
+                                                'Nama Kos': kost.namaKost,
+                                                'Harga Pertahun':
+                                                    kost.hargaPertahun,
+                                                'ImageURL': kost.imageUrl,
+                                                'Kos ID': kost.kosId,
+                                                'Alamat Kos': kost.alamatKos,
+                                                'Jarak': kost.jarakKost,
+                                                'isFavorite': kost.isFavorite,
+                                              });
+                                            } else {
+                                              await FirebaseFirestore.instance
+                                                  .collection('SimpanKos')
+                                                  .doc(kost.kosId)
+                                                  .delete();
+                                            }
                                           },
                                           child: Row(
                                             children: [
