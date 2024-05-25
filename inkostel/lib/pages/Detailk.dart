@@ -296,7 +296,7 @@ class _DetailState extends State<Detail> {
                                       ),
                                       SizedBox(width: 5),
                                       Text(
-                                        _kos!.alamat,
+                                        _kos!.alamatKos,
                                         style: TextStyle(
                                           fontFamily: 'Poppins',
                                           fontSize: 20,
