@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:inkostel/views/login.view.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/profile.dart';
+import 'package:inkostel/pages/signin.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:flutter/services.dart';
@@ -375,7 +375,7 @@ class _PengaturanState extends State<Pengaturan> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => LoginView()),
+                                              builder: (context) => SignInScreen()),
                                         );
                                       },
                                       child: const Text(
