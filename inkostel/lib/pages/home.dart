@@ -8,19 +8,13 @@ import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/service/kost_model.dart';
+import 'package:inkostel/utils/format_currency.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
-
-    static Future<List<Kost>> fetchData() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection("Kos") // Ganti dengan nama koleksi yang sesuai
-        .get();
-    return querySnapshot.docs.map((doc) => Kost.fromFirestore(doc)).toList();
-  }
+  const Home({Key? key}) : super(key: key);
 
   @override
-  State<Home> createState() => _HomeState();
+  _HomeState createState() => _HomeState();
 }
 
 String getLabel(double value) {
@@ -37,6 +31,19 @@ String getLabel(double value) {
 
 class _HomeState extends State<Home> {
   double currentSliderValue = 0.0;
+  late Future<List<Kost>> _kostsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _kostsFuture = fetchData();
+  }
+
+  Future<List<Kost>> fetchData() async {
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection("Kos").get();
+    return querySnapshot.docs.map((doc) => Kost.fromFirestore(doc)).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -320,15 +327,33 @@ class _HomeState extends State<Home> {
                         child: Container(
                             height: 260,
                             color: const Color.fromRGBO(254, 251, 246, 1),
-                            child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              children: [
-                                buildCard(),
-                                buildCard(),
-                                buildCard(),
-                                buildCard(),
-                              ],
-                            )),
+                            // List Rekomendasi
+                            child: FutureBuilder<List<Kost>>(
+                                future: fetchData(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Center(
+                                        child: CircularProgressIndicator());
+                                  } else if (snapshot.hasError) {
+                                    return Center(
+                                        child:
+                                            Text('Error: ${snapshot.error}'));
+                                  } else if (!snapshot.hasData ||
+                                      snapshot.data!.isEmpty) {
+                                    return const Center(
+                                        child: Text('No data available'));
+                                  } else {
+                                    return ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: snapshot.data!.length,
+                                      itemBuilder: (context, index) {
+                                        return KostCard(
+                                            kost: snapshot.data![index]);
+                                      },
+                                    );
+                                  }
+                                })),
                       ),
                       Padding(
                         padding:
@@ -371,9 +396,6 @@ class _HomeState extends State<Home> {
                             child: ListView(
                               scrollDirection: Axis.horizontal,
                               children: [
-                                buildCard(),
-                                buildCard(),
-                                buildCard(),
                                 buildCard(),
                               ],
                             )),
@@ -518,7 +540,11 @@ class _HomeState extends State<Home> {
       child: GestureDetector(
         onTap: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Detail(kosId: '',)));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Detail(
+                        kosId: '',
+                      )));
         },
         child: Container(
           // Widget Card Kos
@@ -530,7 +556,7 @@ class _HomeState extends State<Home> {
             ),
             borderRadius: BorderRadius.circular(20.0),
             image: DecorationImage(
-              image: const AssetImage('images/kamar.png'),
+              image: const AssetImage('images/kamar_2.jpg'),
               colorFilter: ColorFilter.mode(
                   Colors.black.withOpacity(0.2), BlendMode.darken),
               fit: BoxFit.cover,
@@ -614,6 +640,106 @@ class _HomeState extends State<Home> {
           ),
         ),
       ));
+}
+
+class KostCard extends StatefulWidget {
+  final Kost kost;
+
+  KostCard({required this.kost});
+
+  @override
+  State<KostCard> createState() => _KostCardState();
+}
+
+class _KostCardState extends State<KostCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      child: GestureDetector(
+        // onTap: () {
+        //   Navigator.push(
+        //       context, MaterialPageRoute(builder: (context) => detail()));
+        // },
+        child: Container(
+          width: 230,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+              color: const Color.fromARGB(109, 134, 146, 134),
+            ),
+            borderRadius: BorderRadius.circular(20.0),
+            image: DecorationImage(
+              image: AssetImage('images/kamar.png'),
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.2), BlendMode.darken),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: Colors.black.withOpacity(0.5),
+                        width: 0,
+                      ),
+                    ),
+                    child: Text(
+                      formatCurrency(widget.kost.hargaPertahun),
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const Spacer(),
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15, bottom: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        widget.kost.namaKost,
+                        style: GoogleFonts.getFont(
+                          'Poppins',
+                          fontSize: 25,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        widget.kost.alamatKos,
+                        style: GoogleFonts.getFont(
+                          'Poppins',
+                          fontSize: 13,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 // Class Filter Dialog dibuat stateful
