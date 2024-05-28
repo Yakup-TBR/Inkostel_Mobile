@@ -108,7 +108,7 @@ class _DetailState extends State<Detail> {
                       CarouselSlider(
                         options: CarouselOptions(
                           height: 317,
-                          viewportFraction: 1.0,
+                          viewportFraction: 2.0, // Full Page?
                           initialPage: 0,
                           enableInfiniteScroll: true,
                           reverse: false,
@@ -146,11 +146,7 @@ class _DetailState extends State<Detail> {
                         left: 20,
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CariKos()),
-                            );
+                            Navigator.pop(context);
                           },
                           child: Container(
                             width: 30,
@@ -289,15 +285,15 @@ class _DetailState extends State<Detail> {
                                 children: [
                                   Row(
                                     children: [
-                                      Icon(
+                                      const Icon(
                                         Icons.location_on,
                                         color: Color.fromRGBO(72, 255, 249, 1),
                                         size: 20,
                                       ),
-                                      SizedBox(width: 5),
+                                      const SizedBox(width: 5),
                                       Text(
                                         _kos!.alamatKos,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontFamily: 'Poppins',
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,

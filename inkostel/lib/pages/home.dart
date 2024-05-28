@@ -11,9 +11,10 @@ import 'package:inkostel/service/kost_model.dart';
 import 'package:inkostel/utils/format_currency.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomeState createState() => _HomeState();
 }
 
@@ -348,7 +349,7 @@ class _HomeState extends State<Home> {
                                       scrollDirection: Axis.horizontal,
                                       itemCount: snapshot.data!.length,
                                       itemBuilder: (context, index) {
-                                        return KostCard(
+                                        return CardRekomendasi(
                                             kost: snapshot.data![index]);
                                       },
                                     );
@@ -393,12 +394,32 @@ class _HomeState extends State<Home> {
                         child: Container(
                             height: 260,
                             color: const Color.fromRGBO(254, 251, 246, 1),
-                            child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              children: [
-                                buildCard(),
-                              ],
-                            )),
+                            child: FutureBuilder<List<Kost>>(
+                                future: fetchData(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Center(
+                                        child: CircularProgressIndicator());
+                                  } else if (snapshot.hasError) {
+                                    return Center(
+                                        child:
+                                            Text('Error: ${snapshot.error}'));
+                                  } else if (!snapshot.hasData ||
+                                      snapshot.data!.isEmpty) {
+                                    return const Center(
+                                        child: Text('No data available'));
+                                  } else {
+                                    return ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: snapshot.data!.length,
+                                      itemBuilder: (context, index) {
+                                        return CardRekomendasi(
+                                            kost: snapshot.data![index]);
+                                      },
+                                    );
+                                  }
+                                })),
                       ),
                       Padding(
                         padding:
@@ -438,15 +459,32 @@ class _HomeState extends State<Home> {
                         child: Container(
                             height: 260,
                             color: const Color.fromRGBO(254, 251, 246, 1),
-                            child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              children: [
-                                buildCard(),
-                                buildCard(),
-                                buildCard(),
-                                buildCard(),
-                              ],
-                            )),
+                            child: FutureBuilder<List<Kost>>(
+                                future: fetchData(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Center(
+                                        child: CircularProgressIndicator());
+                                  } else if (snapshot.hasError) {
+                                    return Center(
+                                        child:
+                                            Text('Error: ${snapshot.error}'));
+                                  } else if (!snapshot.hasData ||
+                                      snapshot.data!.isEmpty) {
+                                    return const Center(
+                                        child: Text('No data available'));
+                                  } else {
+                                    return ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: snapshot.data!.length,
+                                      itemBuilder: (context, index) {
+                                        return CardTermurah(
+                                            kost: snapshot.data![index]);
+                                      },
+                                    );
+                                  }
+                                })),
                       ),
                       const Padding(
                         padding: EdgeInsets.only(
@@ -534,20 +572,32 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+}
 
-  Widget buildCard() => Padding(
+// ListView Rekomendasi
+class CardRekomendasi extends StatefulWidget {
+  final Kost kost;
+
+  const CardRekomendasi({super.key, required this.kost});
+
+  @override
+  State<CardRekomendasi> createState() => _CardRekomendasiState();
+}
+
+class _CardRekomendasiState extends State<CardRekomendasi> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: GestureDetector(
         onTap: () {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => Detail(
-                        kosId: '',
-                      )));
+                builder: (context) => Detail(kosId: widget.kost.kosId),
+              ));
         },
         child: Container(
-          // Widget Card Kos
           width: 230,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -556,7 +606,9 @@ class _HomeState extends State<Home> {
             ),
             borderRadius: BorderRadius.circular(20.0),
             image: DecorationImage(
-              image: const AssetImage('images/kamar_2.jpg'),
+              image:
+                  // Ubah Menjadi gambar data di database
+                  const AssetImage('images/kamar.png'),
               colorFilter: ColorFilter.mode(
                   Colors.black.withOpacity(0.2), BlendMode.darken),
               fit: BoxFit.cover,
@@ -564,120 +616,10 @@ class _HomeState extends State<Home> {
           ),
           child: Column(
             children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: Colors.black.withOpacity(0.5),
-                        width: 0,
-                      ),
-                    ),
-                    child: RichText(
-                      text: const TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'Harganya',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          TextSpan(
-                            text: ' Bln',
-                            style: TextStyle(
-                              color: Colors
-                                  .grey, // Atur warna yang diinginkan untuk bagian "Juta / Bln"
-                              fontSize: 15,
-                              fontWeight: FontWeight
-                                  .normal, // Jika diperlukan, ubah berat font sesuai kebutuhan
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+              Visibility(
+                visible: false,
+                child: Text(widget.kost.kosId),
               ),
-              const Spacer(),
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15, bottom: 15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "NamaKos",
-                        style: GoogleFonts.getFont(
-                          'Poppins',
-                          fontSize: 25,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        "Alamat",
-                        style: GoogleFonts.getFont(
-                          'Poppins',
-                          fontSize: 13,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ));
-}
-
-class KostCard extends StatefulWidget {
-  final Kost kost;
-
-  KostCard({required this.kost});
-
-  @override
-  State<KostCard> createState() => _KostCardState();
-}
-
-class _KostCardState extends State<KostCard> {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
-      child: GestureDetector(
-        // onTap: () {
-        //   Navigator.push(
-        //       context, MaterialPageRoute(builder: (context) => detail()));
-        // },
-        child: Container(
-          width: 230,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(
-              color: const Color.fromARGB(109, 134, 146, 134),
-            ),
-            borderRadius: BorderRadius.circular(20.0),
-            image: DecorationImage(
-              image: AssetImage('images/kamar.png'),
-              colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.2), BlendMode.darken),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Column(
-            children: [
               Align(
                 alignment: Alignment.topRight,
                 child: Padding(
@@ -742,156 +684,220 @@ class _KostCardState extends State<KostCard> {
   }
 }
 
-// Class Filter Dialog dibuat stateful
-class FilterDialog extends StatefulWidget {
-  const FilterDialog({super.key});
+// ListView Terdekat
+class CardTerdekat extends StatefulWidget {
+  final Kost kost;
+
+  const CardTerdekat({super.key, required this.kost});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _FilterDialogState createState() => _FilterDialogState();
+  State<CardTerdekat> createState() => _CardTerdekatState();
 }
 
-class _FilterDialogState extends State<FilterDialog> {
-  double _currentSliderValue = 0.0;
-  bool isChecked100Meters = false;
-  bool isChecked200Meters = false;
-  bool isChecked500Meters = false;
-  bool isChecked1KM = false;
-  bool isCheckedLebih1KM = false;
-
-  String _getLabel(double value) {
-    if (value < 500) {
-      return "< 5 Juta";
-    } else if (value >= 500 && value < 1000) {
-      return "5 - 7 Juta";
-    } else if (value >= 1000 && value < 1500) {
-      return "7 - 10 Juta";
-    } else if (value >= 1500 && value < 2000) {
-      return "10 - 15 Juta";
-    } else {
-      return "> 15 Juta";
-    }
-  }
-
+class _CardTerdekatState extends State<CardTerdekat> {
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Filter',
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.w600,
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Detail(kosId: widget.kost.kosId),
+              ));
+        },
+        child: Container(
+          width: 230,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+              color: const Color.fromARGB(109, 134, 146, 134),
+            ),
+            borderRadius: BorderRadius.circular(20.0),
+            image: DecorationImage(
+              image:
+                  // Ubah Menjadi gambar data di database
+                  const AssetImage('images/kamar.png'),
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.2), BlendMode.darken),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Column(
+            children: [
+              Visibility(
+                visible: false,
+                child: Text(widget.kost.kosId),
               ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Jarak',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            CheckboxListTile(
-              title: const Text('Kurang 100 Meter'),
-              value: isChecked100Meters,
-              onChanged: (bool? value) {
-                setState(() {
-                  isChecked100Meters = value!;
-                });
-              },
-              activeColor: const Color.fromRGBO(100, 204, 197, 1),
-              checkColor: Colors.white,
-            ),
-            CheckboxListTile(
-              title: const Text('100 - 300 Meter'),
-              value: isChecked200Meters,
-              onChanged: (bool? value) {
-                setState(() {
-                  isChecked200Meters = value!;
-                });
-              },
-              activeColor: const Color.fromRGBO(100, 204, 197, 1),
-              checkColor: Colors.white,
-            ),
-            CheckboxListTile(
-              title: const Text('300 - 500 Meter'),
-              value: isChecked500Meters,
-              onChanged: (bool? value) {
-                setState(() {
-                  isChecked500Meters = value!;
-                });
-              },
-              activeColor: const Color.fromRGBO(100, 204, 197, 1),
-              checkColor: Colors.white,
-            ),
-            CheckboxListTile(
-              title: const Text('500 - 1 KM'),
-              value: isChecked1KM,
-              onChanged: (bool? value) {
-                setState(() {
-                  isChecked1KM = value!;
-                });
-              },
-              activeColor: const Color.fromRGBO(100, 204, 197, 1),
-              checkColor: Colors.white,
-            ),
-            CheckboxListTile(
-              title: const Text('Lebih dari 1 KM'),
-              value: isCheckedLebih1KM,
-              onChanged: (bool? value) {
-                setState(() {
-                  isCheckedLebih1KM = value!;
-                });
-              },
-              activeColor: const Color.fromRGBO(100, 204, 197, 1),
-              checkColor: Colors.white,
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Harga Pertahun',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            Slider(
-              value: _currentSliderValue,
-              max: 2000,
-              divisions: 4,
-              label: _getLabel(_currentSliderValue),
-              onChanged: (double value) {
-                setState(() {
-                  _currentSliderValue = value;
-                });
-              },
-              activeColor: const Color.fromRGBO(100, 204, 197, 1),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    'Tutup',
-                    style: GoogleFonts.getFont(
-                      'Poppins',
-                      fontSize: 17,
-                      color: Colors.black,
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: Colors.black.withOpacity(0.5),
+                        width: 0,
+                      ),
+                    ),
+                    child: Text(
+                      formatCurrency(widget.kost.hargaPertahun),
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
-              ],
+              ),
+              const Spacer(),
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15, bottom: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        widget.kost.namaKost,
+                        style: GoogleFonts.getFont(
+                          'Poppins',
+                          fontSize: 25,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        widget.kost.alamatKos,
+                        style: GoogleFonts.getFont(
+                          'Poppins',
+                          fontSize: 13,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ListView Termurah
+class CardTermurah extends StatefulWidget {
+  final Kost kost;
+
+  const CardTermurah({super.key, required this.kost});
+
+  @override
+  State<CardTermurah> createState() => _CardTermurahState();
+}
+
+class _CardTermurahState extends State<CardTermurah> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Detail(kosId: widget.kost.kosId),
+              ));
+        },
+        child: Container(
+          width: 230,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+              color: const Color.fromARGB(109, 134, 146, 134),
             ),
-          ],
+            borderRadius: BorderRadius.circular(20.0),
+            image: DecorationImage(
+              image:
+                  // Ubah Menjadi gambar data di database
+                  const AssetImage('images/kamar.png'),
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.2), BlendMode.darken),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Column(
+            children: [
+              Visibility(
+                visible: false,
+                child: Text(widget.kost.kosId),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: Colors.black.withOpacity(0.5),
+                        width: 0,
+                      ),
+                    ),
+                    child: Text(
+                      formatCurrency(widget.kost.hargaPertahun),
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const Spacer(),
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15, bottom: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        widget.kost.namaKost,
+                        style: GoogleFonts.getFont(
+                          'Poppins',
+                          fontSize: 25,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        widget.kost.alamatKos,
+                        style: GoogleFonts.getFont(
+                          'Poppins',
+                          fontSize: 13,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
