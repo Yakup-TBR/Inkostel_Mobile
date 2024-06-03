@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Simpan {
   final String namaKost;
+  final String jarakKost;
   final String hargaPertahun;
   final String imageUrl;
   final String kosId;
@@ -9,6 +10,7 @@ class Simpan {
 
   Simpan({
     required this.namaKost,
+    required this.jarakKost,
     required this.hargaPertahun,
     required this.imageUrl,
     required this.kosId,
@@ -19,6 +21,7 @@ class Simpan {
     Map data = doc.data() as Map<String, dynamic>;
     return Simpan(
       namaKost: data['Nama Kos'] ?? '',
+      jarakKost: data['Jarak'] ?? '',
       hargaPertahun: data['Harga Pertahun'] ?? '',
       imageUrl: data['ImageURL'] ?? '',
       kosId: data['Kos ID'] ?? '',

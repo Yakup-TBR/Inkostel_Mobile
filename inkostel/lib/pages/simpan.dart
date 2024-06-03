@@ -1,298 +1,229 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/settings.dart';
 
-
-
-void main() {
-  runApp(const Simpan());
-}
-
 class Simpan extends StatefulWidget {
   const Simpan({super.key});
-  
-
 
   @override
-  // ignore: library_private_types_in_public_api
   _SimpanState createState() => _SimpanState();
 }
 
 class _SimpanState extends State<Simpan> {
-  bool isFavorite1 = true;
-  bool isFavorite2 = true;
-  bool isFavorite3 = true;
-  bool isFavorite4 = true;
+  List<DocumentSnapshot> _savedKosts = [];
+  bool _isLoading = true;
+  bool _isLoadingMore = false;
+  final ScrollController _scrollController = ScrollController();
+  final int _itemsPerPage = 10;
+  DocumentSnapshot? _lastDocument;
 
-  final List<Map<String, dynamic>> kosData = [
-    {
-      'imagePath': 'images/kamar.png',
-      'price': 8500000,
-      'name': 'Kost Putri Pondok Firdaus',
-      'distance': 900,
-    },
-    {
-      'imagePath': 'images/kamar.png',
-      'price': 9000000,
-      'name': 'Kost Putra Pondok Firdaus',
-      'distance': 5000,
-    },
-    {
-      'imagePath': 'images/kamar.png',
-      'price': 7000000,
-      'name': 'Kost Putri Pondok Firdaus',
-      'distance': 600,
-    },
-    {
-      'imagePath': 'images/kamar.png',
-      'price': 10000000,
-      'name': 'Kost Putra Pondok Firdaus',
-      'distance': 6500,
-    },
-    {
-      'imagePath': 'images/kamar.png',
-      'price': 10000000,
-      'name': 'Kost Putra Pondok Firdaus',
-      'distance': 6500,
-    },
-    {
-      'imagePath': 'images/kamar.png',
-      'price': 6000000,
-      'name': 'Kost Putra Pondok Firdaus',
-      'distance': 6500,
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _fetchSavedKosts();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        _fetchMoreSavedKosts();
+      }
+    });
+  }
 
-  int _currentPage = 0;
-  final int _itemsPerPage = 2;
+  Future<void> _fetchSavedKosts() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('SimpanKos')
+        .limit(_itemsPerPage)
+        .get();
+
+    setState(() {
+      _savedKosts = querySnapshot.docs;
+      _isLoading = false;
+      if (_savedKosts.isNotEmpty) {
+        _lastDocument = _savedKosts.last;
+      }
+    });
+  }
+
+  Future<void> _fetchMoreSavedKosts() async {
+    if (_isLoadingMore || _lastDocument == null) return;
+
+    setState(() {
+      _isLoadingMore = true;
+    });
+
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('SimpanKos')
+        .startAfterDocument(_lastDocument!)
+        .limit(_itemsPerPage)
+        .get();
+
+    setState(() {
+      _savedKosts.addAll(querySnapshot.docs);
+      _isLoadingMore = false;
+      if (querySnapshot.docs.isNotEmpty) {
+        _lastDocument = querySnapshot.docs.last;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final int totalPages = (kosData.length / _itemsPerPage).ceil();
-
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
+      backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
+      appBar: AppBar(
         backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
-        appBar: AppBar(
-          backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
-          toolbarHeight: 65,
-          title: Padding(
-            padding: const EdgeInsets.only(left: 15),
-            child: Row(
-              children: [
-                _buildBackbutton(),
-                Padding(
-                  padding: const EdgeInsets.only(left: 70),
-                  child: Text(
-                    'Kos Tersimpan',
-                    style: GoogleFonts.poppins(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+        toolbarHeight: 65,
+        automaticallyImplyLeading: false,
+        title: Padding(
+          padding: const EdgeInsets.only(left: 15),
+          child: Row(
+            children: [
+              _buildBackbutton(),
+              Padding(
+                padding: const EdgeInsets.only(left: 70),
+                child: Text(
+                  'Kos Tersimpan',
+                  style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-        body: Stack(
-          children: [
-            Column(
-              children: [
-                const SizedBox(height: 0),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: _itemsPerPage,
+      ),
+      body: Column(
+        children: [
+          const SizedBox(height: 10),
+          Expanded(
+            child: _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : ListView.builder(
+                    controller: _scrollController,
+                    itemCount: _savedKosts.length + 1,
                     itemBuilder: (context, index) {
-                      final int itemIndex =
-                          _currentPage * _itemsPerPage + index;
-                      if (itemIndex >= kosData.length) {
-                        return const SizedBox.shrink();
+                      if (index == _savedKosts.length) {
+                        return _isLoadingMore
+                            ? const Center(child: CircularProgressIndicator())
+                            : Container();
                       }
-                      final kos = kosData[itemIndex];
+                      final DocumentSnapshot kostDoc = _savedKosts[index];
+                      final Map<String, dynamic> kostData =
+                          kostDoc.data() as Map<String, dynamic>;
+
+                      final String imagePath = kostData['ImageURL'] ?? '';
+                      final int price =
+                          int.tryParse(kostData['Harga Pertahun'].toString()) ??
+                              0;
+                      final String name = kostData['Nama Kos'] ?? '';
+                      final String distance = kostData['Jarak'] ?? '0';
+                      final bool isFavorite = kostData['isFavorite'] ?? false;
+
                       return _buildListItem(
-                        imagePath: kos['imagePath'],
-                        price: kos['price'],
-                        name: kos['name'],
-                        distance: kos['distance'],
-                        isFavorite: index == 0 ? isFavorite1 : isFavorite2,
-                        onTap: () {
+                        imagePath: imagePath,
+                        price: price,
+                        name: name,
+                        distance: distance,
+                        isFavorite: isFavorite,
+                        onTap: () async {
                           setState(() {
-                            if (index == 0) {
-                              isFavorite1 = !isFavorite1;
-                            } else {
-                              isFavorite2 = !isFavorite2;
-                            }
+                            kostData['isFavorite'] = !kostData['isFavorite'];
                           });
+
+                          // Update favorit status di Firestore
+                          await FirebaseFirestore.instance
+                              .collection('SimpanKos')
+                              .doc(kostDoc.id)
+                              .update({'isFavorite': kostData['isFavorite']});
                         },
                       );
                     },
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List<Widget>.generate(
-                    (totalPages > 4) ? 4 : totalPages,
-                    (int pageIndex) {
-                      int displayPageIndex;
-                      if (totalPages <= 5 || _currentPage <= 2) {
-                        displayPageIndex = pageIndex;
-                      } else if (_currentPage >= totalPages - 3) {
-                        displayPageIndex = totalPages - 4 + pageIndex;
-                      } else {
-                        displayPageIndex = _currentPage - 2 + pageIndex;
-                      }
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _currentPage = displayPageIndex;
-                          });
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.fromLTRB(5, 5, 5, 72.5),
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: _currentPage == displayPageIndex
-                                ? const Color.fromRGBO(100, 204, 197, 1)
-                                : Colors.grey,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Text(
-                            (displayPageIndex + 1).toString(),
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
+        selectedItemColor: const Color.fromARGB(255, 232, 255, 240),
+        unselectedItemColor: Colors.grey,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        selectedFontSize: 14,
+        unselectedFontSize: 14,
+        onTap: (int index) {
+          switch (index) {
+            case 0:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Home()),
+              );
+              break;
+            case 1:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Simpan()),
+              );
+              break;
+            case 2:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const JualKos()),
+              );
+              break;
+            case 3:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Pengaturan()),
+              );
+              break;
+            default:
+          }
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'lib/icons/home.png',
+              height: 30,
             ),
-            Positioned(
-              left: 113,
-              bottom: 70,
-              child: GestureDetector(
-                onTap: (_currentPage > 0)
-                    ? () {
-                        setState(() {
-                          _currentPage--;
-                        });
-                      }
-                    : null,
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: const Icon(Icons.arrow_back_ios_new),
-                ),
-              ),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'lib/icons/simpan_active.png',
+              height: 30,
             ),
-            Positioned(
-              right: 113,
-              bottom: 70,
-              child: GestureDetector(
-                onTap: (_currentPage < totalPages - 1)
-                    ? () {
-                        setState(() {
-                          _currentPage++;
-                        });
-                      }
-                    : null,
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: const Icon(Icons.arrow_forward_ios),
-                ),
-              ),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'lib/icons/plus.png',
+              height: 30,
             ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: BottomNavigationBar(
-                type: BottomNavigationBarType.fixed,
-                backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
-                selectedItemColor: const Color.fromARGB(255, 232, 255, 240),
-                unselectedItemColor: Colors.grey,
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
-                selectedFontSize: 14,
-                unselectedFontSize: 14,
-                onTap: (int index) {
-                  switch (index) {
-                    case 0:
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const Home()),
-                      );
-                      break;
-                    case 1:
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const Simpan()),
-                      );
-                      break;
-                    case 2:
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const JualKos()),
-                      );
-                      break;
-                    case 3:
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const Pengaturan()),
-                      );
-                      break;
-                    default:
-                  }
-                },
-                items: [
-                  BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'lib/icons/home.png',
-                      height: 30,
-                    ),
-                    label: 'Home',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'lib/icons/simpan_active.png',
-                      height: 30,
-                    ),
-                    label: 'Search',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'lib/icons/plus.png',
-                      height: 30,
-                    ),
-                    label: 'Save',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'lib/icons/gear.png',
-                      height: 30,
-                    ),
-                    label: 'Settings',
-                  ),
-                ],
-              ),
+            label: 'Save',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'lib/icons/gear.png',
+              height: 30,
             ),
-          ],
-        ),
+            label: 'Settings',
+          ),
+        ],
       ),
     );
   }
@@ -329,7 +260,7 @@ class _SimpanState extends State<Simpan> {
     required String imagePath,
     required int price,
     required String name,
-    required int distance,
+    required String distance,
     required bool isFavorite,
     required VoidCallback onTap,
   }) {
@@ -353,7 +284,7 @@ class _SimpanState extends State<Simpan> {
               ),
               borderRadius: BorderRadius.circular(20.0),
               image: DecorationImage(
-                image: AssetImage(imagePath),
+                image: NetworkImage(imagePath),
                 fit: BoxFit.cover,
               ),
             ),
@@ -373,7 +304,7 @@ class _SimpanState extends State<Simpan> {
                       ),
                     ),
                     child: Text(
-                      formatCurrency(price),
+                      'Rp $price',
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 16,
@@ -388,7 +319,7 @@ class _SimpanState extends State<Simpan> {
                   child: Text(
                     name,
                     style: const TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255),
+                      color: Color.fromARGB(255, 0, 0, 0),
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -400,9 +331,9 @@ class _SimpanState extends State<Simpan> {
                   child: Row(
                     children: [
                       Text(
-                        getDistanceText(distance),
+                        '$distance',
                         style: const TextStyle(
-                          color: Color.fromARGB(255, 255, 255, 255),
+                          color: Color.fromARGB(255, 0, 0, 0),
                           fontSize: 17,
                         ),
                       ),
@@ -430,6 +361,7 @@ class _SimpanState extends State<Simpan> {
     );
   }
 
+  // Fungsi untuk mengonversi harga
   String formatCurrency(int amount) {
     if (amount >= 1000000) {
       double result = amount / 1000000;
@@ -441,25 +373,12 @@ class _SimpanState extends State<Simpan> {
     } else if (amount >= 1000) {
       double result = amount / 1000;
       if (result % 1 == 0) {
-        return 'Rp ${result.toInt()} thn';
+        return 'Rp ${result.toInt()} rb/thn';
       } else {
-        return 'Rp ${result.toStringAsFixed(1)} thn';
+        return 'Rp ${result.toStringAsFixed(1)} rb/thn';
       }
     } else {
       return 'Rp $amount';
-    }
-  }
-
-  String getDistanceText(int distance) {
-    if (distance >= 1000) {
-      double km = distance / 1000;
-      if (distance % 1000 == 0) {
-        return '${km.toInt()} km';
-      } else {
-        return '${km.toStringAsFixed(1)} km';
-      }
-    } else {
-      return '$distance meter';
     }
   }
 }
