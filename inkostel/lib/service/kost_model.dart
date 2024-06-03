@@ -24,12 +24,24 @@ class Kost {
     return Kost(
       namaKost: data['Nama Kos'] ?? '',
       jarakKost: data['Jarak'] ?? '',
-      hargaPertahun: data['Harga Pertahun'] ?? '',
+      hargaPertahun: _convertToInt(data['Harga Pertahun']) ?? 0,
       imageUrl: data['ImageURL'] ?? '',
       kosId: data['Kos ID'] ?? '',
       isFavorite: data['isFavorite'] ?? false,
       alamatKos: data['Alamat Kos'] ?? '',
     );
+  }
+ 
+  static int? _convertToInt(dynamic value) {
+    if (value is int) {
+      return value;
+    } else if (value is String) {
+      return int.tryParse(value);
+    } else if (value is double) {
+      return value.toInt();
+    } else {
+      return null;
+    }
   }
 
   void toggleFavoriteStatus() {
