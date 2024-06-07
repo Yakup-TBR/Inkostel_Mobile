@@ -2,14 +2,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:inkostel/service/database.dart';
-import 'package:intl/intl.dart';
 import 'package:inkostel/pages/home.dart';
+import 'package:inkostel/pages/profile.dart';
 import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
-import 'package:inkostel/pages/profile.dart';
+import 'package:inkostel/service/database.dart';
 import 'package:random_string/random_string.dart';
-import 'package:inkostel/service/image_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -51,16 +49,24 @@ class _JualKosState extends State<JualKos> {
   // Variable to store selected distance
   String? selectedDistance;
 
-  // Formatter for price text field
-  // final priceFormatter = NumberTextInputFormatter();
-  File? _imageFile;
+  List<File> _imageFiles = [];
 
-  // Function to handle selecting an image from the gallery
+  // Function to handle selecting an image from the gallery or camera
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
     setState(() {
       if (pickedFile != null) {
-        _imageFile = File(pickedFile.path);
+        if (_imageFiles.length < 6) {
+          _imageFiles.add(File(pickedFile.path));
+        } else {
+          Fluttertoast.showToast(
+            msg: "You can only upload up to 6 images",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+          );
+        }
       }
     });
   }
@@ -79,42 +85,28 @@ class _JualKosState extends State<JualKos> {
     }
   }
 
-  Future<void> _saveImageLocally(File imageFile) async {
-    final imagePath = await saveImageLocally(imageFile);
-    print('Image saved locally at $imagePath');
-  }
+  Future<void> _uploadImagesAndSaveUrls(List<File> imageFiles) async {
+    List<String> imageUrls = [];
+    for (int i = 0; i < imageFiles.length; i++) {
+      String imageName = 'kost_image_${DateTime.now().millisecondsSinceEpoch}_$i.jpg';
+      String downloadUrl = await uploadImageToFirebase(imageFiles[i].path, imageName);
+      imageUrls.add(downloadUrl);
+    }
 
-  Future<void> _uploadImageAndSaveUrl(File imageFile) async {
-    try {
-      String imageName = 'kost_image_${DateTime.now().millisecondsSinceEpoch}.jpg';
-      String downloadUrl = await uploadImageToFirebase(imageFile.path, imageName);
-      // Simpan URL gambar ke Firestore
+    // Simpan URL gambar ke Firestore
+    for (String url in imageUrls) {
       await FirebaseFirestore.instance.collection('images').add({
-        'url': downloadUrl,
+        'url': url,
         'uploaded_at': Timestamp.now(),
       });
-      print('Image uploaded and URL saved to Firestore. URL: $downloadUrl');
-      Fluttertoast.showToast(
-        msg: "Image uploaded and URL saved successfully!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 3,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0
-      );
-    } catch (e) {
-      print(e);
-      Fluttertoast.showToast(
-        msg: "Failed to upload image: $e",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 3,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0
-      );
     }
+    Fluttertoast.showToast(
+      msg: "Images uploaded and URLs saved successfully!",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+    );
   }
 
   @override
@@ -356,9 +348,45 @@ class _JualKosState extends State<JualKos> {
                               onTap: () {
                                 _showImagePicker(); // Panggil fungsi untuk menampilkan pemilih gambar
                               },
-                              child: _imageFile == null
-                                  ? const Icon(Icons.add_a_photo)
-                                  : Image.file(_imageFile!),
+                              child: Column(
+                                children: [
+                                  if (_imageFiles.isEmpty)
+                                    const Icon(Icons.add_a_photo)
+                                  else
+                                    GridView.builder(
+                                      shrinkWrap: true,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                        crossAxisSpacing: 4.0,
+                                        mainAxisSpacing: 4.0,
+                                      ),
+                                      itemCount: _imageFiles.length,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        return Stack(
+                                          children: [
+                                            Image.file(
+                                              _imageFiles[index],
+                                              fit: BoxFit.cover,
+                                            ),
+                                            Positioned(
+                                              top: -10,
+                                              right: -10,
+                                              child: IconButton(
+                                                icon: const Icon(Icons.cancel, color: Colors.red),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    _imageFiles.removeAt(index);
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -367,39 +395,40 @@ class _JualKosState extends State<JualKos> {
                           onPressed: () async {
                             String Id = randomAlphaNumeric(8);
 
-                            // Upload image to Firebase Storage
-                            String imagePath =
-                                _imageFile != null ? _imageFile!.path : '';
-                            String imageUrl = '';
-                            if (imagePath.isNotEmpty) {
-                              imageUrl = await uploadImageToFirebase(imagePath, 'kost_image_$Id.jpg');
+                            // Upload images to Firebase Storage
+                            List<String> imageUrls = [];
+                            for (int i = 0; i < _imageFiles.length; i++) {
+                              String imageName = 'kost_image_${Id}_$i.jpg';
+                              String imageUrl = await uploadImageToFirebase(_imageFiles[i].path, imageName);
+                              imageUrls.add(imageUrl);
                             }
 
-                            // Update kosDataMap with imageUrl
+                            // Update kosDataMap with imageUrls
                             Map<String, dynamic> kosDataMap = {
                               "Kos ID": Id,
                               "Nama Kos": namaKosController.text,
                               "Nomor Telepon": "62" + nomorTelponController.text,
                               "Alamat Kos": alamatKos1Controller.text,
-                              "Link Map":alamatlinkController.text,
+                              "Link Map": alamatlinkController.text,
                               "Harga Pertahun": int.tryParse(hargaPertahunController.text) ?? 0,
                               "Harga Perbulan": int.tryParse(hargaPerbulanController.text) ?? 0,
                               "Fasilitas": facilityValues,
                               "Deskripsi": deskripsiController.text,
-                              "ImageURL": imageUrl,
+                              "ImageURLs": imageUrls,
                               "Jarak": selectedDistance,
                             };
 
                             // Tambahkan data kos ke Firebase Database
                             await DatabaseMethods().addKosDetails(kosDataMap, Id).then((value) {
                               Fluttertoast.showToast(
-                                  msg: "Berhasil Mengirim, Data Kos Anda Akan diverifikasi oleh Admin",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.CENTER,
-                                  timeInSecForIosWeb: 3,
-                                  backgroundColor: Color.fromARGB(255, 16, 173, 89),
-                                  textColor: Colors.white,
-                                  fontSize: 16.0);
+                                msg: "Berhasil Mengirim, Data Kos Anda Akan diverifikasi oleh Admin",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 3,
+                                backgroundColor: const Color.fromARGB(255, 16, 173, 89),
+                                textColor: Colors.white,
+                                fontSize: 16.0,
+                              );
                             });
                           },
                           child: const Text('Submit'),
@@ -483,7 +512,6 @@ class _JualKosState extends State<JualKos> {
     );
   }
 
-  // Fungsi di ikon kamera untuk ambil gambar
   // Function to show the image picker modal bottom sheet
   void _showImagePicker() {
     showModalBottomSheet(
