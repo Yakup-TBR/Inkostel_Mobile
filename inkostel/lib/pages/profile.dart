@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,46 +9,48 @@ import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/signin.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/tes.dart';
+import 'package:inkostel/service/user_model.dart';
 
 class Profile extends StatelessWidget {
-  const Profile({super.key});
+  const Profile({Key? key}) : super(key: key);
   final double coverHeight = 170;
   final double profileSize = 110;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<User?>(
+      body: FutureBuilder<UserProfile?>(
         future: _getUserData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (snapshot.hasData) {
-            User user = snapshot.data!;
-            String name = user.displayName ?? 'User';
-            String email = user.email ?? 'No Email';
-            String userId = user.uid;
-            String username = '@username'; // Set username sesuai kebutuhan Anda
-            String number = '+62 - 8123 - 5643 - 8923';
-            String description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
+          } else if (!snapshot.hasData || snapshot.data == null) {
+            // Tampilkan halaman sign-in jika tidak ada data pengguna atau pengguna belum masuk
+            return const SignInScreen();
+          } else {
+            UserProfile user = snapshot.data!;
+            // Set default values if user data is missing
+            String userName = user.nama.isNotEmpty ? user.nama : 'User';
+            String userUsername = user.username.isNotEmpty ? user.username : 'username';
+            String userPhone = user.nomorTelepon.isNotEmpty ? user.nomorTelepon : '+62 123456789';
+            String userEmail = user.email.isNotEmpty ? user.email : 'user@example.com';
+            String userDescription = user.deskripsi.isNotEmpty ? user.deskripsi : 'Deskripsi belum diisi';
+            String userPhotoURL = user.photoURL.isNotEmpty ? user.photoURL : 'images/profile.png';
 
             return Stack(
               children: [
                 ListView(
                   padding: EdgeInsets.zero,
                   children: <Widget>[
-                    buildTop(context),
-                    buildBottom(name, username, number, email, userId, description),
-                    const SizedBox(height: 100), // Membuat ruang kosong di bagian bawah untuk memberi tempat pada tombol back
+                    buildTop(context, userPhotoURL),
+                    buildBottom(context, userName, userUsername, userPhone, userEmail, userDescription),
+                    const SizedBox(height: 100),
                   ],
                 ),
               ],
             );
-          } else {
-            // Jika pengguna belum masuk, arahkan ke halaman login
-            return SignInScreen();
           }
         },
       ),
@@ -125,11 +127,21 @@ class Profile extends StatelessWidget {
     );
   }
 
-  Future<User?> _getUserData() async {
-    return FirebaseAuth.instance.currentUser;
+  Future<UserProfile?> _getUserData() async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      await createUserProfileIfNotExists(); // Ensure user profile exists
+      var userProfile = await getUserProfile(); // Retrieve user profile from Firestore
+      if (userProfile != null) {
+        return userProfile;
+      } else {
+        return null; // No user data found in Firestore
+      }
+    } else {
+      return null; // User not logged in
+    }
   }
 
-  Widget buildTop(BuildContext context) {
+  Widget buildTop(BuildContext context, String photoURL) {
     final bottom = profileSize / 2;
     final top = coverHeight - profileSize / 2 - 30;
 
@@ -158,7 +170,7 @@ class Profile extends StatelessWidget {
         ),
         Positioned(
           top: top,
-          child: buildProfileImageWithShadow(context),
+          child: buildProfileImageWithShadow(context, photoURL),
         ),
         Positioned(
           left: 10,
@@ -199,7 +211,7 @@ class Profile extends StatelessWidget {
         ),
       );
 
-  Widget buildProfileImageWithShadow(BuildContext context) {
+  Widget buildProfileImageWithShadow(BuildContext context, String photoURL) {
     return Stack(
       children: [
         Container(
@@ -218,8 +230,8 @@ class Profile extends StatelessWidget {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(16),
-            child: Image.asset(
-              'images/profile.png',
+            child: Image.network(
+              photoURL,
               width: profileSize,
               height: profileSize,
               fit: BoxFit.cover,
@@ -231,7 +243,7 @@ class Profile extends StatelessWidget {
           right: 0,
           child: GestureDetector(
             onTap: () {
-              EditProfile(context); // Function to handle profile edit
+              editProfile(context); // Function to handle profile edit
             },
             child: Container(
               width: 30,
@@ -254,7 +266,7 @@ class Profile extends StatelessWidget {
     );
   }
 
-  Widget buildBottom(String name, String username, String number, String email, String userId, String description) {
+  Widget buildBottom(BuildContext context, String name, String username, String phone, String email, String description) {
     return Container(
       color: Colors.white,
       child: Column(
@@ -278,7 +290,7 @@ class Profile extends StatelessWidget {
             ),
           ),
           Text(
-            number,
+            phone,
             style: GoogleFonts.getFont(
               'Poppins',
               fontSize: 18,
@@ -293,14 +305,6 @@ class Profile extends StatelessWidget {
               color: Colors.grey,
             ),
           ),
-          // Text(
-          //   'User ID: $userId',
-          //   style: GoogleFonts.getFont(
-          //     'Poppins',
-          //     fontSize: 18,
-          //     color: Colors.grey,
-          //   ),
-          // ),
           const SizedBox(height: 30),
           Text(
             description,
@@ -316,15 +320,10 @@ class Profile extends StatelessWidget {
     );
   }
 
-  // ignore: non_constant_identifier_names
-  void EditProfile(BuildContext context) {
-    // Get the current user
-    User? user = FirebaseAuth.instance.currentUser;
-
-    // Create TextEditingControllers with initial values
-    TextEditingController nameController = TextEditingController(text: user?.displayName ?? 'User');
-    TextEditingController numberController = TextEditingController(text: '+62 - 8123 - 5643 - 8923'.replaceAll('+62', ''));
-    TextEditingController descriptionController = TextEditingController(text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.');
+  void editProfile(BuildContext context) {
+    TextEditingController nameController = TextEditingController();
+    TextEditingController numberController = TextEditingController();
+    TextEditingController descriptionController = TextEditingController();
 
     showDialog(
       context: context,
@@ -336,7 +335,7 @@ class Profile extends StatelessWidget {
             children: <Widget>[
               OutlinedButton(
                 onPressed: () {
-                  showImageSourceDialog(context);
+                  showImageSourceDialog(context); // Panggil fungsi untuk memilih sumber gambar
                 },
                 child: Text(
                   'Ubah Gambar Profil',
@@ -346,7 +345,6 @@ class Profile extends StatelessWidget {
                 ),
                 style: ButtonStyle(
                   side: MaterialStateProperty.resolveWith<BorderSide>((states) {
-                    // Menetapkan ketebalan outline dan warna abu-abu
                     return BorderSide(color: Colors.grey, width: 1);
                   }),
                 ),
@@ -364,7 +362,6 @@ class Profile extends StatelessWidget {
                 controller: numberController,
                 decoration: const InputDecoration(
                   labelText: 'Nomor',
-                  // Tambahkan teks +62 secara otomatis sebagai prefix
                   prefixText: '+62 ',
                   labelStyle: TextStyle(color: Color.fromARGB(255, 76, 165, 175)), 
                 ),
@@ -374,7 +371,7 @@ class Profile extends StatelessWidget {
                 controller: descriptionController,
                 decoration: const InputDecoration(
                   labelText: 'Deskripsi',
-                  labelStyle: TextStyle(color: Color.fromARGB(255, 76, 165, 175)), // Warna teks hijau
+                  labelStyle: TextStyle(color: Color.fromARGB(255, 76, 165, 175)), 
                 ),
               ),
             ],
@@ -397,10 +394,10 @@ class Profile extends StatelessWidget {
                 String newNumber = '+62' + numberController.text; // Gabungkan dengan prefix +62
                 String newDescription = descriptionController.text;
 
-                // Update user profile in Firebase Authentication
-                await user?.updateDisplayName(newName);
+                await updateProfileName(newName); // Update nama
+                await updateProfilePhoneNumber(newNumber); // Update nomor telepon
+                await updateProfileDescription(newDescription); // Update deskripsi
 
-                // Close the dialog
                 Navigator.of(context).pop();
               },
               child: const Text(
@@ -416,7 +413,7 @@ class Profile extends StatelessWidget {
     );
   }
 
-  //Method untuk menampilkan dialog pilihan sumber gambar
+
   void showImageSourceDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -449,23 +446,24 @@ class Profile extends StatelessWidget {
     );
   }
 
-  //Method untuk mengambil gambar dari galeri
   void _getImageFromGallery(BuildContext context) async {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
       File imageFile = File(pickedImage.path);
-      //Menggunakan imageFile untuk menampilkan gambar atau menyimpannya
+      // Panggil fungsi untuk memperbarui URL gambar profil
+      await updateProfileImageURL(imageFile.path);
     }
   }
 
-  //Method untuk mengambil gambar dari kamera
   void _getImageFromCamera(BuildContext context) async {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: ImageSource.camera);
     if (pickedImage != null) {
       File imageFile = File(pickedImage.path);
-      //Menggunakan imageFile untuk menampilkan gambar atau menyimpannya
+      // Panggil fungsi untuk memperbarui URL gambar profil
+      await updateProfileImageURL(imageFile.path);
     }
   }
+
 }
