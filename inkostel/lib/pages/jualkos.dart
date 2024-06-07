@@ -3,17 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:inkostel/service/database.dart';
-import 'package:intl/intl.dart'; // Import intl package
+import 'package:intl/intl.dart';
 import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/profile.dart';
 import 'package:random_string/random_string.dart';
 import 'package:inkostel/service/image_service.dart';
-
-void main() {
-  runApp(const JualKos());
-}
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class JualKos extends StatefulWidget {
   const JualKos({super.key});
@@ -23,18 +21,6 @@ class JualKos extends StatefulWidget {
 }
 
 class _JualKosState extends State<JualKos> {
-  Future<void> _saveImageLocally(File imageFile) async {
-    final imagePath = await saveImageLocally(imageFile);
-    print('Image saved locally at $imagePath');
-  }
-
-  Future<void> _uploadImageToFirebase(String imagePath) async {
-    final String imageName = 'kost_image.jpg'; // Nama gambar yang akan diunggah
-    final imageUrl = await uploadImageToFirebase(imagePath, imageName);
-    print('Image uploaded to Firebase. URL: $imageUrl');
-    // Di sini Anda dapat melakukan apa pun yang Anda inginkan dengan URL gambar, misalnya menyimpannya di database Firebase
-  }
-
   // Text Editing Controller tiap textField
   TextEditingController namaKosController = new TextEditingController();
   TextEditingController nomorTelponController = new TextEditingController();
@@ -79,6 +65,58 @@ class _JualKosState extends State<JualKos> {
     });
   }
 
+  Future<String> uploadImageToFirebase(String imagePath, String imageName) async {
+    try {
+      File imageFile = File(imagePath);
+      Reference storageRef = FirebaseStorage.instance.ref().child('images/$imageName');
+      UploadTask uploadTask = storageRef.putFile(imageFile);
+      TaskSnapshot taskSnapshot = await uploadTask;
+      String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      print(e);
+      throw e;
+    }
+  }
+
+  Future<void> _saveImageLocally(File imageFile) async {
+    final imagePath = await saveImageLocally(imageFile);
+    print('Image saved locally at $imagePath');
+  }
+
+  Future<void> _uploadImageAndSaveUrl(File imageFile) async {
+    try {
+      String imageName = 'kost_image_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      String downloadUrl = await uploadImageToFirebase(imageFile.path, imageName);
+      // Simpan URL gambar ke Firestore
+      await FirebaseFirestore.instance.collection('images').add({
+        'url': downloadUrl,
+        'uploaded_at': Timestamp.now(),
+      });
+      print('Image uploaded and URL saved to Firestore. URL: $downloadUrl');
+      Fluttertoast.showToast(
+        msg: "Image uploaded and URL saved successfully!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 3,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0
+      );
+    } catch (e) {
+      print(e);
+      Fluttertoast.showToast(
+        msg: "Failed to upload image: $e",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 3,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -99,8 +137,7 @@ class _JualKosState extends State<JualKos> {
                     borderRadius: BorderRadius.circular(18),
                     boxShadow: [
                       BoxShadow(
-                        color:
-                            const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+                        color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
                         spreadRadius: 0,
                         blurRadius: 4,
                         offset: const Offset(0, 1), // Atur posisi shadow
@@ -113,8 +150,7 @@ class _JualKosState extends State<JualKos> {
                       // Tambahkan kode navigasi ke halaman profil di sini
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const Profile()),
+                        MaterialPageRoute(builder: (context) => const Profile()),
                       );
                     },
                     child: Image.asset(
@@ -126,8 +162,7 @@ class _JualKosState extends State<JualKos> {
                 const Padding(
                   padding: EdgeInsets.only(left: 20),
                   child: Text('Hai, Supri Basuki',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
               ],
             ),
@@ -142,15 +177,13 @@ class _JualKosState extends State<JualKos> {
                 const SizedBox(height: 20),
                 Container(
                   // ---------Pop up Gagal Login
-                  constraints:
-                      const BoxConstraints(minWidth: 150, maxWidth: 330),
+                  constraints: const BoxConstraints(minWidth: 150, maxWidth: 330),
                   decoration: BoxDecoration(
                     color: const Color.fromARGB(255, 209, 205, 205),
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
-                        color:
-                            const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+                        color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
                         spreadRadius: 0,
                         blurRadius: 4,
                         offset: const Offset(0, 1), // Atur posisi shadow
@@ -164,8 +197,7 @@ class _JualKosState extends State<JualKos> {
                       children: [
                         const Text('Daftarkan kostan Anda sekarang!',
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.w600)),
+                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 20),
                         // TextFormField for Nama Kostan with prefix icon
                         TextFormField(
@@ -210,7 +242,7 @@ class _JualKosState extends State<JualKos> {
                         // Dropdown for Jarak
                         DropdownButtonFormField<String>(
                           decoration: const InputDecoration(
-                            labelText: 'Jarak',
+                            labelText: 'Jarak dari Telkom University',
                           ),
                           value: selectedDistance,
                           items: const [
@@ -266,8 +298,7 @@ class _JualKosState extends State<JualKos> {
                         TextFormField(
                           controller: hargaPertahunController,
                           // inputFormatters: [priceFormatter], // Apply formatter
-                          keyboardType:
-                              TextInputType.number, // Set keyboard type
+                          keyboardType: TextInputType.number, // Set keyboard type
                           decoration: const InputDecoration(
                             labelText: 'Harga Pertahun (Wajib diisi)',
                           ),
@@ -275,8 +306,7 @@ class _JualKosState extends State<JualKos> {
                         TextFormField(
                           controller: hargaPerbulanController,
                           // inputFormatters: [priceFormatter], // Apply formatter
-                          keyboardType:
-                              TextInputType.number, // Set keyboard type
+                          keyboardType: TextInputType.number, // Set keyboard type
                           decoration: const InputDecoration(
                             labelText: 'Harga Perbulan (Opsional)',
                           ),
@@ -342,23 +372,18 @@ class _JualKosState extends State<JualKos> {
                                 _imageFile != null ? _imageFile!.path : '';
                             String imageUrl = '';
                             if (imagePath.isNotEmpty) {
-                              imageUrl = await uploadImageToFirebase(
-                                  imagePath, 'kost_image.jpg');
+                              imageUrl = await uploadImageToFirebase(imagePath, 'kost_image_$Id.jpg');
                             }
 
                             // Update kosDataMap with imageUrl
                             Map<String, dynamic> kosDataMap = {
                               "Kos ID": Id,
                               "Nama Kos": namaKosController.text,
-                              "Nomor Telepon": nomorTelponController.text,
+                              "Nomor Telepon": "62" + nomorTelponController.text,
                               "Alamat Kos": alamatKos1Controller.text,
                               "Link Map":alamatlinkController.text,
-                              "Harga Pertahun":
-                                  int.tryParse(hargaPertahunController.text) ??
-                                      0,
-                              "Harga Perbulan":
-                                  int.tryParse(hargaPerbulanController.text) ??
-                                      0,
+                              "Harga Pertahun": int.tryParse(hargaPertahunController.text) ?? 0,
+                              "Harga Perbulan": int.tryParse(hargaPerbulanController.text) ?? 0,
                               "Fasilitas": facilityValues,
                               "Deskripsi": deskripsiController.text,
                               "ImageURL": imageUrl,
@@ -366,17 +391,13 @@ class _JualKosState extends State<JualKos> {
                             };
 
                             // Tambahkan data kos ke Firebase Database
-                            await DatabaseMethods()
-                                .addKosDetails(kosDataMap, Id)
-                                .then((value) {
+                            await DatabaseMethods().addKosDetails(kosDataMap, Id).then((value) {
                               Fluttertoast.showToast(
-                                  msg:
-                                      "Berhasil Mengirim, Data Kos Anda Akan diverifikasi oleh Admin",
+                                  msg: "Berhasil Mengirim, Data Kos Anda Akan diverifikasi oleh Admin",
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.CENTER,
                                   timeInSecForIosWeb: 3,
-                                  backgroundColor:
-                                      Color.fromARGB(255, 16, 173, 89),
+                                  backgroundColor: Color.fromARGB(255, 16, 173, 89),
                                   textColor: Colors.white,
                                   fontSize: 16.0);
                             });
