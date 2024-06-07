@@ -8,6 +8,8 @@ import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/service/kost_model.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:inkostel/utils/format_currency.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,26 +18,9 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: Detail(kosId: 'kosId'),
     );
-  }
-}
-
-final Uri _url = Uri.parse(
-    'https://www.google.com/maps/place/Universitas+Telkom/@-6.973007,107.6291105,17z/data=!3m1!4b1!4m6!3m5!1s0x2e68e9adf177bf8d:0x437398556f9fa03!8m2!3d-6.973007!4d107.6316854!16s%2Fm%2F0y6lbq_?entry=ttu');
-
-final Uri _wa = Uri.parse('https://wa.me/62895621670003');
-
-Future<void> _launchUrl() async {
-  if (!await launchUrl(_url)) {
-    throw Exception('Could not launch $_url');
-  }
-}
-
-Future<void> _launchwa() async {
-  if (!await launchUrl(_wa)) {
-    throw Exception('Could not launch $_wa');
   }
 }
 
@@ -76,6 +61,8 @@ class _DetailState extends State<Detail> {
     await _fetchKost();
   }
 
+  
+
   bool isSimpanPressed = false;
   final PanelController _panelController = PanelController();
 
@@ -86,6 +73,22 @@ class _DetailState extends State<Detail> {
         appBar: AppBar(title: Text('Loading...')),
         body: Center(child: CircularProgressIndicator()),
       );
+    }
+
+    final Uri _wa = Uri.parse('https://wa.me/${_kos?.noWA}');
+    Future<void> _launchwa() async {
+      if (!await launchUrl(_wa)) {
+        throw Exception('Could not launch $_wa');
+      }
+    }
+
+    final Uri _url = Uri.parse(
+        'https://www.google.com/maps/place/Universitas+Telkom/@-6.973007,107.6291105,17z/data=!3m1!4b1!4m6!3m5!1s0x2e68e9adf177bf8d:0x437398556f9fa03!8m2!3d-6.973007!4d107.6316854!16s%2Fm%2F0y6lbq_?entry=ttu');
+
+    Future<void> _launchUrl() async {
+      if (!await launchUrl(_url)) {
+        throw Exception('Could not launch $_url');
+      }
     }
 
     return Scaffold(
@@ -241,37 +244,6 @@ class _DetailState extends State<Detail> {
                                   ),
                                 ),
                                 const Spacer(),
-                                const Padding(
-                                  padding:
-                                      EdgeInsets.only(top: 50, right: 15.0),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.topCenter,
-                                        child: Icon(
-                                          Icons.star_rate,
-                                          color:
-                                              Color.fromRGBO(242, 255, 60, 1),
-                                          size: 20,
-                                        ),
-                                      ),
-                                      SizedBox(width: 5),
-                                      Align(
-                                        alignment: Alignment.topCenter,
-                                        child: Text(
-                                          '( 4,5 )',
-                                          style: TextStyle(
-                                            fontFamily: 'Poppins',
-                                            fontSize: 16,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
                               ],
                             ),
                           ),
@@ -306,59 +278,130 @@ class _DetailState extends State<Detail> {
                               ),
                             ),
                           ),
-                          const Padding(
+                          Padding(
                             padding: EdgeInsets.only(top: 10, left: 25),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.kitchen,
-                                      color: Color.fromRGBO(72, 255, 249, 1),
-                                      size: 20,
-                                    ),
-                                    SizedBox(width: 5),
-                                    Text(
-                                      'DAPUR',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
+                                if (_kos?.fasilitas['AC'] == true)
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        MdiIcons.airConditioner,
                                         color: Color.fromRGBO(72, 255, 249, 1),
+                                        size: 20,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(width: 20),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.wifi,
-                                      color: Color.fromRGBO(72, 255, 249, 1),
-                                      size: 20,
-                                    ),
-                                    SizedBox(width: 10),
-                                    Text(
-                                      'WIFI',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
+                                      const SizedBox(width: 1),
+                                      const Text(
+                                        'AC',
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              Color.fromRGBO(72, 255, 249, 1),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                const SizedBox(width: 5),
+                                if (_kos?.fasilitas['WiFi'] == true)
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        MdiIcons.wifi,
                                         color: Color.fromRGBO(72, 255, 249, 1),
+                                        size: 20,
                                       ),
-                                    ),
-                                  ],
-                                ),
+                                      SizedBox(width: 1),
+                                      const Text(
+                                        'WIFI',
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              Color.fromRGBO(72, 255, 249, 1),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                const SizedBox(width: 5),
+                                if (_kos?.fasilitas['Kulkas'] == true)
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        MdiIcons.fridgeOutline,
+                                        color: Color.fromRGBO(72, 255, 249, 1),
+                                        size: 20,
+                                      ),
+                                      const SizedBox(width: 1),
+                                      const Text(
+                                        'Kulkas',
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              Color.fromRGBO(72, 255, 249, 1),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                SizedBox(width: 5),
+                                if (_kos?.fasilitas['Tempat Parkir'] == true)
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        MdiIcons.parking,
+                                        color: Color.fromRGBO(72, 255, 249, 1),
+                                        size: 20,
+                                      ),
+                                      const SizedBox(width: 1),
+                                      const Text(
+                                        'Parkir',
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              Color.fromRGBO(72, 255, 249, 1),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                const SizedBox(width: 1),
+                                if (_kos?.fasilitas['Kamar Mandi Dalam'] ==
+                                    true)
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        MdiIcons.toilet,
+                                        color: Color.fromRGBO(72, 255, 249, 1),
+                                        size: 20,
+                                      ),
+                                      const SizedBox(width: 1),
+                                      const Text(
+                                        'Kamar mandi',
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              Color.fromRGBO(72, 255, 249, 1),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                               ],
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(top: 20, left: 30),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20, left: 20),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   'Deskripsi',
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
@@ -369,8 +412,8 @@ class _DetailState extends State<Detail> {
                                 ),
                                 SizedBox(height: 10),
                                 Text(
-                                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed faucibus tortor nec sapien bibendum, vitae ullamcorper nisi porta. Quisque in purus nunc. Phasellus vel diam luctus, fermentum justo et, congue leo. Sed a felis in ante eleifend rhoncus sed eu augue. Ut vitae nulla vel sem placerat venenatis vitae et nisl. Curabitur non massa vitae tellus luctus facilisis. Maecenas non justo vel quam accumsan bibendum sit amet nec nisi. Morbi id posuere eros. Fusce eu erat ac tortor congue vehicula. Vestibulum posuere ipsum a libero finibus tincidunt. Sed convallis convallis lacus, quis vehicula nisl feugiat quis. Curabitur dapibus quam et augue scelerisque, in tristique nulla tempor. Vestibulum cursus mauris non metus tristique, sed egestas elit aliquet. Vivamus ac lacus eget leo vehicula convallis. Vivamus nec tellus nec purus sagittis sodales.',
-                                  style: TextStyle(
+                                  _kos!.deskripsi,
+                                  style: const TextStyle(
                                     fontFamily: 'Poppins',
                                     fontSize: 12,
                                     fontWeight: FontWeight.normal,
@@ -397,14 +440,15 @@ class _DetailState extends State<Detail> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 15.0, left: 30),
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(bottom: 15.0, left: 30),
                           child: Align(
                             alignment: Alignment.bottomRight,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   'Harga Sewa:',
                                   style: TextStyle(
                                     color: Colors.grey,
@@ -412,10 +456,10 @@ class _DetailState extends State<Detail> {
                                     fontFamily: 'Poppins',
                                   ),
                                 ),
-                                SizedBox(height: 5),
+                                const SizedBox(height: 5),
                                 Text(
-                                  '1 Juta/Bulan',
-                                  style: TextStyle(
+                                  formatCurrency(_kos!.hargaPertahun),
+                                  style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 14,
                                     fontFamily: 'Poppins',

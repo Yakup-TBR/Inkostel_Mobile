@@ -8,6 +8,9 @@ class Kost {
   final String kosId;
   final String alamatKos;
   bool isFavorite;
+  final String deskripsi;
+  final Map<String, bool> fasilitas;
+  final String noWA;
 
   Kost({
     required this.namaKost,
@@ -17,10 +20,13 @@ class Kost {
     required this.kosId,
     this.isFavorite = false,
     required this.alamatKos,
+    required this.deskripsi,
+    required this.fasilitas,
+    required this.noWA,
   });
 
   factory Kost.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data() as Map<String, dynamic>;
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return Kost(
       namaKost: data['Nama Kos'] ?? '',
       jarakKost: data['Jarak'] ?? '',
@@ -29,9 +35,12 @@ class Kost {
       kosId: data['Kos ID'] ?? '',
       isFavorite: data['isFavorite'] ?? false,
       alamatKos: data['Alamat Kos'] ?? '',
+      deskripsi: data['Deskripsi'] ?? '',
+      fasilitas: _convertToFasilitas(data['Fasilitas'] ?? {}),
+      noWA: data['Nomor Telepon'] ?? '',
     );
   }
- 
+
   static int? _convertToInt(dynamic value) {
     if (value is int) {
       return value;
@@ -57,4 +66,15 @@ class Kost {
       'isFavorite': isFavorite,
     };
   }
+}
+
+// Helper function to convert dynamic map to Map<String, bool>
+Map<String, bool> _convertToFasilitas(Map<String, dynamic> map) {
+  Map<String, bool> result = {};
+  map.forEach((key, value) {
+    if (value is bool) {
+      result[key] = value;
+    }
+  });
+  return result;
 }
