@@ -1,41 +1,58 @@
-// ignore_for_file: unused_local_variable
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:inkostel/pages/carikos.dart';
-import 'package:inkostel/pages/jualkos.dart';
-import 'package:inkostel/pages/simpan.dart';
-import 'package:inkostel/pages/tes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:inkostel/pages/carikos.dart';
+import 'package:inkostel/pages/jualkos.dart';
+import 'package:inkostel/pages/signin.dart';
+import 'package:inkostel/pages/simpan.dart';
+import 'package:inkostel/pages/tes.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
   final double coverHeight = 170;
   final double profileSize = 110;
 
-  final String name = 'Supri Basuki';
-  final String username = '@supribasuki';
-  final String number = '+62 - 8123 - 5643 - 8923';
-  final String email = 'supribasuki@gmail.com';
-  final String description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              buildTop(context),
-              buildBottom(),
-              SizedBox(height: 100), // Membuat ruang kosong di bagian bawah untuk memberi tempat pada tombol back
-            ],
-          ),
-        ],
+      body: FutureBuilder<User?>(
+        future: _getUserData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.hasData) {
+            User user = snapshot.data!;
+            String name = user.displayName ?? 'User';
+            String email = user.email ?? 'No Email';
+            String userId = user.uid;
+            String username = '@username'; // Set username sesuai kebutuhan Anda
+            String number = '+62 - 8123 - 5643 - 8923';
+            String description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
+
+            return Stack(
+              children: [
+                ListView(
+                  padding: EdgeInsets.zero,
+                  children: <Widget>[
+                    buildTop(context),
+                    buildBottom(name, username, number, email, userId, description),
+                    const SizedBox(height: 100), // Membuat ruang kosong di bagian bawah untuk memberi tempat pada tombol back
+                  ],
+                ),
+              ],
+            );
+          } else {
+            // Jika pengguna belum masuk, arahkan ke halaman login
+            return SignInScreen();
+          }
+        },
       ),
       bottomNavigationBar: BottomNavigationBar(
-        // Bottom NavBar
         type: BottomNavigationBarType.fixed,
         backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
         selectedItemColor: const Color.fromARGB(255, 232, 255, 240),
@@ -48,28 +65,24 @@ class Profile extends StatelessWidget {
           // Handle bottom navigation bar item tap here
           switch (index) {
             case 0:
-              // Navigasi ke halaman Home
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const CariKos()),
               );
               break;
             case 1:
-              // Navigasi ke halaman Search
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const Simpan()),
               );
               break;
             case 2:
-              // Navigasi ke halaman Save
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const JualKos()),
               );
               break;
             case 3:
-              // Navigasi ke halaman Add
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const Tes()),
@@ -112,6 +125,9 @@ class Profile extends StatelessWidget {
     );
   }
 
+  Future<User?> _getUserData() async {
+    return FirebaseAuth.instance.currentUser;
+  }
 
   Widget buildTop(BuildContext context) {
     final bottom = profileSize / 2;
@@ -172,7 +188,6 @@ class Profile extends StatelessWidget {
       ],
     );
   }
-
 
   Widget buildCoverImage() => Container(
         color: Colors.grey,
@@ -239,7 +254,7 @@ class Profile extends StatelessWidget {
     );
   }
 
-  Widget buildBottom() {
+  Widget buildBottom(String name, String username, String number, String email, String userId, String description) {
     return Container(
       color: Colors.white,
       child: Column(
@@ -278,6 +293,14 @@ class Profile extends StatelessWidget {
               color: Colors.grey,
             ),
           ),
+          // Text(
+          //   'User ID: $userId',
+          //   style: GoogleFonts.getFont(
+          //     'Poppins',
+          //     fontSize: 18,
+          //     color: Colors.grey,
+          //   ),
+          // ),
           const SizedBox(height: 30),
           Text(
             description,
@@ -295,9 +318,13 @@ class Profile extends StatelessWidget {
 
   // ignore: non_constant_identifier_names
   void EditProfile(BuildContext context) {
-    TextEditingController nameController = TextEditingController(text: name);
-    TextEditingController numberController = TextEditingController(text: number.replaceAll('+62', ''));
-    TextEditingController descriptionController = TextEditingController(text: description);
+    // Get the current user
+    User? user = FirebaseAuth.instance.currentUser;
+
+    // Create TextEditingControllers with initial values
+    TextEditingController nameController = TextEditingController(text: user?.displayName ?? 'User');
+    TextEditingController numberController = TextEditingController(text: '+62 - 8123 - 5643 - 8923'.replaceAll('+62', ''));
+    TextEditingController descriptionController = TextEditingController(text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.');
 
     showDialog(
       context: context,
@@ -365,11 +392,15 @@ class Profile extends StatelessWidget {
               ),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 String newName = nameController.text;
                 String newNumber = '+62' + numberController.text; // Gabungkan dengan prefix +62
                 String newDescription = descriptionController.text;
-                // Update data user here
+
+                // Update user profile in Firebase Authentication
+                await user?.updateDisplayName(newName);
+
+                // Close the dialog
                 Navigator.of(context).pop();
               },
               child: const Text(
@@ -391,21 +422,21 @@ class Profile extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Pilih Sumber Gambar'),
+          title: const Text('Pilih Sumber Gambar'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTile(
-                leading: Icon(Icons.photo_library),
-                title: Text('Galeri'),
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Galeri'),
                 onTap: () {
                   Navigator.pop(context);
                   _getImageFromGallery(context);
                 },
               ),
               ListTile(
-                leading: Icon(Icons.camera_alt),
-                title: Text('Kamera'),
+                leading: const Icon(Icons.camera_alt),
+                title: const Text('Kamera'),
                 onTap: () {
                   Navigator.pop(context);
                   _getImageFromCamera(context);
@@ -421,8 +452,7 @@ class Profile extends StatelessWidget {
   //Method untuk mengambil gambar dari galeri
   void _getImageFromGallery(BuildContext context) async {
     final picker = ImagePicker();
-    // ignore: deprecated_member_use
-    final pickedImage = await picker.getImage(source: ImageSource.gallery);
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
       File imageFile = File(pickedImage.path);
       //Menggunakan imageFile untuk menampilkan gambar atau menyimpannya
@@ -432,12 +462,10 @@ class Profile extends StatelessWidget {
   //Method untuk mengambil gambar dari kamera
   void _getImageFromCamera(BuildContext context) async {
     final picker = ImagePicker();
-    // ignore: deprecated_member_use
-    final pickedImage = await picker.getImage(source: ImageSource.camera);
+    final pickedImage = await picker.pickImage(source: ImageSource.camera);
     if (pickedImage != null) {
       File imageFile = File(pickedImage.path);
       //Menggunakan imageFile untuk menampilkan gambar atau menyimpannya
     }
   }
-
 }

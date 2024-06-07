@@ -215,12 +215,44 @@ class _JualKosState extends State<JualKos> {
                           value: selectedDistance,
                           items: const [
                             DropdownMenuItem(
-                              value: '100-500 M',
-                              child: Text('100-500 M'),
+                              value: '100-200 M',
+                              child: Text('100-200 M'),
                             ),
                             DropdownMenuItem(
-                              value: '500-1000 M',
-                              child: Text('500-1000 M'),
+                              value: '200-300 M',
+                              child: Text('200-300 M'),
+                            ),
+                            DropdownMenuItem(
+                              value: '300-400 M',
+                              child: Text('300-400 M'),
+                            ),
+                            DropdownMenuItem(
+                              value: '400-500 M',
+                              child: Text('400-500 M'),
+                            ),
+                            DropdownMenuItem(
+                              value: '500-600 M',
+                              child: Text('500-600 M'),
+                            ),
+                            DropdownMenuItem(
+                              value: '600-700 M',
+                              child: Text('600-700 M'),
+                            ),
+                            DropdownMenuItem(
+                              value: '700-800 M',
+                              child: Text('700-800 M'),
+                            ),
+                            DropdownMenuItem(
+                              value: '800-900 M',
+                              child: Text('800-900 M'),
+                            ),
+                            DropdownMenuItem(
+                              value: '900-1000 M',
+                              child: Text('900-1000 M'),
+                            ),
+                            DropdownMenuItem(
+                              value: '1000 M >>',
+                              child: Text('1000 M >>'),
                             ),
                           ],
                           onChanged: (value) {
@@ -319,9 +351,8 @@ class _JualKosState extends State<JualKos> {
                               "Kos ID": Id,
                               "Nama Kos": namaKosController.text,
                               "Nomor Telepon": nomorTelponController.text,
-                              "Alamat Kos": alamatKos1Controller.text +
-                                  ' ' +
-                                  alamatlinkController.text,
+                              "Alamat Kos": alamatKos1Controller.text,
+                              "Link Map":alamatlinkController.text,
                               "Harga Pertahun":
                                   int.tryParse(hargaPertahunController.text) ??
                                       0,
