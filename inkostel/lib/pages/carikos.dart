@@ -153,6 +153,17 @@ class _CariKosState extends State<CariKos> {
     });
   }
 
+// untuk menarik gambar dari firebase
+Future<void> uploadImageAndSaveUrl(String imagePath, String imageName, String documentId) async {
+  String downloadURL = await uploadImageToFirebase(imagePath, imageName);
+  if (downloadURL.isNotEmpty) {
+    await FirebaseFirestore.instance.collection('Kos').doc(documentId).update({
+      'ImageURL': downloadURL,
+    });
+  }
+}
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -493,7 +504,7 @@ class _CariKosState extends State<CariKos> {
                                         child: Text(
                                           kost.namaKost,
                                           style: const TextStyle(
-                                            color: Color.fromARGB(255, 0, 0, 0),
+                                            color: Color.fromARGB(255, 255, 255, 255),
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -505,7 +516,7 @@ class _CariKosState extends State<CariKos> {
                                         child: Text(
                                           kost.jarakKost,
                                           style: const TextStyle(
-                                            color: Color.fromARGB(255, 0, 0, 0),
+                                            color: Color.fromARGB(255, 255, 255, 255),
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold,
                                           ),
