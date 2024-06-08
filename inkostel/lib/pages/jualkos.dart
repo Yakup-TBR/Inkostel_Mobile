@@ -27,6 +27,7 @@ class _JualKosState extends State<JualKos> {
   TextEditingController hargaPertahunController = new TextEditingController();
   TextEditingController hargaPerbulanController = new TextEditingController();
   TextEditingController deskripsiController = new TextEditingController();
+  TextEditingController JarakController = new TextEditingController();
 
   // Define a list of facilities
   List<String> facilities = [
@@ -46,8 +47,6 @@ class _JualKosState extends State<JualKos> {
     'Kamar Mandi Dalam': false,
   };
 
-  // Variable to store selected distance
-  String? selectedDistance;
 
   List<File> _imageFiles = [];
 
@@ -232,58 +231,13 @@ class _JualKosState extends State<JualKos> {
                         ),
                         const SizedBox(height: 10),
                         // Dropdown for Jarak
-                        DropdownButtonFormField<String>(
+                        TextFormField(
+                          controller: JarakController,
+                          // inputFormatters: [priceFormatter], // Apply formatter
+                          keyboardType: TextInputType.number, // Set keyboard type
                           decoration: const InputDecoration(
                             labelText: 'Jarak dari Telkom University',
                           ),
-                          value: selectedDistance,
-                          items: const [
-                            DropdownMenuItem(
-                              value: '100-200 M',
-                              child: Text('100-200 M'),
-                            ),
-                            DropdownMenuItem(
-                              value: '200-300 M',
-                              child: Text('200-300 M'),
-                            ),
-                            DropdownMenuItem(
-                              value: '300-400 M',
-                              child: Text('300-400 M'),
-                            ),
-                            DropdownMenuItem(
-                              value: '400-500 M',
-                              child: Text('400-500 M'),
-                            ),
-                            DropdownMenuItem(
-                              value: '500-600 M',
-                              child: Text('500-600 M'),
-                            ),
-                            DropdownMenuItem(
-                              value: '600-700 M',
-                              child: Text('600-700 M'),
-                            ),
-                            DropdownMenuItem(
-                              value: '700-800 M',
-                              child: Text('700-800 M'),
-                            ),
-                            DropdownMenuItem(
-                              value: '800-900 M',
-                              child: Text('800-900 M'),
-                            ),
-                            DropdownMenuItem(
-                              value: '900-1000 M',
-                              child: Text('900-1000 M'),
-                            ),
-                            DropdownMenuItem(
-                              value: '1000 M >>',
-                              child: Text('1000 M >>'),
-                            ),
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              selectedDistance = value;
-                            });
-                          },
                         ),
                         const SizedBox(height: 10),
                         // TextFormField for Harga with prefix icon
@@ -415,7 +369,7 @@ class _JualKosState extends State<JualKos> {
                               "Fasilitas": facilityValues,
                               "Deskripsi": deskripsiController.text,
                               "ImageURLs": imageUrls,
-                              "Jarak": selectedDistance,
+                              "Jarak": int.tryParse(JarakController.text) ?? 0,
                             };
 
                             // Tambahkan data kos ke Firebase Database

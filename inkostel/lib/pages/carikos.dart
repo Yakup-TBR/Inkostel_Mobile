@@ -519,7 +519,7 @@ class _CariKosState extends State<CariKos> {
                                         bottom: 10,
                                         left: 10,
                                         child: Text(
-                                          kost.jarakKost,
+                                          kost.jarakKost as String,
                                           style: const TextStyle(
                                             color: Color.fromARGB(
                                                 255, 255, 255, 255),

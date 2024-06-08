@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Kost {
   final String namaKost;
-  final String jarakKost;
+  final int jarakKost;
   final int hargaPertahun;
   final int hargaPerbulan;
   final List<String> imageUrl;
@@ -33,7 +33,7 @@ class Kost {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return Kost(
       namaKost: data['Nama Kos'] ?? '',
-      jarakKost: data['Jarak'] ?? '',
+      jarakKost: _convertToInt(data['Jarak']) ?? 0,
       hargaPertahun: _convertToInt(data['Harga Pertahun']) ?? 0,
       imageUrl: List<String>.from(data['ImageURLs'] ?? []),
       kosId: data['Kos ID'] ?? '',
