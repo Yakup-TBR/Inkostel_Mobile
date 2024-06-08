@@ -725,9 +725,9 @@ class _CariKosState extends State<CariKos> {
     } else if (amount >= 1000) {
       double result = amount / 1000;
       if (result % 1 == 0) {
-        return 'Rp ${result.toInt()} thn';
+        return 'Rp ${result.toInt()} k/bln';
       } else {
-        return 'Rp ${result.toStringAsFixed(1)} thn';
+        return 'Rp ${result.toStringAsFixed(1)} k/bln';
       }
     } else {
       return 'Rp $amount';

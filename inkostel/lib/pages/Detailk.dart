@@ -64,6 +64,14 @@ class _DetailState extends State<Detail> {
     await _fetchKost();
   }
 
+  bool _showPerYear = true;
+
+  void _togglePriceType() {
+    setState(() {
+      _showPerYear = !_showPerYear;
+    });
+  }
+
   bool isSimpanPressed = false;
   final PanelController _panelController = PanelController();
 
@@ -97,12 +105,33 @@ class _DetailState extends State<Detail> {
       }
     }
 
-    bool _showPerYear = true;
+    String hargaPertahun(int amount) {
+      if (amount >= 1000000) {
+        double result = amount / 1000000;
+        if (result % 1 == 0) {
+          return 'Rp ${result.toInt()} jt/thn';
+        } else {
+          return 'Rp ${result.toStringAsFixed(1)} jt/thn';
+        }
+      } else {
+        // Mengembalikan string dengan format 'Rp {amount} ribu/thn' jika amount kurang dari 1 juta
+        double result = amount / 1000;
+        return 'Rp ${result.toInt()} ribu/thn';
+      }
+    }
 
-    void _togglePriceType() {
-      setState(() {
-        _showPerYear = !_showPerYear;
-      });
+    String hargaPerbulan(int amount) {
+      if (amount >= 1000) {
+        double result = amount / 1000;
+        if (result % 1 == 0) {
+          return 'Rp ${result.toInt()} k/bln';
+        } else {
+          return 'Rp ${result.toStringAsFixed(1)} ribu/bln';
+        }
+      } else {
+        // Mengembalikan string dengan format 'Rp {amount} ribu/bln' jika amount kurang dari 1000
+        return 'Rp $amount ribu/bln';
+      }
     }
 
     return Scaffold(
@@ -544,8 +573,8 @@ class _DetailState extends State<Detail> {
                                   onTap: _togglePriceType,
                                   child: Text(
                                     _showPerYear
-                                        ? formatCurrency(_kos!.hargaPertahun)
-                                        : formatCurrency(_kos!.hargaPerbulan),
+                                        ? hargaPertahun(_kos!.hargaPertahun)
+                                        : hargaPerbulan(_kos!.hargaPerbulan),
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
