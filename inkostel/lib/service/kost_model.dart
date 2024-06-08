@@ -4,7 +4,7 @@ class Kost {
   final String namaKost;
   final String jarakKost;
   final int hargaPertahun;
-  final String imageUrl;
+  final List<String> imageUrl;
   final String kosId;
   final String alamatKos;
   bool isFavorite;
@@ -31,7 +31,7 @@ class Kost {
       namaKost: data['Nama Kos'] ?? '',
       jarakKost: data['Jarak'] ?? '',
       hargaPertahun: _convertToInt(data['Harga Pertahun']) ?? 0,
-      imageUrl: data['ImageURL'] ?? '',
+      imageUrl: List<String>.from(data['ImageURLs'] ?? []),
       kosId: data['Kos ID'] ?? '',
       isFavorite: data['isFavorite'] ?? false,
       alamatKos: data['Alamat Kos'] ?? '',

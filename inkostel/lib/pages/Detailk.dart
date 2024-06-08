@@ -61,8 +61,6 @@ class _DetailState extends State<Detail> {
     await _fetchKost();
   }
 
-  
-
   bool isSimpanPressed = false;
   final PanelController _panelController = PanelController();
 
@@ -108,10 +106,10 @@ class _DetailState extends State<Detail> {
                   child: Stack(
                     alignment: Alignment.topLeft,
                     children: [
-                      CarouselSlider(
+                      CarouselSlider.builder(
                         options: CarouselOptions(
                           height: 317,
-                          viewportFraction: 2.0, // Full Page?
+                          viewportFraction: 1.0,
                           initialPage: 0,
                           enableInfiniteScroll: true,
                           reverse: false,
@@ -122,27 +120,22 @@ class _DetailState extends State<Detail> {
                           autoPlayCurve: Curves.fastOutSlowIn,
                           scrollDirection: Axis.horizontal,
                         ),
-                        items: [
-                          'images/kamar.png',
-                          'images/hapid.jpg',
-                          'images/contoh.jpg',
-                        ].map((i) {
-                          return Builder(
-                            builder: (BuildContext context) {
-                              return Container(
-                                width: MediaQuery.of(context).size.width,
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 5.0),
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage(i),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              );
-                            },
+                        itemCount: _kos!.imageUrl
+                            .length, // Menggunakan imageUrls dari objek _kos
+                        itemBuilder:
+                            (BuildContext context, int index, int realIndex) {
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: const EdgeInsets.symmetric(horizontal: 0),
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(_kos!.imageUrl[
+                                    index]), // Menggunakan imageUrls dari objek _kos
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           );
-                        }).toList(),
+                        },
                       ),
                       Positioned(
                         top: 55,
@@ -479,6 +472,7 @@ class _DetailState extends State<Detail> {
                                 backgroundColor:
                                     const Color.fromARGB(255, 71, 228, 243),
                               ),
+                              onPressed: _launchwa,
                               child: const Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -498,7 +492,6 @@ class _DetailState extends State<Detail> {
                                   ),
                                 ],
                               ),
-                              onPressed: _launchwa,
                             ),
                           ),
                         ),

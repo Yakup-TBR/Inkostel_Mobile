@@ -154,15 +154,18 @@ class _CariKosState extends State<CariKos> {
   }
 
 // untuk menarik gambar dari firebase
-Future<void> uploadImageAndSaveUrl(String imagePath, String imageName, String documentId) async {
-  String downloadURL = await uploadImageToFirebase(imagePath, imageName);
-  if (downloadURL.isNotEmpty) {
-    await FirebaseFirestore.instance.collection('Kos').doc(documentId).update({
-      'ImageURL': downloadURL,
-    });
+  Future<void> uploadImageAndSaveUrl(
+      String imagePath, String imageName, String documentId) async {
+    String downloadURL = await uploadImageToFirebase(imagePath, imageName);
+    if (downloadURL.isNotEmpty) {
+      await FirebaseFirestore.instance
+          .collection('Kos')
+          .doc(documentId)
+          .update({
+        'ImageURL': downloadURL,
+      });
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -466,8 +469,8 @@ Future<void> uploadImageAndSaveUrl(String imagePath, String imageName, String do
                                             borderRadius:
                                                 BorderRadius.circular(20.0),
                                             image: DecorationImage(
-                                              image:
-                                                  NetworkImage(kost.imageUrl),
+                                              image: NetworkImage(kost.imageUrl[
+                                                  0]), // Menggunakan imageUrls dari objek _kos
                                               fit: BoxFit.cover,
                                             ),
                                           ),
@@ -504,7 +507,8 @@ Future<void> uploadImageAndSaveUrl(String imagePath, String imageName, String do
                                         child: Text(
                                           kost.namaKost,
                                           style: const TextStyle(
-                                            color: Color.fromARGB(255, 255, 255, 255),
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -516,7 +520,8 @@ Future<void> uploadImageAndSaveUrl(String imagePath, String imageName, String do
                                         child: Text(
                                           kost.jarakKost,
                                           style: const TextStyle(
-                                            color: Color.fromARGB(255, 255, 255, 255),
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold,
                                           ),
