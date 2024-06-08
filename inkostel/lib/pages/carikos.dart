@@ -34,18 +34,6 @@ class CariKos extends StatefulWidget {
   _CariKosState createState() => _CariKosState();
 }
 
-String getLabel(double value) {
-  if (value < 500) {
-    return "< 500 Meter";
-  } else if (value >= 500 && value < 1000) {
-    return "500 Meter - 1 KM";
-  } else if (value >= 1000 && value < 2000) {
-    return "1 KM - 2 KM";
-  } else {
-    return "> 2 KM";
-  }
-}
-
 class _CariKosState extends State<CariKos> {
   List<Kost> _allKosts = [];
   List<Kost> _displayedKosts = [];
@@ -56,11 +44,52 @@ class _CariKosState extends State<CariKos> {
   ScrollController _scrollController = ScrollController();
   String _selectedCategory = '';
 
+  bool isChecked100Meters = false;
+  bool isChecked200Meters = false;
+  bool isChecked500Meters = false;
+  bool isChecked1KM = false;
+  bool isCheckedLebih1KM = false;
+  double _currentSliderValue = 0.0;
+
+  void applyFilters(
+    bool checked100Meters,
+    bool checked200Meters,
+    bool checked500Meters,
+    bool checked1KM,
+    bool checkedLebih1KM,
+  ) {
+    setState(() {
+      isChecked100Meters = checked100Meters;
+      isChecked200Meters = checked200Meters;
+      isChecked500Meters = checked500Meters;
+      isChecked1KM = checked1KM;
+      isCheckedLebih1KM = checkedLebih1KM;
+      _filteredKosts();
+    });
+  }
+
+  void _filteredKosts() {
+    List<Kost> filteredKosts = _allKosts.where((kost) {
+      if (isChecked100Meters && kost.jarakKost <= 100) return true;
+      if (isChecked200Meters && kost.jarakKost > 100 && kost.jarakKost <= 300)
+        return true;
+      if (isChecked500Meters && kost.jarakKost > 300 && kost.jarakKost <= 500)
+        return true;
+      if (isChecked1KM && kost.jarakKost > 500 && kost.jarakKost <= 1000)
+        return true;
+      if (isCheckedLebih1KM && kost.jarakKost > 1000) return true;
+      return false;
+    }).toList();
+    _displayedKosts =
+        filteredKosts.take((_currentBatch + 1) * _batchSize).toList();
+  }
+
   final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    _filteredKosts();
     _fetchInitialData();
     AwesomeNotifications().setListeners(
         onActionReceivedMethod: NotificationController.onActionReceivedMethod,
@@ -296,9 +325,9 @@ class _CariKosState extends State<CariKos> {
                     onTap: () {
                       showDialog(
                         context: context,
-                        builder: (BuildContext context) {
-                          return const FilterDialog();
-                        },
+                        builder: (context) => FilterDialog(
+                          applyFilters: applyFilters,
+                        ),
                       );
                     },
                     child: Container(
@@ -519,7 +548,7 @@ class _CariKosState extends State<CariKos> {
                                         bottom: 10,
                                         left: 10,
                                         child: Text(
-                                          kost.jarakKost as String,
+                                          formatJarak(kost.jarakKost),
                                           style: const TextStyle(
                                             color: Color.fromARGB(
                                                 255, 255, 255, 255),
@@ -713,6 +742,16 @@ class _CariKosState extends State<CariKos> {
     ));
   }
 
+  // Fungsi untuk mengonversi jarak
+  String formatJarak(int jarak) {
+    if (jarak >= 1000) {
+      double km = jarak / 1000.0;
+      return '${km.toStringAsFixed(1)} km';
+    } else {
+      return '$jarak meter';
+    }
+  }
+
   // Fungsi untuk mengonversi harga
   String formatCurrency(int amount) {
     if (amount >= 1000000) {
@@ -737,7 +776,15 @@ class _CariKosState extends State<CariKos> {
 
 // Class Filter Dialog dibuat stateful
 class FilterDialog extends StatefulWidget {
-  const FilterDialog({super.key});
+  final Function(
+    bool isChecked100Meters,
+    bool isChecked200Meters,
+    bool isChecked500Meters,
+    bool isChecked1KM,
+    bool isCheckedLebih1KM,
+  ) applyFilters;
+
+  FilterDialog({required this.applyFilters, Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -751,6 +798,21 @@ class _FilterDialogState extends State<FilterDialog> {
   bool isChecked500Meters = false;
   bool isChecked1KM = false;
   bool isCheckedLebih1KM = false;
+
+  void _applyFilters() {
+    Navigator.of(context).pop();
+    final cariKosState = context.findAncestorStateOfType<_CariKosState>();
+    if (cariKosState != null) {
+      cariKosState.applyFilters(
+        isChecked100Meters,
+        isChecked200Meters,
+        isChecked500Meters,
+        isChecked1KM,
+        isCheckedLebih1KM,
+        // _currentSliderValue,
+      );
+    }
+  }
 
   String _getLabel(double value) {
     if (value < 500) {
@@ -796,6 +858,13 @@ class _FilterDialogState extends State<FilterDialog> {
               onChanged: (bool? value) {
                 setState(() {
                   isChecked100Meters = value!;
+                  widget.applyFilters(
+                    isChecked100Meters,
+                    isChecked200Meters,
+                    isChecked500Meters,
+                    isChecked1KM,
+                    isCheckedLebih1KM,
+                  );
                 });
               },
               activeColor: const Color.fromRGBO(100, 204, 197, 1),
@@ -807,6 +876,13 @@ class _FilterDialogState extends State<FilterDialog> {
               onChanged: (bool? value) {
                 setState(() {
                   isChecked200Meters = value!;
+                  widget.applyFilters(
+                    isChecked100Meters,
+                    isChecked200Meters,
+                    isChecked500Meters,
+                    isChecked1KM,
+                    isCheckedLebih1KM,
+                  );
                 });
               },
               activeColor: const Color.fromRGBO(100, 204, 197, 1),
@@ -818,6 +894,13 @@ class _FilterDialogState extends State<FilterDialog> {
               onChanged: (bool? value) {
                 setState(() {
                   isChecked500Meters = value!;
+                  widget.applyFilters(
+                    isChecked100Meters,
+                    isChecked200Meters,
+                    isChecked500Meters,
+                    isChecked1KM,
+                    isCheckedLebih1KM,
+                  );
                 });
               },
               activeColor: const Color.fromRGBO(100, 204, 197, 1),
@@ -829,6 +912,13 @@ class _FilterDialogState extends State<FilterDialog> {
               onChanged: (bool? value) {
                 setState(() {
                   isChecked1KM = value!;
+                  widget.applyFilters(
+                    isChecked100Meters,
+                    isChecked200Meters,
+                    isChecked500Meters,
+                    isChecked1KM,
+                    isCheckedLebih1KM,
+                  );
                 });
               },
               activeColor: const Color.fromRGBO(100, 204, 197, 1),
@@ -840,6 +930,13 @@ class _FilterDialogState extends State<FilterDialog> {
               onChanged: (bool? value) {
                 setState(() {
                   isCheckedLebih1KM = value!;
+                  widget.applyFilters(
+                    isChecked100Meters,
+                    isChecked200Meters,
+                    isChecked500Meters,
+                    isChecked1KM,
+                    isCheckedLebih1KM,
+                  );
                 });
               },
               activeColor: const Color.fromRGBO(100, 204, 197, 1),
