@@ -528,6 +528,7 @@ class _CariKosState extends State<CariKos> {
                                           ),
                                         ),
                                       ),
+                                      //UNTUK SIMPAN KOS
                                       Positioned(
                                         bottom: 10,
                                         right: 10,
