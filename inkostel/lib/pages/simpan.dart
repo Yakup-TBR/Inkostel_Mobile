@@ -5,6 +5,7 @@ import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:inkostel/pages/Detailk.dart';
 
 class Simpan extends StatefulWidget {
   const Simpan({Key? key}) : super(key: key);
@@ -169,7 +170,7 @@ class _SimpanState extends State<Simpan> {
                         isFavorite: isFavorite,
                         documentId: kostDoc.id,
                         kosId: kosId,
-                        onTap: () async {
+                        onTapFavorite: () async {
                           setState(() {
                             kostData['isFavorite'] = !kostData['isFavorite'];
                           });
@@ -302,7 +303,10 @@ class _SimpanState extends State<Simpan> {
           color: const Color.fromRGBO(100, 204, 197, 1),
         ),
         onPressed: () {
-          Navigator.of(context).pop();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Home()),
+          );
         },
       ),
     );
@@ -316,106 +320,116 @@ class _SimpanState extends State<Simpan> {
     required bool isFavorite,
     required String documentId,
     required String kosId,
-    required VoidCallback onTap,
+    required VoidCallback onTapFavorite,
   }) {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.all(1),
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 255, 255, 255),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        children: [
-          const SizedBox(height: 20),
-          Container(
-            width: 370,
-            height: 200,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(
-                color: const Color.fromARGB(108, 206, 206, 206),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Detail(kosId: kosId),
+          ),
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.all(1),
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 255, 255, 255),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            Container(
+              width: 370,
+              height: 200,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  color: const Color.fromARGB(108, 206, 206, 206),
+                ),
+                borderRadius: BorderRadius.circular(20.0),
+                image: DecorationImage(
+                  image: NetworkImage(imagePath),
+                  fit: BoxFit.cover,
+                ),
               ),
-              borderRadius: BorderRadius.circular(20.0),
-              image: DecorationImage(
-                image: NetworkImage(imagePath),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Stack(
-              children: [
-                Positioned(
-                  top: 10,
-                  right: 10,
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: Colors.black.withOpacity(0.5),
-                        width: 1,
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Colors.black.withOpacity(0.5),
+                          width: 1,
+                        ),
+                      ),
+                      child: Text(
+                        formatCurrency(price),
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
+                  ),
+                  Positioned(
+                    bottom: 35,
+                    left: 10,
                     child: Text(
-                      'Rp $price',
+                      name,
                       style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                ),
-                Positioned(
-                  bottom: 35,
-                  left: 10,
-                  child: Text(
-                    name,
-                    style: const TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                  Positioned(
+                    bottom: 10,
+                    left: 10,
+                    child: Row(
+                      children: [
+                        Text(
+                          '$distance km',
+                          style: const TextStyle(
+                            color: Color.fromARGB(255, 254, 254, 254),
+                            fontSize: 17,
+                          ),
+                        ),
+                        const SizedBox(width: 5),
+                        GestureDetector(
+                          onTap: onTapFavorite,
+                          child: Image.asset(
+                            'lib/icons/simpan_active.png',
+                            color: isFavorite
+                                ? const Color.fromRGBO(100, 204, 197, 1)
+                                : Colors.white,
+                            width: 30,
+                            height: 30,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                Positioned(
-                  bottom: 10,
-                  left: 10,
-                  child: Row(
-                    children: [
-                      Text(
-                        '$distance km',
-                        style: const TextStyle(
-                          color: Color.fromARGB(255, 254, 254, 254),
-                          fontSize: 17,
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      GestureDetector(
-                        onTap: onTap,
-                        child: Image.asset(
-                          'lib/icons/simpan_active.png',
-                          color: isFavorite
-                              ? const Color.fromRGBO(100, 204, 197, 1)
-                              : Colors.white,
-                          width: 30,
-                          height: 30,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 2),
-        ],
+            const SizedBox(height: 2),
+          ],
+        ),
       ),
     );
   }
 
- // Fungsi untuk mengonversi harga
+  // Fungsi untuk mengonversi harga
   String formatCurrency(int amount) {
     if (amount >= 1000000) {
       double result = amount / 1000000;
