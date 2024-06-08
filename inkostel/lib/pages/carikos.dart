@@ -912,6 +912,13 @@ class _FilterDialogState extends State<FilterDialog> {
               onChanged: (bool? value) {
                 setState(() {
                   isChecked1KM = value!;
+                  widget.applyFilters(
+                    isChecked100Meters,
+                    isChecked200Meters,
+                    isChecked500Meters,
+                    isChecked1KM,
+                    isCheckedLebih1KM,
+                  );
                 });
               },
               activeColor: const Color.fromRGBO(100, 204, 197, 1),
