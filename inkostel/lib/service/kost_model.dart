@@ -11,6 +11,7 @@ class Kost {
   final String deskripsi;
   final Map<String, bool> fasilitas;
   final String noWA;
+  final String urlMap;
 
   Kost({
     required this.namaKost,
@@ -23,6 +24,7 @@ class Kost {
     required this.deskripsi,
     required this.fasilitas,
     required this.noWA,
+    required this.urlMap,
   });
 
   factory Kost.fromFirestore(DocumentSnapshot doc) {
@@ -38,6 +40,7 @@ class Kost {
       deskripsi: data['Deskripsi'] ?? '',
       fasilitas: _convertToFasilitas(data['Fasilitas'] ?? {}),
       noWA: data['Nomor Telepon'] ?? '',
+      urlMap: data['Link Map'] ?? '',
     );
   }
 

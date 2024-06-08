@@ -12,6 +12,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:inkostel/utils/format_currency.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 void main() {
   runApp(MyApp());
@@ -82,19 +83,24 @@ class _DetailState extends State<Detail> {
       }
     }
 
-    final Uri _url = Uri.parse(
-        'https://www.google.com/maps/place/Universitas+Telkom/@-6.973007,107.6291105,17z/data=!3m1!4b1!4m6!3m5!1s0x2e68e9adf177bf8d:0x437398556f9fa03!8m2!3d-6.973007!4d107.6316854!16s%2Fm%2F0y6lbq_?entry=ttu');
-
     Future<void> _launchUrl() async {
-      if (!await launchUrl(_url)) {
+      if (_kos?.urlMap == null || _kos!.urlMap.isEmpty) {
+        throw Exception('Alamat Kos is empty or null');
+      }
+
+      final Uri _url = Uri.parse(_kos!.urlMap);
+
+      if (!await canLaunch(_url.toString())) {
         throw Exception('Could not launch $_url');
+      } else {
+        await launch(_url.toString());
       }
     }
 
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
-          double minHeight = constraints.maxHeight * 0.65;
+          double minHeight = constraints.maxHeight * 0.628;
           double maxHeight = constraints.maxHeight * 0.8;
 
           return SizedBox(
@@ -142,26 +148,42 @@ class _DetailState extends State<Detail> {
                       Positioned(
                         top: 55,
                         left: 20,
+                        width: 40, // atur lebar
+                        height: 40, // atur tinggi
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.pop(context);
+                            // Tambahkan kode navigasi ke halaman profil di sini
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const CariKos()),
+                            );
                           },
                           child: Container(
-                            width: 30,
-                            height: 30,
                             decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
+                              color: const Color.fromRGBO(254, 251, 246, 1),
+                              borderRadius: BorderRadius.circular(18),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                  spreadRadius: 0,
+                                  blurRadius: 4,
+                                  offset:
+                                      const Offset(0, 1), // Atur posisi shadow
+                                ),
+                              ],
                             ),
-                            child: const Icon(
-                              Icons.arrow_back_ios_new,
-                              size: 20,
-                              color: Color.fromRGBO(100, 204, 197, 1),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                'lib/icons/back.png',
+                                color: const Color.fromRGBO(100, 204, 197, 1),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                     Positioned(
+                      Positioned(
                         top: 55,
                         right: 20,
                         child: GestureDetector(
@@ -272,8 +294,8 @@ class _DetailState extends State<Detail> {
                             child: Row(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 50, left: 22.0),
+                                  padding:
+                                      const EdgeInsets.only(top: 50, left: 20),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -295,38 +317,40 @@ class _DetailState extends State<Detail> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(
-                                top: 10, left: 22.0, right: 22.0),
+                            padding: const EdgeInsets.only(top: 10, left: 19),
                             child: GestureDetector(
                               onTap: _launchUrl,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.location_on,
-                                        color: Color.fromRGBO(72, 255, 249, 1),
-                                        size: 20,
+                                  const Icon(
+                                    Icons.location_on,
+                                    color: Color.fromRGBO(72, 255, 249, 1),
+                                    size: 20,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Expanded(
+                                    // Tambahkan Expanded di sekitar AutoSizeText
+                                    child: AutoSizeText(
+                                      _kos!.alamatKos,
+                                      style: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.grey,
                                       ),
-                                      const SizedBox(width: 5),
-                                      Text(
-                                        _kos!.alamatKos,
-                                        style: const TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                    ],
+                                      textAlign: TextAlign.left,
+                                      // Hapus atau set maxLines ke null untuk membiarkan teks meluas ke beberapa baris
+                                      overflow: TextOverflow
+                                          .visible, // Atur overflow menjadi visible
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top: 10, left: 25),
+                            padding: EdgeInsets.only(top: 10, left: 20),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -458,16 +482,20 @@ class _DetailState extends State<Detail> {
                                   ),
                                 ),
                                 SizedBox(height: 10),
-                                Text(
-                                  _kos!.deskripsi,
-                                  style: const TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.normal,
-                                    color: Colors.grey,
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    _kos?.deskripsi ?? '',
+                                    style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.grey,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                    maxLines: null,
+                                    overflow: TextOverflow.clip,
                                   ),
-                                  maxLines: null,
-                                  overflow: TextOverflow.clip,
                                 ),
                               ],
                             ),
