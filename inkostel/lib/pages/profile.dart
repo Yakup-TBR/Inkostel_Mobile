@@ -1,7 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,10 +23,13 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   final double coverHeight = 170;
   final double profileSize = 110;
+  final GlobalKey<ScaffoldState> _scaffoldKey =
+      GlobalKey<ScaffoldState>(); // Tambahkan global key
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey, // Gunakan global key pada Scaffold
       body: FutureBuilder<UserProfile?>(
         future: _getUserData(),
         builder: (context, snapshot) {
@@ -35,17 +38,22 @@ class _ProfileState extends State<Profile> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data == null) {
-            // Tampilkan halaman sign-in jika tidak ada data pengguna atau pengguna belum masuk
             return const SignInScreen();
           } else {
             UserProfile user = snapshot.data!;
-            // Set default values if user data is missing
             String userName = user.nama.isNotEmpty ? user.nama : 'User';
-            String userUsername = user.username.isNotEmpty ? user.username : 'username';
-            String userPhone = user.nomorTelepon.isNotEmpty ? user.nomorTelepon : '+62 123456789';
-            String userEmail = user.email.isNotEmpty ? user.email : 'user@example.com';
-            String userDescription = user.deskripsi.isNotEmpty ? user.deskripsi : 'Deskripsi belum diisi';
-            String userPhotoURL = user.photoURL.isNotEmpty ? user.photoURL : 'images/profile.png';
+            String userUsername =
+                user.username.isNotEmpty ? user.username : 'username';
+            String userPhone = user.nomorTelepon.isNotEmpty
+                ? user.nomorTelepon
+                : '+62 123456789';
+            String userEmail =
+                user.email.isNotEmpty ? user.email : 'user@example.com';
+            String userDescription = user.deskripsi.isNotEmpty
+                ? user.deskripsi
+                : 'Deskripsi belum diisi';
+            String userPhotoURL =
+                user.photoURL.isNotEmpty ? user.photoURL : 'images/profile.png';
 
             return Stack(
               children: [
@@ -53,7 +61,8 @@ class _ProfileState extends State<Profile> {
                   padding: EdgeInsets.zero,
                   children: <Widget>[
                     buildTop(context, userPhotoURL),
-                    buildBottom(context, userName, userUsername, userPhone, userEmail, userDescription),
+                    buildBottom(context, userName, userUsername, userPhone,
+                        userEmail, userDescription),
                     const SizedBox(height: 100),
                   ],
                 ),
@@ -72,7 +81,6 @@ class _ProfileState extends State<Profile> {
         selectedFontSize: 14,
         unselectedFontSize: 14,
         onTap: (int index) {
-          // Handle bottom navigation bar item tap here
           switch (index) {
             case 0:
               Navigator.push(
@@ -137,15 +145,15 @@ class _ProfileState extends State<Profile> {
 
   Future<UserProfile?> _getUserData() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      await createUserProfileIfNotExists(); // Ensure user profile exists
-      var userProfile = await getUserProfile(); // Retrieve user profile from Firestore
+      await createUserProfileIfNotExists();
+      var userProfile = await getUserProfile();
       if (userProfile != null) {
         return userProfile;
       } else {
-        return null; // No user data found in Firestore
+        return null;
       }
     } else {
-      return null; // User not logged in
+      return null;
     }
   }
 
@@ -243,7 +251,8 @@ class _ProfileState extends State<Profile> {
               width: profileSize,
               height: profileSize,
               fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => Image.asset('images/profile.png'),
+              errorBuilder: (context, error, stackTrace) =>
+                  Image.asset('images/profile.png'),
             ),
           ),
         ),
@@ -252,7 +261,7 @@ class _ProfileState extends State<Profile> {
           right: 0,
           child: GestureDetector(
             onTap: () {
-              editProfile(context); // Function to handle profile edit
+              editProfile(context);
             },
             child: Container(
               width: 30,
@@ -275,7 +284,8 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  Widget buildBottom(BuildContext context, String name, String username, String phone, String email, String description) {
+  Widget buildBottom(BuildContext context, String name, String username,
+      String phone, String email, String description) {
     return Container(
       color: Colors.white,
       child: Column(
@@ -331,19 +341,21 @@ class _ProfileState extends State<Profile> {
 
   void editProfile(BuildContext context) async {
     UserProfile? userProfile = await _getUserData();
-    
+
     if (userProfile == null) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to fetch user data.'))
-        );
+            SnackBar(content: Text('Failed to fetch user data.')));
       }
       return;
     }
 
-    TextEditingController nameController = TextEditingController(text: userProfile.nama);
-    TextEditingController numberController = TextEditingController(text: userProfile.nomorTelepon.replaceFirst('+62', ''));
-    TextEditingController descriptionController = TextEditingController(text: userProfile.deskripsi);
+    TextEditingController nameController =
+        TextEditingController(text: userProfile.nama);
+    TextEditingController numberController = TextEditingController(
+        text: userProfile.nomorTelepon.replaceFirst('+62', ''));
+    TextEditingController descriptionController =
+        TextEditingController(text: userProfile.deskripsi);
 
     showDialog(
       context: context,
@@ -356,16 +368,17 @@ class _ProfileState extends State<Profile> {
               children: <Widget>[
                 OutlinedButton(
                   onPressed: () {
-                    showImageSourceDialog(context); // Panggil fungsi untuk memilih sumber gambar
+                    showImageSourceDialog(context);
                   },
                   child: Text(
                     'Ubah Gambar Profil',
                     style: TextStyle(
-                      color: Color.fromARGB(255, 76, 165, 175), // Warna teks hijau
+                      color: Color.fromARGB(255, 76, 165, 175),
                     ),
                   ),
                   style: ButtonStyle(
-                    side: MaterialStateProperty.resolveWith<BorderSide>((states) {
+                    side:
+                        MaterialStateProperty.resolveWith<BorderSide>((states) {
                       return BorderSide(color: Colors.grey, width: 1);
                     }),
                   ),
@@ -375,7 +388,8 @@ class _ProfileState extends State<Profile> {
                   controller: nameController,
                   decoration: const InputDecoration(
                     labelText: 'Nama',
-                    labelStyle: TextStyle(color: Color.fromARGB(255, 76, 165, 175)), // Warna teks hijau
+                    labelStyle:
+                        TextStyle(color: Color.fromARGB(255, 76, 165, 175)),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -384,7 +398,8 @@ class _ProfileState extends State<Profile> {
                   decoration: const InputDecoration(
                     labelText: 'Nomor',
                     prefixText: '+62 ',
-                    labelStyle: TextStyle(color: Color.fromARGB(255, 76, 165, 175)),
+                    labelStyle:
+                        TextStyle(color: Color.fromARGB(255, 76, 165, 175)),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -392,7 +407,8 @@ class _ProfileState extends State<Profile> {
                   controller: descriptionController,
                   decoration: const InputDecoration(
                     labelText: 'Deskripsi',
-                    labelStyle: TextStyle(color: Color.fromARGB(255, 76, 165, 175)),
+                    labelStyle:
+                        TextStyle(color: Color.fromARGB(255, 76, 165, 175)),
                   ),
                 ),
               ],
@@ -406,28 +422,33 @@ class _ProfileState extends State<Profile> {
               child: const Text(
                 'Batal',
                 style: TextStyle(
-                  color: Color.fromARGB(255, 76, 165, 175), // Warna teks hijau
+                  color: Color.fromARGB(255, 76, 165, 175),
                 ),
               ),
             ),
             TextButton(
               onPressed: () async {
                 String newName = nameController.text;
-                String newNumber = '+62' + numberController.text; // Gabungkan dengan prefix +62
+                String newNumber = '+62' + numberController.text;
                 String newDescription = descriptionController.text;
 
-                await updateProfileName(newName); // Update nama
-                await updateProfilePhoneNumber(newNumber); // Update nomor telepon
-                await updateProfileDescription(newDescription); // Update deskripsi
+                await updateProfileName(newName);
+                await updateProfilePhoneNumber(newNumber);
+                await updateProfileDescription(newDescription);
 
                 if (mounted) {
                   Navigator.of(context).pop();
+                  // Tambahkan sedikit penundaan sebelum menampilkan Snackbar
+                  Future.delayed(Duration(milliseconds: 300), () {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Profile updated successfully.')));
+                  });
                 }
               },
               child: const Text(
                 'Simpan',
                 style: TextStyle(
-                  color: Color.fromARGB(255, 76, 165, 175), // Warna teks hijau
+                  color: Color.fromARGB(255, 76, 165, 175),
                 ),
               ),
             ),
@@ -436,7 +457,6 @@ class _ProfileState extends State<Profile> {
       },
     );
   }
-
 
   void showImageSourceDialog(BuildContext context) {
     showDialog(
@@ -475,7 +495,6 @@ class _ProfileState extends State<Profile> {
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
       File imageFile = File(pickedImage.path);
-      // Panggil fungsi untuk memperbarui URL gambar profil
       await _uploadImageToStorage(context, imageFile);
     }
   }
@@ -485,33 +504,45 @@ class _ProfileState extends State<Profile> {
     final pickedImage = await picker.pickImage(source: ImageSource.camera);
     if (pickedImage != null) {
       File imageFile = File(pickedImage.path);
-      // Panggil fungsi untuk memperbarui URL gambar profil
       await _uploadImageToStorage(context, imageFile);
     }
   }
 
-  Future<void> _uploadImageToStorage(BuildContext context, File imageFile) async {
+  Future<void> _uploadImageToStorage(
+      BuildContext context, File imageFile) async {
     try {
       User? user = FirebaseAuth.instance.currentUser;
       if (user == null) {
         throw Exception("User not logged in");
       }
 
-      String filePath = 'profile/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.png';
+      String filePath =
+          'profile/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.png';
       Reference storageRef = FirebaseStorage.instance.ref().child(filePath);
       UploadTask uploadTask = storageRef.putFile(imageFile);
 
-      TaskSnapshot snapshot = await uploadTask;
-      String downloadURL = await snapshot.ref.getDownloadURL();
+      // Tambahkan listener untuk memantau status unggah
+      uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
+        if (snapshot.state == TaskState.success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Profile picture updated successfully.')));
+        }
+      });
+
+      // Tunggu hingga proses unggah selesai
+      await uploadTask;
+
+      String downloadURL = await storageRef.getDownloadURL();
+      if (downloadURL == null) {
+        throw Exception("Failed to get download URL");
+      }
 
       await updateProfileImageURL(downloadURL);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Profile picture updated successfully.')));
-      }
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to update profile picture: $e')));
-      }
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to update profile picture: $e')));
     }
   }
+
+
 }
