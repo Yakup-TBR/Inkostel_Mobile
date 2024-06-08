@@ -97,6 +97,14 @@ class _DetailState extends State<Detail> {
       }
     }
 
+    bool _showPerYear = true;
+
+    void _togglePriceType() {
+      setState(() {
+        _showPerYear = !_showPerYear;
+      });
+    }
+
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -532,12 +540,17 @@ class _DetailState extends State<Detail> {
                                   ),
                                 ),
                                 const SizedBox(height: 5),
-                                Text(
-                                  formatCurrency(_kos!.hargaPertahun),
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                    fontFamily: 'Poppins',
+                                GestureDetector(
+                                  onTap: _togglePriceType,
+                                  child: Text(
+                                    _showPerYear
+                                        ? formatCurrency(_kos!.hargaPertahun)
+                                        : formatCurrency(_kos!.hargaPerbulan),
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontFamily: 'Poppins',
+                                    ),
                                   ),
                                 ),
                               ],
