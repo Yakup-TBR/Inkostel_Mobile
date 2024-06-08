@@ -4,9 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/settings.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Simpan extends StatefulWidget {
-  const Simpan({super.key});
+  const Simpan({Key? key}) : super(key: key);
 
   @override
   _SimpanState createState() => _SimpanState();
@@ -25,8 +26,7 @@ class _SimpanState extends State<Simpan> {
     super.initState();
     _fetchSavedKosts();
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         _fetchMoreSavedKosts();
       }
     });
@@ -37,18 +37,27 @@ class _SimpanState extends State<Simpan> {
       _isLoading = true;
     });
 
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('SimpanKos')
-        .limit(_itemsPerPage)
-        .get();
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('SimpanKos')
+          .where('User ID', isEqualTo: user.uid)
+          .limit(_itemsPerPage)
+          .get();
 
-    setState(() {
-      _savedKosts = querySnapshot.docs;
-      _isLoading = false;
-      if (_savedKosts.isNotEmpty) {
-        _lastDocument = _savedKosts.last;
-      }
-    });
+      setState(() {
+        _savedKosts = querySnapshot.docs;
+        _isLoading = false;
+        if (_savedKosts.isNotEmpty) {
+          _lastDocument = _savedKosts.last;
+        }
+      });
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+      print('User not logged in');
+    }
   }
 
   Future<void> _fetchMoreSavedKosts() async {
@@ -58,19 +67,40 @@ class _SimpanState extends State<Simpan> {
       _isLoadingMore = true;
     });
 
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('SimpanKos')
-        .startAfterDocument(_lastDocument!)
-        .limit(_itemsPerPage)
-        .get();
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('SimpanKos')
+          .where('User ID', isEqualTo: user.uid)
+          .startAfterDocument(_lastDocument!)
+          .limit(_itemsPerPage)
+          .get();
 
-    setState(() {
-      _savedKosts.addAll(querySnapshot.docs);
-      _isLoadingMore = false;
-      if (querySnapshot.docs.isNotEmpty) {
-        _lastDocument = querySnapshot.docs.last;
-      }
-    });
+      setState(() {
+        _savedKosts.addAll(querySnapshot.docs);
+        _isLoadingMore = false;
+        if (querySnapshot.docs.isNotEmpty) {
+          _lastDocument = querySnapshot.docs.last;
+        }
+      });
+    } else {
+      setState(() {
+        _isLoadingMore = false;
+      });
+      print('User not logged in');
+    }
+  }
+
+  Future<void> _removeFromSaved(String documentId, String kosId) async {
+    await FirebaseFirestore.instance
+        .collection('SimpanKos')
+        .doc(documentId)
+        .delete();
+
+    await FirebaseFirestore.instance
+        .collection('Kos')
+        .doc(kosId)
+        .update({'isFavorite': false});
   }
 
   @override
@@ -122,23 +152,23 @@ class _SimpanState extends State<Simpan> {
                             : Container();
                       }
                       final DocumentSnapshot kostDoc = _savedKosts[index];
-                      final Map<String, dynamic> kostData =
-                          kostDoc.data() as Map<String, dynamic>;
+                      final Map<String, dynamic> kostData = kostDoc.data() as Map<String, dynamic>;
 
-                      final String imagePath = kostData['ImageURL'] ?? '';
-                      final int price =
-                          int.tryParse(kostData['Harga Pertahun'].toString()) ??
-                              0;
+                      final List<String> imageUrls = List<String>.from(kostData['ImageURLs'] ?? []);
+                      final int price = int.tryParse(kostData['Harga Pertahun'].toString()) ?? 0;
                       final String name = kostData['Nama Kos'] ?? '';
-                      final String distance = kostData['Jarak'] ?? '0';
+                      final String distance = kostData['Jarak'].toString();
                       final bool isFavorite = kostData['isFavorite'] ?? false;
+                      final String kosId = kostData['Kos ID'] ?? '';
 
                       return _buildListItem(
-                        imagePath: imagePath,
+                        imagePath: imageUrls.isNotEmpty ? imageUrls[0] : '',
                         price: price,
                         name: name,
                         distance: distance,
                         isFavorite: isFavorite,
+                        documentId: kostDoc.id,
+                        kosId: kosId,
                         onTap: () async {
                           setState(() {
                             kostData['isFavorite'] = !kostData['isFavorite'];
@@ -149,6 +179,28 @@ class _SimpanState extends State<Simpan> {
                               .collection('SimpanKos')
                               .doc(kostDoc.id)
                               .update({'isFavorite': kostData['isFavorite']});
+
+                          // Update status isFavorite di tabel Kos menjadi false
+                          final user = FirebaseAuth.instance.currentUser;
+                          if (user != null) {
+                            await FirebaseFirestore.instance
+                                .collection('Kos')
+                                .doc(kosId)
+                                .update({'isFavorite': kostData['isFavorite']});
+                          }
+
+                          // Hapus item dari daftar jika tidak lagi ditandai sebagai favorit
+                          if (!kostData['isFavorite']) {
+                            // Hapus data dari Firestore
+                            await FirebaseFirestore.instance
+                                .collection('SimpanKos')
+                                .doc(kostDoc.id)
+                                .delete();
+
+                            setState(() {
+                              _savedKosts.removeAt(index);
+                            });
+                          }
                         },
                       );
                     },
@@ -262,6 +314,8 @@ class _SimpanState extends State<Simpan> {
     required String name,
     required String distance,
     required bool isFavorite,
+    required String documentId,
+    required String kosId,
     required VoidCallback onTap,
   }) {
     return Container(
@@ -319,7 +373,7 @@ class _SimpanState extends State<Simpan> {
                   child: Text(
                     name,
                     style: const TextStyle(
-                      color: Color.fromARGB(255, 0, 0, 0),
+                      color: Color.fromARGB(255, 255, 255, 255),
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -331,9 +385,9 @@ class _SimpanState extends State<Simpan> {
                   child: Row(
                     children: [
                       Text(
-                        '$distance',
+                        '$distance km',
                         style: const TextStyle(
-                          color: Color.fromARGB(255, 0, 0, 0),
+                          color: Color.fromARGB(255, 254, 254, 254),
                           fontSize: 17,
                         ),
                       ),
@@ -361,7 +415,7 @@ class _SimpanState extends State<Simpan> {
     );
   }
 
-  // Fungsi untuk mengonversi harga
+ // Fungsi untuk mengonversi harga
   String formatCurrency(int amount) {
     if (amount >= 1000000) {
       double result = amount / 1000000;
@@ -373,9 +427,9 @@ class _SimpanState extends State<Simpan> {
     } else if (amount >= 1000) {
       double result = amount / 1000;
       if (result % 1 == 0) {
-        return 'Rp ${result.toInt()} rb/thn';
+        return 'Rp ${result.toInt()} thn';
       } else {
-        return 'Rp ${result.toStringAsFixed(1)} rb/thn';
+        return 'Rp ${result.toStringAsFixed(1)} thn';
       }
     } else {
       return 'Rp $amount';

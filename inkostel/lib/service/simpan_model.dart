@@ -4,7 +4,7 @@ class Simpan {
   final String namaKost;
   final String jarakKost;
   final String hargaPertahun;
-  final String imageUrl;
+  final List<String> imageUrl;
   final String kosId;
   final String userId;
 
@@ -18,16 +18,26 @@ class Simpan {
   });
 
   factory Simpan.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data() as Map<String, dynamic>;
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return Simpan(
       namaKost: data['Nama Kos'] ?? '',
       jarakKost: data['Jarak'] ?? '',
       hargaPertahun: data['Harga Pertahun'] ?? '',
-      imageUrl: data['ImageURL'] ?? '',
+      imageUrl: List<String>.from(data['ImageURLs'] ?? []),
       kosId: data['Kos ID'] ?? '',
       userId: data['User ID'] ?? '',
     );
   }
 
-  static fromDocumentSnapshot(QueryDocumentSnapshot<Object?> doc) {}
+  static Simpan fromDocumentSnapshot(QueryDocumentSnapshot<Object?> doc) {
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    return Simpan(
+      namaKost: data['Nama Kos'] ?? '',
+      jarakKost: data['Jarak'] ?? '',
+      hargaPertahun: data['Harga Pertahun'] ?? '',
+      imageUrl: List<String>.from(data['ImageURLs'] ?? []),
+      kosId: data['Kos ID'] ?? '',
+      userId: data['User ID'] ?? '',
+    );
+  }
 }

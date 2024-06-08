@@ -14,6 +14,7 @@ import 'package:random_string/random_string.dart';
 import 'package:inkostel/service/image_service.dart';
 // import 'package:inkostel/main.dart';
 import 'package:inkostel/service/kost_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() {
   runApp(const CariKos());
@@ -532,48 +533,72 @@ class _CariKosState extends State<CariKos> {
                                         right: 10,
                                         child: GestureDetector(
                                           onTap: () async {
-                                            setState(() {
-                                              kost.toggleFavoriteStatus();
-                                              if (kost.isFavorite) {
-                                                AwesomeNotifications()
-                                                    .createNotification(
-                                                  content: NotificationContent(
-                                                    id: 1,
-                                                    channelKey: 'notif_simpan',
-                                                    title:
-                                                        'Kos ${kost.namaKost} telah Disimpan!',
-                                                    body: 'Ketuk untuk melihat',
-                                                  ),
-                                                );
-                                              }
-                                            });
+                                            final user = FirebaseAuth
+                                                .instance.currentUser;
+                                            if (user != null) {
+                                              final userId = user.uid;
 
-                                            // Perbarui status favorit di Firestore
-                                            await FirebaseFirestore.instance
-                                                .collection('Kos')
-                                                .doc(kost.kosId)
-                                                .update(kost.toFirestore());
+                                              setState(() {
+                                                kost.toggleFavoriteStatus();
+                                                if (kost.isFavorite) {
+                                                  AwesomeNotifications()
+                                                      .createNotification(
+                                                    content:
+                                                        NotificationContent(
+                                                      id: 1,
+                                                      channelKey:
+                                                          'notif_simpan',
+                                                      title:
+                                                          'Kos ${kost.namaKost} telah Disimpan!',
+                                                      body:
+                                                          'Ketuk untuk melihat',
+                                                    ),
+                                                  );
+                                                }
+                                              });
 
-                                            // Simpan detail Kost ke koleksi SimpanKos
-                                            if (kost.isFavorite) {
+                                              // Perbarui status favorit di Firestore
                                               await FirebaseFirestore.instance
-                                                  .collection('SimpanKos')
+                                                  .collection('Kos')
                                                   .doc(kost.kosId)
-                                                  .set({
-                                                'Nama Kos': kost.namaKost,
-                                                'Harga Pertahun':
-                                                    kost.hargaPertahun,
-                                                'ImageURL': kost.imageUrl,
-                                                'Kos ID': kost.kosId,
-                                                'Alamat Kos': kost.alamatKos,
-                                                'Jarak': kost.jarakKost,
-                                                'isFavorite': kost.isFavorite,
+                                                  .update(kost.toFirestore());
+
+                                              // Simpan detail Kost ke koleksi SimpanKos
+                                              final simpanKosDocId =
+                                                  '${userId}_${kost.kosId}';
+                                              if (kost.isFavorite) {
+                                                await FirebaseFirestore.instance
+                                                    .collection('SimpanKos')
+                                                    .doc(simpanKosDocId)
+                                                    .set({
+                                                  'Nama Kos': kost.namaKost,
+                                                  'Harga Pertahun':
+                                                      kost.hargaPertahun,
+                                                  'ImageURLs': kost.imageUrl,
+                                                  'Kos ID': kost.kosId,
+                                                  'User ID': userId,
+                                                  'Alamat Kos': kost.alamatKos,
+                                                  'Jarak': kost.jarakKost,
+                                                  'isFavorite': kost.isFavorite,
+                                                });
+                                              } else {
+                                                await FirebaseFirestore.instance
+                                                    .collection('SimpanKos')
+                                                    .doc(simpanKosDocId)
+                                                    .delete();
+                                              }
+
+                                              // Update status isFavorite di tabel Kos
+                                              await FirebaseFirestore.instance
+                                                  .collection('Kos')
+                                                  .doc(kost.kosId)
+                                                  .update({
+                                                'isFavorite_$userId':
+                                                    kost.isFavorite
                                               });
                                             } else {
-                                              await FirebaseFirestore.instance
-                                                  .collection('SimpanKos')
-                                                  .doc(kost.kosId)
-                                                  .delete();
+                                              // Tangani kasus ketika pengguna tidak login
+                                              print('Pengguna tidak login');
                                             }
                                           },
                                           child: Row(
