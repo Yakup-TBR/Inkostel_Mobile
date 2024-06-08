@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,8 +13,14 @@ import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/tes.dart';
 import 'package:inkostel/service/user_model.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
+
+  @override
+  _ProfileState createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
   final double coverHeight = 170;
   final double profileSize = 110;
 
@@ -235,6 +243,7 @@ class Profile extends StatelessWidget {
               width: profileSize,
               height: profileSize,
               fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Image.asset('images/profile.png'),
             ),
           ),
         ),
@@ -320,61 +329,74 @@ class Profile extends StatelessWidget {
     );
   }
 
-  void editProfile(BuildContext context) {
-    TextEditingController nameController = TextEditingController();
-    TextEditingController numberController = TextEditingController();
-    TextEditingController descriptionController = TextEditingController();
+  void editProfile(BuildContext context) async {
+    UserProfile? userProfile = await _getUserData();
+    
+    if (userProfile == null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to fetch user data.'))
+        );
+      }
+      return;
+    }
+
+    TextEditingController nameController = TextEditingController(text: userProfile.nama);
+    TextEditingController numberController = TextEditingController(text: userProfile.nomorTelepon.replaceFirst('+62', ''));
+    TextEditingController descriptionController = TextEditingController(text: userProfile.deskripsi);
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Edit Profil'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              OutlinedButton(
-                onPressed: () {
-                  showImageSourceDialog(context); // Panggil fungsi untuk memilih sumber gambar
-                },
-                child: Text(
-                  'Ubah Gambar Profil',
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 76, 165, 175), // Warna teks hijau
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                OutlinedButton(
+                  onPressed: () {
+                    showImageSourceDialog(context); // Panggil fungsi untuk memilih sumber gambar
+                  },
+                  child: Text(
+                    'Ubah Gambar Profil',
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 76, 165, 175), // Warna teks hijau
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    side: MaterialStateProperty.resolveWith<BorderSide>((states) {
+                      return BorderSide(color: Colors.grey, width: 1);
+                    }),
                   ),
                 ),
-                style: ButtonStyle(
-                  side: MaterialStateProperty.resolveWith<BorderSide>((states) {
-                    return BorderSide(color: Colors.grey, width: 1);
-                  }),
+                const SizedBox(height: 20),
+                TextField(
+                  controller: nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Nama',
+                    labelStyle: TextStyle(color: Color.fromARGB(255, 76, 165, 175)), // Warna teks hijau
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Nama',
-                  labelStyle: TextStyle(color: Color.fromARGB(255, 76, 165, 175)), // Warna teks hijau
+                const SizedBox(height: 20),
+                TextField(
+                  controller: numberController,
+                  decoration: const InputDecoration(
+                    labelText: 'Nomor',
+                    prefixText: '+62 ',
+                    labelStyle: TextStyle(color: Color.fromARGB(255, 76, 165, 175)),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: numberController,
-                decoration: const InputDecoration(
-                  labelText: 'Nomor',
-                  prefixText: '+62 ',
-                  labelStyle: TextStyle(color: Color.fromARGB(255, 76, 165, 175)), 
+                const SizedBox(height: 20),
+                TextField(
+                  controller: descriptionController,
+                  decoration: const InputDecoration(
+                    labelText: 'Deskripsi',
+                    labelStyle: TextStyle(color: Color.fromARGB(255, 76, 165, 175)),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: descriptionController,
-                decoration: const InputDecoration(
-                  labelText: 'Deskripsi',
-                  labelStyle: TextStyle(color: Color.fromARGB(255, 76, 165, 175)), 
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
           actions: <Widget>[
             TextButton(
@@ -398,7 +420,9 @@ class Profile extends StatelessWidget {
                 await updateProfilePhoneNumber(newNumber); // Update nomor telepon
                 await updateProfileDescription(newDescription); // Update deskripsi
 
-                Navigator.of(context).pop();
+                if (mounted) {
+                  Navigator.of(context).pop();
+                }
               },
               child: const Text(
                 'Simpan',
@@ -452,7 +476,7 @@ class Profile extends StatelessWidget {
     if (pickedImage != null) {
       File imageFile = File(pickedImage.path);
       // Panggil fungsi untuk memperbarui URL gambar profil
-      await updateProfileImageURL(imageFile.path);
+      await _uploadImageToStorage(context, imageFile);
     }
   }
 
@@ -462,8 +486,32 @@ class Profile extends StatelessWidget {
     if (pickedImage != null) {
       File imageFile = File(pickedImage.path);
       // Panggil fungsi untuk memperbarui URL gambar profil
-      await updateProfileImageURL(imageFile.path);
+      await _uploadImageToStorage(context, imageFile);
     }
   }
 
+  Future<void> _uploadImageToStorage(BuildContext context, File imageFile) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw Exception("User not logged in");
+      }
+
+      String filePath = 'profile/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.png';
+      Reference storageRef = FirebaseStorage.instance.ref().child(filePath);
+      UploadTask uploadTask = storageRef.putFile(imageFile);
+
+      TaskSnapshot snapshot = await uploadTask;
+      String downloadURL = await snapshot.ref.getDownloadURL();
+
+      await updateProfileImageURL(downloadURL);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Profile picture updated successfully.')));
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to update profile picture: $e')));
+      }
+    }
+  }
 }

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 class UserProfile {
   final String userId;
   final String email;
@@ -9,7 +8,7 @@ class UserProfile {
   final String nama;
   final String nomorTelepon;
   final String deskripsi;
-  final String photoURL; 
+  final String photoURL;
 
   UserProfile({
     required this.userId,
@@ -64,7 +63,7 @@ class UserProfile {
   }
 }
 
-Future<UserProfile> getUserProfile() async {
+Future<UserProfile?> getUserProfile() async {
   User? user = FirebaseAuth.instance.currentUser;
   if (user == null) {
     throw Exception("User not logged in");
@@ -72,12 +71,11 @@ Future<UserProfile> getUserProfile() async {
 
   DocumentSnapshot<Map<String, dynamic>> userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
   if (!userDoc.exists) {
-    // Arahkan pengguna kembali ke halaman sign-in jika data pengguna tidak ada
-    return Future.error("User data not found");
+    return null; // Return null if no user data is found
   }
 
   return UserProfile.fromUser(user, userDoc.data()!);
-} 
+}
 
 Future<UserCredential> signInWithEmailAndPassword(String email, String password) async {
   UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
@@ -116,10 +114,7 @@ Future<void> updateProfileName(String newName) async {
     throw Exception("User not logged in");
   }
 
-  // Prepare the updated data
   Map<String, dynamic> updateData = {'Nama': newName};
-
-  // Update the user document in Firestore
   await FirebaseFirestore.instance.collection('users').doc(user.uid).update(updateData);
 }
 
@@ -129,10 +124,7 @@ Future<void> updateProfilePhoneNumber(String newPhoneNumber) async {
     throw Exception("User not logged in");
   }
 
-  // Prepare the updated data
   Map<String, dynamic> updateData = {'Nomor Telepon': newPhoneNumber};
-
-  // Update the user document in Firestore
   await FirebaseFirestore.instance.collection('users').doc(user.uid).update(updateData);
 }
 
@@ -142,21 +134,16 @@ Future<void> updateProfileDescription(String newDescription) async {
     throw Exception("User not logged in");
   }
 
-  // Prepare the updated data
   Map<String, dynamic> updateData = {'Deskripsi': newDescription};
-
-  // Update the user document in Firestore
   await FirebaseFirestore.instance.collection('users').doc(user.uid).update(updateData);
 }
+
 Future<void> updateProfileImageURL(String newImageURL) async {
   User? user = FirebaseAuth.instance.currentUser;
   if (user == null) {
     throw Exception("User not logged in");
   }
 
-  // Prepare the updated data
   Map<String, dynamic> updateData = {'PhotoURL': newImageURL};
-
-  // Update the user document in Firestore
   await FirebaseFirestore.instance.collection('users').doc(user.uid).update(updateData);
 }
