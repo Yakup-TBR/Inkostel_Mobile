@@ -1,4 +1,6 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:inkostel/pages/carikos.dart';
@@ -159,34 +161,86 @@ class _DetailState extends State<Detail> {
                           ),
                         ),
                       ),
-                      Positioned(
+                     Positioned(
                         top: 55,
                         right: 20,
                         child: GestureDetector(
-                          onTap: () {},
-                          onTapDown: (details) {
-                            setState(() {
-                              isSimpanPressed = !isSimpanPressed;
-                            });
+                          onTap: () async {
+                            final user = FirebaseAuth.instance.currentUser;
+                            if (user != null) {
+                              final userId = user.uid;
+
+                              setState(() {
+                                _kos?.toggleFavoriteStatus();
+                                if (_kos!.isFavorite) {
+                                  AwesomeNotifications().createNotification(
+                                    content: NotificationContent(
+                                      id: 1,
+                                      channelKey: 'notif_simpan',
+                                      title:
+                                          'Kos ${_kos?.namaKost} telah Disimpan!',
+                                      body: 'Ketuk untuk melihat',
+                                    ),
+                                  );
+                                }
+                              });
+
+                              // Perbarui status favorit di Firestore
+                              await FirebaseFirestore.instance
+                                  .collection('Kos')
+                                  .doc(_kos?.kosId)
+                                  .update(_kos!.toFirestore());
+
+                              // Simpan detail Kost ke koleksi SimpanKos
+                              final simpanKosDocId = '${userId}_${_kos?.kosId}';
+                              if (_kos!.isFavorite) {
+                                await FirebaseFirestore.instance
+                                    .collection('SimpanKos')
+                                    .doc(simpanKosDocId)
+                                    .set({
+                                  'Nama Kos': _kos?.namaKost,
+                                  'Harga Pertahun': _kos?.hargaPertahun,
+                                  'ImageURLs': _kos?.imageUrl,
+                                  'Kos ID': _kos?.kosId,
+                                  'User ID': userId,
+                                  'Alamat Kos': _kos?.alamatKos,
+                                  'Jarak': _kos?.jarakKost,
+                                  'isFavorite': _kos?.isFavorite,
+                                });
+                              } else {
+                                await FirebaseFirestore.instance
+                                    .collection('SimpanKos')
+                                    .doc(simpanKosDocId)
+                                    .delete();
+                              }
+
+                              // Update status isFavorite di tabel Kos
+                              await FirebaseFirestore.instance
+                                  .collection('Kos')
+                                  .doc(_kos?.kosId)
+                                  .update(
+                                      {'isFavorite_$userId': _kos?.isFavorite});
+                            } else {
+                              // Tangani kasus ketika pengguna tidak login
+                              print('Pengguna tidak login');
+                            }
                           },
-                          onTapCancel: () {
-                            setState(() {
-                              isSimpanPressed = !isSimpanPressed;
-                            });
-                          },
-                          child: Container(
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Image.asset(
-                              'lib/icons/simpan.png',
-                              color: isSimpanPressed
-                                  ? Colors.blue
-                                  : const Color.fromRGBO(128, 128, 128, 1),
-                            ),
+                          child: Row(
+                            children: [
+                              const SizedBox(width: 5),
+                              Image.asset(
+                                'lib/icons/simpan_active.png',
+                                color: _kos!.isFavorite
+                                    ? const Color.fromRGBO(100, 204, 197, 1)
+                                    : Colors.grey,
+                                width: 30,
+                                height: 30,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Icon(Icons.error,
+                                      color: Colors.red);
+                                },
+                              ),
+                            ],
                           ),
                         ),
                       ),
