@@ -7,6 +7,7 @@ import 'package:inkostel/pages/profile.dart';
 import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/service/database.dart';
+import 'package:inkostel/service/user_model.dart';
 import 'package:random_string/random_string.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -20,14 +21,15 @@ class JualKos extends StatefulWidget {
 
 class _JualKosState extends State<JualKos> {
   // Text Editing Controller tiap textField
-  TextEditingController namaKosController = new TextEditingController();
-  TextEditingController nomorTelponController = new TextEditingController();
-  TextEditingController alamatKos1Controller = new TextEditingController();
-  TextEditingController alamatlinkController = new TextEditingController();
-  TextEditingController hargaPertahunController = new TextEditingController();
-  TextEditingController hargaPerbulanController = new TextEditingController();
-  TextEditingController deskripsiController = new TextEditingController();
-  TextEditingController JarakController = new TextEditingController();
+  TextEditingController namaKosController = TextEditingController();
+  TextEditingController nomorTelponController = TextEditingController();
+  TextEditingController alamatKos1Controller = TextEditingController();
+  TextEditingController alamatlinkController = TextEditingController();
+  TextEditingController hargaPertahunController = TextEditingController();
+  TextEditingController hargaPerbulanController = TextEditingController();
+  TextEditingController deskripsiController = TextEditingController();
+  TextEditingController JarakController = TextEditingController();
+
 
   // Define a list of facilities
   List<String> facilities = [
@@ -46,7 +48,6 @@ class _JualKosState extends State<JualKos> {
     'Tempat Parkir': false,
     'Kamar Mandi Dalam': false,
   };
-
 
   List<File> _imageFiles = [];
 
@@ -120,41 +121,64 @@ class _JualKosState extends State<JualKos> {
             padding: const EdgeInsets.only(left: 15),
             child: Row(
               children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: const Color.fromRGBO(254, 251, 246, 1),
-                    borderRadius: BorderRadius.circular(18),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
-                        spreadRadius: 0,
-                        blurRadius: 4,
-                        offset: const Offset(0, 1), // Atur posisi shadow
-                      ),
-                    ],
-                  ),
-                  padding: const EdgeInsets.all(11),
-                  child: GestureDetector(
-                    onTap: () {
-                      // Tambahkan kode navigasi ke halaman profil di sini
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const Profile()),
+                FutureBuilder<UserProfile?>(
+                  future: getUserProfile(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(254, 251, 246, 1),
+                          borderRadius: BorderRadius.circular(18),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+                              spreadRadius: 0,
+                              blurRadius: 4,
+                              offset: const Offset(0, 1),
+                            ),
+                          ],
+                          image: DecorationImage(
+                            image: NetworkImage(snapshot.data!.photoURL),
+                            fit: BoxFit.cover,
+                            colorFilter: null, // Atur nilai ColorFilter menjadi null
+                          ),
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            // Tambahkan kode navigasi ke halaman profil di sini
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const Profile()),
+                            );
+                          },
+                        ),
                       );
+                    } else {
+                      return Container(); // Return empty container if data is not available yet
+                    }
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: FutureBuilder<UserProfile?>(
+                    future: getUserProfile(), // Panggil metode getUserProfile()
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Text(
+                          'Hai, ${snapshot.data!.nama}',
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        );
+                      } else {
+                        return Text(
+                          'Hai, User',
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        );
+                      }
                     },
-                    child: Image.asset(
-                      'lib/icons/orang.png',
-                      color: const Color.fromRGBO(100, 204, 197, 1),
-                    ),
                   ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Text('Hai, Supri Basuki',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                ),
+                )
               ],
             ),
           ),

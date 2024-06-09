@@ -16,6 +16,7 @@ import 'package:inkostel/service/image_service.dart';
 import 'package:inkostel/service/kost_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+
 void main() {
   runApp(const CariKos());
 }
@@ -196,6 +197,9 @@ class _CariKosState extends State<CariKos> {
       });
     }
   }
+
+
+  
 
   @override
   Widget build(BuildContext context) {

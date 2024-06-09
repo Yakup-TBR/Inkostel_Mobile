@@ -7,6 +7,7 @@ import 'package:inkostel/pages/signin.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:flutter/services.dart';
+import 'package:inkostel/service/user_model.dart';
 
 class Pengaturan extends StatefulWidget {
   const Pengaturan({super.key});
@@ -17,6 +18,26 @@ class Pengaturan extends StatefulWidget {
 
 class _PengaturanState extends State<Pengaturan> {
   bool isDarkMode = false;
+  UserProfile? userProfile;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserProfile();
+  }
+
+  Future<void> _fetchUserProfile() async {
+    try {
+      UserProfile? profile = await getUserProfile();
+      if (profile != null) {
+        setState(() {
+          userProfile = profile;
+        });
+      }
+    } catch (e) {
+      print("Error fetching user profile: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,26 +119,33 @@ class _PengaturanState extends State<Pengaturan> {
                                   offset: const Offset(0, 1), // Atur posisi shadow
                                 ),
                               ],
-                            ),
-                            padding: const EdgeInsets.all(10),
-                            child: GestureDetector(
-                              onTap: () {
-                                // Tambahkan kode navigasi ke halaman profil di sini
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Profile()),
-                                );
-                              },
-                              child: Image.asset(
-                                'lib/icons/orang.png',
-                                color: const Color.fromRGBO(100, 204, 197, 1),
-                              ),
+                              image: userProfile != null && userProfile!.photoURL.isNotEmpty
+                                  ? DecorationImage(
+                                      image: NetworkImage(userProfile!.photoURL),
+                                      fit: BoxFit.cover,
+                                      onError: (exception, stackTrace) {
+                                        // Handle the error, for example by showing a default image
+                                        DecorationImage(
+                                          image: AssetImage('lib/icons/orang.png'),
+                                          fit: BoxFit.cover,
+                                          colorFilter: ColorFilter.mode(
+                                              const Color.fromRGBO(100, 204, 197, 1),
+                                              BlendMode.srcATop),
+                                        );
+                                      },
+                                    )
+                                  : DecorationImage(
+                                      image: AssetImage('lib/icons/orang.png'),
+                                      fit: BoxFit.cover,
+                                      colorFilter: ColorFilter.mode(
+                                          const Color.fromRGBO(100, 204, 197, 1),
+                                          BlendMode.srcATop),
+                                    ),
                             ),
                           ),
                         ),
                         Text(
-                          'Supri Basuki',
+                          userProfile != null ? userProfile!.nama : 'Loading...',
                           style: GoogleFonts.getFont('Poppins',
                               fontSize: 23,
                               fontWeight: FontWeight.w600,
