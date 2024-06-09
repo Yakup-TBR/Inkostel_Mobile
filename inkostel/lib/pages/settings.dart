@@ -125,20 +125,20 @@ class _PengaturanState extends State<Pengaturan> {
                                       fit: BoxFit.cover,
                                       onError: (exception, stackTrace) {
                                         // Handle the error, for example by showing a default image
-                                        DecorationImage(
+                                        const DecorationImage(
                                           image: AssetImage('lib/icons/orang.png'),
                                           fit: BoxFit.cover,
                                           colorFilter: ColorFilter.mode(
-                                              const Color.fromRGBO(100, 204, 197, 1),
+                                              Color.fromRGBO(100, 204, 197, 1),
                                               BlendMode.srcATop),
                                         );
                                       },
                                     )
-                                  : DecorationImage(
+                                  : const DecorationImage(
                                       image: AssetImage('lib/icons/orang.png'),
                                       fit: BoxFit.cover,
                                       colorFilter: ColorFilter.mode(
-                                          const Color.fromRGBO(100, 204, 197, 1),
+                                          Color.fromRGBO(100, 204, 197, 1),
                                           BlendMode.srcATop),
                                     ),
                             ),
@@ -196,69 +196,6 @@ class _PengaturanState extends State<Pengaturan> {
                             ),
                           ),
                         ),
-                        Container(
-                          // ---- Dark Mode
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: isDarkMode
-                                ? Colors.grey[800]
-                                : const Color.fromRGBO(235, 233, 233, 1),
-                            borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(15),
-                              topLeft: Radius.circular(15),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 10, left: 30, right: 24, bottom: 10),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 20),
-                                  child: Container(
-                                    width: 40,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      color: const Color.fromRGBO(
-                                          100, 204, 197, 1),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    padding: const EdgeInsets.all(3),
-                                    child: Image.asset(
-                                      'lib/icons/bulan.png',
-                                      color: isDarkMode
-                                          ? Colors.white
-                                          : const Color.fromRGBO(0, 0, 0, 1),
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  'Dark Mode',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'Poppins',
-                                    color: isDarkMode ? Colors.white : Colors.black,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Switch(
-                                      value: isDarkMode,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          isDarkMode = value;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
                         GestureDetector(
                           onTap: () {
                             // Aksi yang akan dijalankan ketika widget ditekan
@@ -270,11 +207,9 @@ class _PengaturanState extends State<Pengaturan> {
                               color: isDarkMode
                                   ? Colors.grey[800]
                                   : const Color.fromRGBO(235, 233, 233, 1),
-                              border: const Border.symmetric(
-                                horizontal: BorderSide(
-                                  color: Colors.grey,
-                                  width: 1,
-                                ),
+                              borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(15),
+                                topLeft: Radius.circular(15),
                               ),
                             ),
                             child: Padding(
@@ -438,6 +373,8 @@ class _PengaturanState extends State<Pengaturan> {
                               borderRadius: const BorderRadius.only(
                                 topRight: Radius.circular(15),
                                 topLeft: Radius.circular(15),
+                                 bottomLeft: Radius.circular(15),
+                                bottomRight: Radius.circular(15),
                               ),
                             ),
                             child: Padding(
@@ -467,61 +404,6 @@ class _PengaturanState extends State<Pengaturan> {
                                   ),
                                   Text(
                                     'Sign Out',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: 'Poppins',
-                                      color: isDarkMode ? Colors.white : Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            // Lakukan Ganti Email
-                          },
-                          child: Container(
-                            // ---- Ganti Email
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: isDarkMode
-                                  ? Colors.grey[800]
-                                  : const Color.fromRGBO(235, 233, 233, 1),
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 10, left: 30, right: 24, bottom: 10),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 20),
-                                    child: Container(
-                                      width: 40,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        color: const Color.fromRGBO(
-                                            100, 204, 197, 1),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      padding: const EdgeInsets.all(4),
-                                      child: Image.asset(
-                                        'lib/icons/emailChange.png',
-                                        color: isDarkMode
-                                          ? Colors.white
-                                          : const Color.fromRGBO(0, 0, 0, 1),
-                                      ),
-                                    ),
-                                  ),
-                                  Text(
-                                    'Ganti Email',
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
