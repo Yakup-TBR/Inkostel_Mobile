@@ -6,7 +6,7 @@ import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/utils/color.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+  const SignUpScreen({Key? key}) : super(key: key);
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -67,6 +67,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           password: _passwordTextController.text)
                       .then((value) {
                     print("Created New Account");
+                    // Tampilkan Snackbar setelah berhasil mendaftar
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Akun berhasil didaftarkan'),
+                      ),
+                    );
+                    // Navigasi kembali ke halaman sign-in
                     Navigator.push(
                         context,
                         MaterialPageRoute(

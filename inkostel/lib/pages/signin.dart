@@ -45,7 +45,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 logoWidget("assets/images/2.png"),
                 const SizedBox(height: 30),
                 reusableTextField(
-                  "Enter Username",
+                  "Enter Email",
                   Icons.person_outline,
                   false,
                   _emailTextController,
