@@ -565,95 +565,225 @@ class _CariKosState extends State<CariKos> {
                                       Positioned(
                                         bottom: 10,
                                         right: 10,
-                                        child: GestureDetector(
-                                          onTap: () async {
-                                            final user = FirebaseAuth
-                                                .instance.currentUser;
-                                            if (user != null) {
-                                              final userId = user.uid;
+                                        child: StreamBuilder<QuerySnapshot>(
+                                          stream: FirebaseFirestore.instance
+                                              .collection('SimpanKos')
+                                              .where('User ID',
+                                                  isEqualTo: FirebaseAuth
+                                                      .instance
+                                                      .currentUser
+                                                      ?.uid)
+                                              .snapshots(),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return CircularProgressIndicator();
+                                            }
+                                            if (snapshot.hasError) {
+                                              return Text(
+                                                  'Error: ${snapshot.error}');
+                                            }
+                                            if (!snapshot.hasData ||
+                                                snapshot.data!.docs.isEmpty) {
+                                              // Tidak ada data yang tersimpan untuk pengguna saat ini
+                                              return GestureDetector(
+                                                onTap: () async {
+                                                  final user = FirebaseAuth
+                                                      .instance.currentUser;
+                                                  if (user != null) {
+                                                    final userId = user.uid;
+                                                    kost.toggleFavoriteStatus();
+                                                    if (kost.isFavorite) {
+                                                      AwesomeNotifications()
+                                                          .createNotification(
+                                                        content:
+                                                            NotificationContent(
+                                                          id: 1,
+                                                          channelKey:
+                                                              'notif_simpan',
+                                                          title:
+                                                              'Kos ${kost.namaKost} telah Disimpan!',
+                                                          body:
+                                                              'Ketuk untuk melihat',
+                                                        ),
+                                                      );
+                                                    }
+                                                    await FirebaseFirestore
+                                                        .instance
+                                                        .collection('Kos')
+                                                        .doc(kost.kosId)
+                                                        .update(
+                                                            kost.toFirestore());
 
-                                              setState(() {
-                                                kost.toggleFavoriteStatus();
-                                                if (kost.isFavorite) {
-                                                  AwesomeNotifications()
-                                                      .createNotification(
-                                                    content:
-                                                        NotificationContent(
-                                                      id: 1,
-                                                      channelKey:
-                                                          'notif_simpan',
-                                                      title:
-                                                          'Kos ${kost.namaKost} telah Disimpan!',
-                                                      body:
-                                                          'Ketuk untuk melihat',
+                                                    final simpanKosDocId =
+                                                        '${userId}_${kost.kosId}';
+                                                    if (kost.isFavorite) {
+                                                      await FirebaseFirestore
+                                                          .instance
+                                                          .collection(
+                                                              'SimpanKos')
+                                                          .doc(simpanKosDocId)
+                                                          .set({
+                                                        'Nama Kos':
+                                                            kost.namaKost,
+                                                        'Harga Pertahun':
+                                                            kost.hargaPertahun,
+                                                        'ImageURLs':
+                                                            kost.imageUrl,
+                                                        'Kos ID': kost.kosId,
+                                                        'User ID': userId,
+                                                        'Alamat Kos':
+                                                            kost.alamatKos,
+                                                        'Jarak': kost.jarakKost,
+                                                        'isFavorite':
+                                                            kost.isFavorite,
+                                                      });
+                                                    } else {
+                                                      await FirebaseFirestore
+                                                          .instance
+                                                          .collection(
+                                                              'SimpanKos')
+                                                          .doc(simpanKosDocId)
+                                                          .delete();
+                                                    }
+
+                                                    await FirebaseFirestore
+                                                        .instance
+                                                        .collection('Kos')
+                                                        .doc(kost.kosId)
+                                                        .update({
+                                                      'isFavorite_${userId}':
+                                                          kost.isFavorite
+                                                    });
+                                                  } else {
+                                                    print(
+                                                        'Pengguna tidak login');
+                                                  }
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    const SizedBox(width: 5),
+                                                    Image.asset(
+                                                      'lib/icons/simpan_active.png',
+                                                      color: Colors.grey,
+                                                      width: 30,
+                                                      height: 30,
+                                                      errorBuilder: (context,
+                                                          error, stackTrace) {
+                                                        return const Icon(
+                                                            Icons.error,
+                                                            color: Colors.red);
+                                                      },
                                                     ),
-                                                  );
-                                                }
-                                              });
-
-                                              // Perbarui status favorit di Firestore
-                                              await FirebaseFirestore.instance
-                                                  .collection('Kos')
-                                                  .doc(kost.kosId)
-                                                  .update(kost.toFirestore());
-
-                                              // Simpan detail Kost ke koleksi SimpanKos
-                                              final simpanKosDocId =
-                                                  '${userId}_${kost.kosId}';
-                                              if (kost.isFavorite) {
-                                                await FirebaseFirestore.instance
-                                                    .collection('SimpanKos')
-                                                    .doc(simpanKosDocId)
-                                                    .set({
-                                                  'Nama Kos': kost.namaKost,
-                                                  'Harga Pertahun':
-                                                      kost.hargaPertahun,
-                                                  'ImageURLs': kost.imageUrl,
-                                                  'Kos ID': kost.kosId,
-                                                  'User ID': userId,
-                                                  'Alamat Kos': kost.alamatKos,
-                                                  'Jarak': kost.jarakKost,
-                                                  'isFavorite': kost.isFavorite,
-                                                });
-                                              } else {
-                                                await FirebaseFirestore.instance
-                                                    .collection('SimpanKos')
-                                                    .doc(simpanKosDocId)
-                                                    .delete();
-                                              }
-
-                                              // Update status isFavorite di tabel Kos
-                                              await FirebaseFirestore.instance
-                                                  .collection('Kos')
-                                                  .doc(kost.kosId)
-                                                  .update({
-                                                'isFavorite_$userId':
-                                                    kost.isFavorite
-                                              });
+                                                  ],
+                                                ),
+                                              );
                                             } else {
-                                              // Tangani kasus ketika pengguna tidak login
-                                              print('Pengguna tidak login');
+                                              // Data telah disimpan oleh pengguna saat ini
+                                              final user = FirebaseAuth
+                                                  .instance.currentUser;
+                                              final userId = user?.uid;
+                                              final docs = snapshot.data!.docs;
+                                              final isKostSaved = docs.any(
+                                                  (doc) =>
+                                                      doc['Kos ID'] ==
+                                                          kost.kosId &&
+                                                      doc['User ID'] == userId);
+                                              return GestureDetector(
+                                                onTap: () async {
+                                                  if (user != null) {
+                                                    kost.toggleFavoriteStatus();
+                                                    if (kost.isFavorite) {
+                                                      AwesomeNotifications()
+                                                          .createNotification(
+                                                        content:
+                                                            NotificationContent(
+                                                          id: 1,
+                                                          channelKey:
+                                                              'notif_simpan',
+                                                          title:
+                                                              'Kos ${kost.namaKost} telah Disimpan!',
+                                                          body:
+                                                              'Ketuk untuk melihat',
+                                                        ),
+                                                      );
+                                                    }
+                                                    await FirebaseFirestore
+                                                        .instance
+                                                        .collection('Kos')
+                                                        .doc(kost.kosId)
+                                                        .update(
+                                                            kost.toFirestore());
+
+                                                    final simpanKosDocId =
+                                                        '${userId}_${kost.kosId}';
+                                                    if (kost.isFavorite) {
+                                                      await FirebaseFirestore
+                                                          .instance
+                                                          .collection(
+                                                              'SimpanKos')
+                                                          .doc(simpanKosDocId)
+                                                          .set({
+                                                        'Nama Kos':
+                                                            kost.namaKost,
+                                                        'Harga Pertahun':
+                                                            kost.hargaPertahun,
+                                                        'ImageURLs':
+                                                            kost.imageUrl,
+                                                        'Kos ID': kost.kosId,
+                                                        'User ID': userId,
+                                                        'Alamat Kos':
+                                                            kost.alamatKos,
+                                                        'Jarak': kost.jarakKost,
+                                                        'isFavorite':
+                                                            kost.isFavorite,
+                                                      });
+                                                    } else {
+                                                      await FirebaseFirestore
+                                                          .instance
+                                                          .collection(
+                                                              'SimpanKos')
+                                                          .doc(simpanKosDocId)
+                                                          .delete();
+                                                    }
+
+                                                    await FirebaseFirestore
+                                                        .instance
+                                                        .collection('Kos')
+                                                        .doc(kost.kosId)
+                                                        .update({
+                                                      'isFavorite_${userId}':
+                                                          kost.isFavorite
+                                                    });
+                                                  } else {
+                                                    print(
+                                                        'Pengguna tidak login');
+                                                  }
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    const SizedBox(width: 5),
+                                                    Image.asset(
+                                                      'lib/icons/simpan_active.png',
+                                                      color: isKostSaved
+                                                          ? const Color
+                                                              .fromRGBO(
+                                                              100, 204, 197, 1)
+                                                          : Colors.grey,
+                                                      width: 30,
+                                                      height: 30,
+                                                      errorBuilder: (context,
+                                                          error, stackTrace) {
+                                                        return const Icon(
+                                                            Icons.error,
+                                                            color: Colors.red);
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
                                             }
                                           },
-                                          child: Row(
-                                            children: [
-                                              const SizedBox(width: 5),
-                                              Image.asset(
-                                                'lib/icons/simpan_active.png',
-                                                color: kost.isFavorite
-                                                    ? const Color.fromRGBO(
-                                                        100, 204, 197, 1)
-                                                    : Colors.grey,
-                                                width: 30,
-                                                height: 30,
-                                                errorBuilder: (context, error,
-                                                    stackTrace) {
-                                                  return const Icon(Icons.error,
-                                                      color: Colors.red);
-                                                },
-                                              ),
-                                            ],
-                                          ),
                                         ),
                                       ),
                                     ],
