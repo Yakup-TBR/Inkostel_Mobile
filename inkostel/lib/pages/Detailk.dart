@@ -132,10 +132,17 @@ class _DetailState extends State<Detail> {
     }
 
     String hargaPerbulan(int amount) {
-      if (amount >= 1000) {
+      if (amount >= 1000000) {
+        double result = amount / 1000000;
+        if (result % 1 == 0) {
+          return 'Rp ${result.toInt()} juta/bln';
+        } else {
+          return 'Rp ${result.toStringAsFixed(1)} juta/bln';
+        }
+      } else if (amount >= 1000) {
         double result = amount / 1000;
         if (result % 1 == 0) {
-          return 'Rp ${result.toInt()} k/bln';
+          return 'Rp ${result.toInt()} ribu/bln';
         } else {
           return 'Rp ${result.toStringAsFixed(1)} ribu/bln';
         }
@@ -204,7 +211,9 @@ class _DetailState extends State<Detail> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>  CariKos(searchText: '',)),
+                                  builder: (context) => CariKos(
+                                        searchText: '',
+                                      )),
                             );
                           },
                           child: Container(
@@ -688,7 +697,7 @@ class _DetailState extends State<Detail> {
             case 0:
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) =>  Home()),
+                MaterialPageRoute(builder: (context) => Home()),
               );
               break;
             case 1:
