@@ -130,6 +130,7 @@ class _JualKosState extends State<JualKos> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
         appBar: AppBar(

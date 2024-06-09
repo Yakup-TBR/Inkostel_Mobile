@@ -51,6 +51,7 @@ class _PengaturanState extends State<Pengaturan> {
     ));
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
       home: Scaffold(
         resizeToAvoidBottomInset: false,
