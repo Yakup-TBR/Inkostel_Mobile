@@ -120,6 +120,15 @@ class _DetailState extends State<Detail> {
       }
     }
 
+    String formatJarak(int jarak) {
+      if (jarak >= 1000) {
+        double km = jarak / 1000.0;
+        return '${km.toStringAsFixed(1)} km';
+      } else {
+        return '$jarak m';
+      }
+    }
+
     String hargaPerbulan(int amount) {
       if (amount >= 1000) {
         double result = amount / 1000;
@@ -350,6 +359,39 @@ class _DetailState extends State<Detail> {
                                   ),
                                 ),
                                 const Spacer(),
+                                Padding(
+                                  padding:
+                                      EdgeInsets.only(top: 50, right: 15.0),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Align(
+                                        alignment: Alignment.topCenter,
+                                        child: Text(
+                                          'Jarak :',
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 17,
+                                            color: Color.fromARGB(255, 7, 4, 4),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 5),
+                                      Align(
+                                        alignment: Alignment.topCenter,
+                                        child: Text(
+                                          formatJarak(_kos!.jarakKost),
+                                          style: const TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 17,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
