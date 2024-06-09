@@ -9,12 +9,11 @@ import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/profile.dart';
 import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
-import 'package:inkostel/pages/tes.dart';
-import 'package:random_string/random_string.dart';
 import 'package:inkostel/service/image_service.dart';
 // import 'package:inkostel/main.dart';
 import 'package:inkostel/service/kost_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:inkostel/service/user_model.dart';
 
 
 void main() {
@@ -44,7 +43,6 @@ class _CariKosState extends State<CariKos> {
   int _currentBatch = 0;
   ScrollController _scrollController = ScrollController();
   String _selectedCategory = '';
-
   bool isChecked100Meters = false;
   bool isChecked200Meters = false;
   bool isChecked500Meters = false;
@@ -185,18 +183,18 @@ class _CariKosState extends State<CariKos> {
   }
 
 // untuk menarik gambar dari firebase
-  Future<void> uploadImageAndSaveUrl(
-      String imagePath, String imageName, String documentId) async {
-    String downloadURL = await uploadImageToFirebase(imagePath, imageName);
-    if (downloadURL.isNotEmpty) {
-      await FirebaseFirestore.instance
-          .collection('Kos')
-          .doc(documentId)
-          .update({
-        'ImageURL': downloadURL,
-      });
-    }
-  }
+  // Future<void> uploadImageAndSaveUrl(
+  //     String imagePath, String imageName, String documentId) async {
+  //   String downloadURL = await uploadImageToFirebase(imagePath, imageName);
+  //   if (downloadURL.isNotEmpty) {
+  //     await FirebaseFirestore.instance
+  //         .collection('Kos')
+  //         .doc(documentId)
+  //         .update({
+  //       'ImageURL': downloadURL,
+  //     });
+  //   }
+  // }
 
 
   
@@ -214,43 +212,64 @@ class _CariKosState extends State<CariKos> {
           padding: const EdgeInsets.only(left: 15),
           child: Row(
             children: [
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: const Color.fromRGBO(254, 251, 246, 1),
-                  borderRadius: BorderRadius.circular(18),
-                  boxShadow: [
-                    BoxShadow(
-                      color:
-                          const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
-                      spreadRadius: 0,
-                      blurRadius: 4,
-                      offset: const Offset(0, 1), // Atur posisi shadow
-                    ),
-                  ],
-                ),
-                padding: const EdgeInsets.all(11),
-                child: GestureDetector(
-                  onTap: () {
-                    // Tambahkan kode navigasi ke halaman profil di sini
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Profile()),
-                    );
+              FutureBuilder<UserProfile?>(
+                  future: getUserProfile(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(254, 251, 246, 1),
+                          borderRadius: BorderRadius.circular(18),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+                              spreadRadius: 0,
+                              blurRadius: 4,
+                              offset: const Offset(0, 1),
+                            ),
+                          ],
+                          image: DecorationImage(
+                            image: NetworkImage(snapshot.data!.photoURL),
+                            fit: BoxFit.cover,
+                            colorFilter: null, // Atur nilai ColorFilter menjadi null
+                          ),
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            // Tambahkan kode navigasi ke halaman profil di sini
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const Profile()),
+                            );
+                          },
+                        ),
+                      );
+                    } else {
+                      return Container(); // Return empty container if data is not available yet
+                    }
                   },
-                  child: Image.asset(
-                    'lib/icons/orang.png',
-                    color: const Color.fromRGBO(100, 204, 197, 1),
-                  ),
                 ),
-              ),
               Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Text('Hai, Supri Basuki',
-                    style: GoogleFonts.getFont('Poppins',
-                        fontSize: 18, fontWeight: FontWeight.bold)),
-              ),
+                  padding: const EdgeInsets.only(left: 20),
+                  child: FutureBuilder<UserProfile?>(
+                    future: getUserProfile(), // Panggil metode getUserProfile()
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Text(
+                          'Hai, ${snapshot.data!.nama}',
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        );
+                      } else {
+                        return Text(
+                          'Hai, User',
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        );
+                      }
+                    },
+                  ),
+                )
             ],
           ),
         ),
