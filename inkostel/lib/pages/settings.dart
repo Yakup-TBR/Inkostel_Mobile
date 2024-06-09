@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,6 +8,8 @@ import 'package:inkostel/pages/signin.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:flutter/services.dart';
+import 'package:inkostel/pages/splash.dart';
+import 'package:inkostel/service/user_model.dart';
 
 class Pengaturan extends StatefulWidget {
   const Pengaturan({super.key});
@@ -17,6 +20,26 @@ class Pengaturan extends StatefulWidget {
 
 class _PengaturanState extends State<Pengaturan> {
   bool isDarkMode = false;
+  UserProfile? userProfile;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserProfile();
+  }
+
+  Future<void> _fetchUserProfile() async {
+    try {
+      UserProfile? profile = await getUserProfile();
+      if (profile != null) {
+        setState(() {
+          userProfile = profile;
+        });
+      }
+    } catch (e) {
+      print("Error fetching user profile: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +53,8 @@ class _PengaturanState extends State<Pengaturan> {
       theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
       home: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: isDarkMode ? Colors.black : const Color.fromRGBO(253, 252, 248, 1),
+        backgroundColor:
+            isDarkMode ? Colors.black : const Color.fromRGBO(253, 252, 248, 1),
         body: Stack(
           children: [
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -68,7 +92,8 @@ class _PengaturanState extends State<Pengaturan> {
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+                        color:
+                            const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
                         spreadRadius: 0,
                         blurRadius: 4,
                         offset: const Offset(0, 1), // Atur posisi shadow
@@ -95,34 +120,57 @@ class _PengaturanState extends State<Pengaturan> {
                                       .withOpacity(0.5),
                                   spreadRadius: 0,
                                   blurRadius: 4,
-                                  offset: const Offset(0, 1), // Atur posisi shadow
+                                  offset:
+                                      const Offset(0, 1), // Atur posisi shadow
                                 ),
                               ],
-                            ),
-                            padding: const EdgeInsets.all(10),
-                            child: GestureDetector(
-                              onTap: () {
-                                // Tambahkan kode navigasi ke halaman profil di sini
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Profile()),
-                                );
-                              },
-                              child: Image.asset(
-                                'lib/icons/orang.png',
-                                color: const Color.fromRGBO(100, 204, 197, 1),
-                              ),
+                              image: userProfile != null &&
+                                      userProfile!.photoURL.isNotEmpty
+                                  ? DecorationImage(
+                                      image:
+                                          NetworkImage(userProfile!.photoURL),
+                                      fit: BoxFit.cover,
+                                      onError: (exception, stackTrace) {
+                                        // Handle the error, for example by showing a default image
+                                        const DecorationImage(
+                                          image:
+                                              AssetImage('lib/icons/orang.png'),
+                                          fit: BoxFit.cover,
+                                          colorFilter: ColorFilter.mode(
+                                              Color.fromRGBO(100, 204, 197, 1),
+                                              BlendMode.srcATop),
+                                        );
+                                      },
+                                    )
+                                  : const DecorationImage(
+                                      image: AssetImage('lib/icons/orang.png'),
+                                      fit: BoxFit.cover,
+                                      colorFilter: ColorFilter.mode(
+                                          Color.fromRGBO(100, 204, 197, 1),
+                                          BlendMode.srcATop),
+                                    ),
                             ),
                           ),
                         ),
-                        Text(
-                          'Supri Basuki',
-                          style: GoogleFonts.getFont('Poppins',
-                              fontSize: 23,
-                              fontWeight: FontWeight.w600,
-                              color: isDarkMode ? Colors.white : Colors.black),
-                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: FutureBuilder<UserProfile?>(
+                            future: getUserProfile(), // Panggil metode getUserProfile()
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Text(
+                                  'Hai, ${snapshot.data!.username}',
+                                  style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                                );
+                              } else {
+                                return const Text(
+                                  '',
+                                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                                );
+                              }
+                            },
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -148,72 +196,10 @@ class _PengaturanState extends State<Pengaturan> {
                                 Shadow(
                                   color: isDarkMode
                                       ? Colors.black.withOpacity(0.3)
-                                      : const Color.fromARGB(0, 0, 0, 0).withOpacity(0.3),
+                                      : const Color.fromARGB(0, 0, 0, 0)
+                                          .withOpacity(0.3),
                                   blurRadius: 10,
                                   offset: const Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          // ---- Dark Mode
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: isDarkMode
-                                ? Colors.grey[800]
-                                : const Color.fromRGBO(235, 233, 233, 1),
-                            borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(15),
-                              topLeft: Radius.circular(15),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 10, left: 30, right: 24, bottom: 10),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 20),
-                                  child: Container(
-                                    width: 40,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      color: const Color.fromRGBO(
-                                          100, 204, 197, 1),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    padding: const EdgeInsets.all(3),
-                                    child: Image.asset(
-                                      'lib/icons/bulan.png',
-                                      color: isDarkMode
-                                          ? Colors.white
-                                          : const Color.fromRGBO(0, 0, 0, 1),
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  'Dark Mode',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'Poppins',
-                                    color: isDarkMode ? Colors.white : Colors.black,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Switch(
-                                      value: isDarkMode,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          isDarkMode = value;
-                                        });
-                                      },
-                                    ),
-                                  ),
                                 ),
                               ],
                             ),
@@ -230,11 +216,9 @@ class _PengaturanState extends State<Pengaturan> {
                               color: isDarkMode
                                   ? Colors.grey[800]
                                   : const Color.fromRGBO(235, 233, 233, 1),
-                              border: const Border.symmetric(
-                                horizontal: BorderSide(
-                                  color: Colors.grey,
-                                  width: 1,
-                                ),
+                              borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(15),
+                                topLeft: Radius.circular(15),
                               ),
                             ),
                             child: Padding(
@@ -257,8 +241,8 @@ class _PengaturanState extends State<Pengaturan> {
                                       child: Image.asset(
                                         'lib/icons/about.png',
                                         color: isDarkMode
-                                          ? Colors.white
-                                          : const Color.fromRGBO(0, 0, 0, 1),
+                                            ? Colors.white
+                                            : const Color.fromRGBO(0, 0, 0, 1),
                                       ),
                                     ),
                                   ),
@@ -268,7 +252,9 @@ class _PengaturanState extends State<Pengaturan> {
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
                                       fontFamily: 'Poppins',
-                                      color: isDarkMode ? Colors.white : Colors.black,
+                                      color: isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
                                     ),
                                   ),
                                 ],
@@ -312,8 +298,8 @@ class _PengaturanState extends State<Pengaturan> {
                                       child: Image.asset(
                                         'lib/icons/tanggapan.png',
                                         color: isDarkMode
-                                          ? Colors.white
-                                          : const Color.fromRGBO(0, 0, 0, 1),
+                                            ? Colors.white
+                                            : const Color.fromRGBO(0, 0, 0, 1),
                                       ),
                                     ),
                                   ),
@@ -323,7 +309,9 @@ class _PengaturanState extends State<Pengaturan> {
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
                                       fontFamily: 'Poppins',
-                                      color: isDarkMode ? Colors.white : Colors.black,
+                                      color: isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
                                     ),
                                   ),
                                 ],
@@ -343,7 +331,8 @@ class _PengaturanState extends State<Pengaturan> {
                                 Shadow(
                                   color: isDarkMode
                                       ? Colors.black.withOpacity(0.3)
-                                      : const Color.fromARGB(0, 0, 0, 0).withOpacity(0.3),
+                                      : const Color.fromARGB(0, 0, 0, 0)
+                                          .withOpacity(0.3),
                                   blurRadius: 10,
                                   offset: const Offset(0, 3),
                                 ),
@@ -359,11 +348,13 @@ class _PengaturanState extends State<Pengaturan> {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: const Text('Konfirmasi Sign Out'),
-                                  content: const Text('Apakah Anda yakin ingin keluar?'),
+                                  content: const Text(
+                                      'Apakah Anda yakin ingin keluar?'),
                                   actions: [
                                     TextButton(
                                       onPressed: () {
-                                        Navigator.of(context).pop(); // Tutup dialog
+                                        Navigator.of(context)
+                                            .pop(); // Tutup dialog
                                       },
                                       child: const Text(
                                         'Tidak',
@@ -371,11 +362,12 @@ class _PengaturanState extends State<Pengaturan> {
                                       ),
                                     ),
                                     TextButton(
-                                      onPressed: () {
-                                        Navigator.push(
+                                      onPressed: () async {
+                                        await FirebaseAuth.instance.signOut();
+                                        Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => SignInScreen()),
+                                              builder: (context) => SplashScreen()),
                                         );
                                       },
                                       child: const Text(
@@ -398,6 +390,8 @@ class _PengaturanState extends State<Pengaturan> {
                               borderRadius: const BorderRadius.only(
                                 topRight: Radius.circular(15),
                                 topLeft: Radius.circular(15),
+                                bottomLeft: Radius.circular(15),
+                                bottomRight: Radius.circular(15),
                               ),
                             ),
                             child: Padding(
@@ -420,8 +414,8 @@ class _PengaturanState extends State<Pengaturan> {
                                       child: Image.asset(
                                         'lib/icons/signout.png',
                                         color: isDarkMode
-                                          ? Colors.white
-                                          : const Color.fromRGBO(0, 0, 0, 1),
+                                            ? Colors.white
+                                            : const Color.fromRGBO(0, 0, 0, 1),
                                       ),
                                     ),
                                   ),
@@ -431,62 +425,9 @@ class _PengaturanState extends State<Pengaturan> {
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
                                       fontFamily: 'Poppins',
-                                      color: isDarkMode ? Colors.white : Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            // Lakukan Ganti Email
-                          },
-                          child: Container(
-                            // ---- Ganti Email
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: isDarkMode
-                                  ? Colors.grey[800]
-                                  : const Color.fromRGBO(235, 233, 233, 1),
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 10, left: 30, right: 24, bottom: 10),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 20),
-                                    child: Container(
-                                      width: 40,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        color: const Color.fromRGBO(
-                                            100, 204, 197, 1),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      padding: const EdgeInsets.all(4),
-                                      child: Image.asset(
-                                        'lib/icons/emailChange.png',
-                                        color: isDarkMode
+                                      color: isDarkMode
                                           ? Colors.white
-                                          : const Color.fromRGBO(0, 0, 0, 1),
-                                      ),
-                                    ),
-                                  ),
-                                  Text(
-                                    'Ganti Email',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: 'Poppins',
-                                      color: isDarkMode ? Colors.white : Colors.black,
+                                          : Colors.black,
                                     ),
                                   ),
                                 ],
