@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -346,8 +347,9 @@ class _PengaturanState extends State<Pengaturan> {
                                       ),
                                     ),
                                     TextButton(
-                                      onPressed: () {
-                                        Navigator.push(
+                                      onPressed: () async {
+                                        await FirebaseAuth.instance.signOut();
+                                        Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) => SignInScreen()),
