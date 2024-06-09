@@ -94,7 +94,8 @@ class _DetailState extends State<Detail> {
 
     Future<void> _launchUrl() async {
       if (_kos?.urlMap == null || _kos!.urlMap.isEmpty) {
-        throw Exception('Alamat Kos is empty or null');
+        // Menonaktifkan tombol jika URL kosong
+        return;
       }
 
       final Uri _url = Uri.parse(_kos!.urlMap);
@@ -337,64 +338,65 @@ class _DetailState extends State<Detail> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          SizedBox(
-                            child: Row(
-                              children: [
-                                Padding(
+                          Row(
+                            children: [
+                              Expanded(
+                                flex:
+                                    3, // Misalnya, memberikan lebih banyak fleksibilitas kepada Expanded ini
+                                child: Padding(
                                   padding:
                                       const EdgeInsets.only(top: 50, left: 20),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
+                                      // Menghapus Expanded di dalam Column karena tidak diperlukan
                                       Text(
                                         _kos!.namaKost,
                                         style: const TextStyle(
                                           fontFamily: 'Poppins',
-                                          fontSize: 20,
+                                          fontSize: 25,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.black,
+                                          color: Color.fromARGB(255, 0, 0, 0),
                                         ),
+                                        textAlign: TextAlign.left,
+                                        // Hapus atau set maxLines ke null untuk membiarkan teks meluas ke beberapa baris
+                                        maxLines: null,
+                                        overflow: TextOverflow
+                                            .visible, // Atur overflow menjadi visible
                                       ),
                                     ],
                                   ),
                                 ),
-                                const Spacer(),
-                                Padding(
-                                  padding:
-                                      EdgeInsets.only(top: 50, right: 15.0),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Align(
-                                        alignment: Alignment.topCenter,
-                                        child: Text(
-                                          'Jarak :',
-                                          style: TextStyle(
-                                            fontFamily: 'Poppins',
-                                            fontSize: 17,
-                                            color: Color.fromARGB(255, 7, 4, 4),
-                                          ),
-                                        ),
+                              ),
+                              const Spacer(),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 50, right: 15.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Jarak :',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 25,
+                                        color: Color.fromARGB(255, 7, 4, 4),
                                       ),
-                                      SizedBox(width: 5),
-                                      Align(
-                                        alignment: Alignment.topCenter,
-                                        child: Text(
-                                          formatJarak(_kos!.jarakKost),
-                                          style: const TextStyle(
-                                            fontFamily: 'Poppins',
-                                            fontSize: 17,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      formatJarak(_kos!.jarakKost),
+                                      style: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 25,
+                                        color: Colors.grey,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10, left: 19),
@@ -405,7 +407,7 @@ class _DetailState extends State<Detail> {
                                 children: [
                                   const Icon(
                                     Icons.location_on,
-                                    color: Color.fromRGBO(72, 255, 249, 1),
+                                    color: Color.fromRGBO(100, 204, 197, 1),
                                     size: 20,
                                   ),
                                   const SizedBox(width: 5),
@@ -415,7 +417,7 @@ class _DetailState extends State<Detail> {
                                       _kos!.alamatKos,
                                       style: const TextStyle(
                                         fontFamily: 'Poppins',
-                                        fontSize: 15,
+                                        fontSize: 20,
                                         fontWeight: FontWeight.normal,
                                         color: Colors.grey,
                                       ),
@@ -439,7 +441,7 @@ class _DetailState extends State<Detail> {
                                     children: [
                                       Icon(
                                         MdiIcons.airConditioner,
-                                        color: Color.fromRGBO(72, 255, 249, 1),
+                                        color: Color.fromRGBO(100, 204, 197, 1),
                                         size: 20,
                                       ),
                                       const SizedBox(width: 1),
@@ -450,7 +452,7 @@ class _DetailState extends State<Detail> {
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                           color:
-                                              Color.fromRGBO(72, 255, 249, 1),
+                                              Color.fromRGBO(100, 204, 197, 1),
                                         ),
                                       ),
                                     ],
@@ -461,7 +463,7 @@ class _DetailState extends State<Detail> {
                                     children: [
                                       Icon(
                                         MdiIcons.wifi,
-                                        color: Color.fromRGBO(72, 255, 249, 1),
+                                        color: Color.fromRGBO(100, 204, 197, 1),
                                         size: 20,
                                       ),
                                       SizedBox(width: 1),
@@ -472,7 +474,7 @@ class _DetailState extends State<Detail> {
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                           color:
-                                              Color.fromRGBO(72, 255, 249, 1),
+                                              Color.fromRGBO(100, 204, 197, 1),
                                         ),
                                       ),
                                     ],
@@ -483,7 +485,7 @@ class _DetailState extends State<Detail> {
                                     children: [
                                       Icon(
                                         MdiIcons.fridgeOutline,
-                                        color: Color.fromRGBO(72, 255, 249, 1),
+                                        color: Color.fromRGBO(100, 204, 197, 1),
                                         size: 20,
                                       ),
                                       const SizedBox(width: 1),
@@ -494,7 +496,7 @@ class _DetailState extends State<Detail> {
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                           color:
-                                              Color.fromRGBO(72, 255, 249, 1),
+                                              Color.fromRGBO(100, 204, 197, 1),
                                         ),
                                       ),
                                     ],
@@ -505,7 +507,8 @@ class _DetailState extends State<Detail> {
                                     children: [
                                       Icon(
                                         MdiIcons.parking,
-                                        color: Color.fromRGBO(72, 255, 249, 1),
+                                        color: const Color.fromRGBO(
+                                            100, 204, 197, 1),
                                         size: 20,
                                       ),
                                       const SizedBox(width: 1),
@@ -516,7 +519,7 @@ class _DetailState extends State<Detail> {
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                           color:
-                                              Color.fromRGBO(72, 255, 249, 1),
+                                              Color.fromRGBO(100, 204, 197, 1),
                                         ),
                                       ),
                                     ],
@@ -528,7 +531,7 @@ class _DetailState extends State<Detail> {
                                     children: [
                                       Icon(
                                         MdiIcons.toilet,
-                                        color: Color.fromRGBO(72, 255, 249, 1),
+                                        color: Color.fromRGBO(100, 204, 197, 1),
                                         size: 20,
                                       ),
                                       const SizedBox(width: 1),
@@ -539,7 +542,7 @@ class _DetailState extends State<Detail> {
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                           color:
-                                              Color.fromRGBO(72, 255, 249, 1),
+                                              Color.fromRGBO(100, 204, 197, 1),
                                         ),
                                       ),
                                     ],
@@ -556,9 +559,9 @@ class _DetailState extends State<Detail> {
                                   'Deskripsi',
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
-                                    fontSize: 25,
+                                    fontSize: 30,
                                     fontWeight: FontWeight.normal,
-                                    color: Color.fromRGBO(67, 104, 80, 1),
+                                    color: Color.fromRGBO(0, 0, 0, 1),
                                   ),
                                 ),
                                 SizedBox(height: 10),
@@ -568,7 +571,7 @@ class _DetailState extends State<Detail> {
                                     _kos?.deskripsi ?? '',
                                     style: const TextStyle(
                                       fontFamily: 'Poppins',
-                                      fontSize: 12,
+                                      fontSize: 15,
                                       fontWeight: FontWeight.normal,
                                       color: Colors.grey,
                                     ),
@@ -607,7 +610,7 @@ class _DetailState extends State<Detail> {
                                   'Harga Sewa:',
                                   style: TextStyle(
                                     color: Colors.grey,
-                                    fontSize: 20,
+                                    fontSize: 25,
                                     fontFamily: 'Poppins',
                                   ),
                                 ),
@@ -620,7 +623,7 @@ class _DetailState extends State<Detail> {
                                         : hargaPerbulan(_kos!.hargaPerbulan),
                                     style: const TextStyle(
                                       color: Colors.black,
-                                      fontSize: 14,
+                                      fontSize: 20,
                                       fontFamily: 'Poppins',
                                     ),
                                   ),
@@ -637,7 +640,7 @@ class _DetailState extends State<Detail> {
                               style: ElevatedButton.styleFrom(
                                 minimumSize: const Size(30, 50),
                                 backgroundColor:
-                                    const Color.fromARGB(255, 71, 228, 243),
+                                    const Color.fromRGBO(100, 204, 197, 1),
                               ),
                               onPressed: _launchwa,
                               child: const Row(
@@ -646,14 +649,14 @@ class _DetailState extends State<Detail> {
                                   Icon(
                                     Icons.phone,
                                     color: Colors.white,
-                                    size: 18,
+                                    size: 20,
                                   ),
                                   SizedBox(width: 10),
                                   Text(
                                     'whatsapp',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 14,
+                                      fontSize: 20,
                                       fontFamily: 'Poppins',
                                     ),
                                   ),
