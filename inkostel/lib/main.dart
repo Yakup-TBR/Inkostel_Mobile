@@ -74,7 +74,7 @@ class AuthChecker extends StatelessWidget {
         } else if (snapshot.hasData) {
           return const Home();
         } else {
-          return const SignInScreen();
+          return const SplashScreen();
         }
       },
     );
