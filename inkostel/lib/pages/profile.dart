@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -490,24 +489,21 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  Future<void> _uploadImageToStorage(BuildContext parentContext, File imageFile) async {
-  User? user = FirebaseAuth.instance.currentUser;
-  if (user == null) {
-    return;
+  Future<String> uploadImageToFirebase(String imagePath, String imageName) async {
+    try {
+      File imageFile = File(imagePath);
+      Reference storageRef = FirebaseStorage.instance.ref().child('images/$imageName');
+      UploadTask uploadTask = storageRef.putFile(imageFile);
+      TaskSnapshot taskSnapshot = await uploadTask;
+      String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      print(e);
+      throw e;
+    }
   }
 
-  String filePath = 'profile/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.png';
-  Reference storageRef = FirebaseStorage.instance.ref().child(filePath);
-  UploadTask uploadTask = storageRef.putFile(imageFile);
-
-  TaskSnapshot snapshot = await uploadTask;
-  String downloadURL = await snapshot.ref.getDownloadURL();
-
-  await updateProfileImageURL(downloadURL);
-}
-
-void _showAlertDialog(BuildContext context, String title, String message) {
-  WidgetsBinding.instance.addPostFrameCallback((_) {
+  void _showAlertDialog(BuildContext context, String title, String message) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -525,37 +521,53 @@ void _showAlertDialog(BuildContext context, String title, String message) {
         );
       },
     );
-  });
-}
-
-void _handleImageUpload(BuildContext parentContext, File imageFile) async {
-  try {
-    await _uploadImageToStorage(parentContext, imageFile);
-    _showAlertDialog(parentContext, 'Success', 'Profile picture updated successfully.');
-  } catch (e) {
-    _showAlertDialog(parentContext, 'Error', 'Failed to upload profile picture.');
   }
 
+  Future<void> _uploadImageToStorage(BuildContext parentContext, File imageFile) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      return;
+    }
 
-}
-
-void _getImageFromGallery(BuildContext parentContext) async {
-  final picker = ImagePicker();
-  final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-  if (pickedImage != null) {
-    File imageFile = File(pickedImage.path);
-    _handleImageUpload(parentContext, imageFile);
+    String filePath = 'profile/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.png';
+    String downloadURL = await uploadImageToFirebase(imageFile.path, filePath);
+    await updateProfileImageURL(downloadURL);
   }
-}
 
-void _getImageFromCamera(BuildContext parentContext) async {
-  final picker = ImagePicker();
-  final pickedImage = await picker.pickImage(source: ImageSource.camera);
-  if (pickedImage != null) {
-    File imageFile = File(pickedImage.path);
-    _handleImageUpload(parentContext, imageFile);
+  void _handleImageUpload(BuildContext parentContext, File imageFile) async {
+    try {
+      await _uploadImageToStorage(parentContext, imageFile);
+      if (parentContext.mounted) {
+        // Handle success feedback here (e.g., show a SnackBar or other UI element)
+        ScaffoldMessenger.of(parentContext).showSnackBar(
+          SnackBar(content: Text('Profile picture updated successfully.'))
+        );
+      }
+    } catch (e) {
+      if (parentContext.mounted) {
+        // Handle error feedback here (e.g., show a SnackBar or other UI element)
+        ScaffoldMessenger.of(parentContext).showSnackBar(
+          SnackBar(content: Text('Failed to upload profile picture.'))
+        );
+      }
+    }
   }
-}
 
+  void _getImageFromGallery(BuildContext parentContext) async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      File imageFile = File(pickedImage.path);
+      _handleImageUpload(parentContext, imageFile);
+    }
+  }
 
+  void _getImageFromCamera(BuildContext parentContext) async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.camera);
+    if (pickedImage != null) {
+      File imageFile = File(pickedImage.path);
+      _handleImageUpload(parentContext, imageFile);
+    }
+  }
 }
