@@ -159,7 +159,7 @@ class _SimpanState extends State<Simpan> {
                       final List<String> imageUrls = List<String>.from(kostData['ImageURLs'] ?? []);
                       final int price = int.tryParse(kostData['Harga Pertahun'].toString()) ?? 0;
                       final String name = kostData['Nama Kos'] ?? '';
-                      final String distance = kostData['Jarak'].toString();
+                      final int distance = int.tryParse(kostData['Jarak'].toString()) ?? 0;
                       final bool isFavorite = kostData['isFavorite'] ?? false;
                       final String kosId = kostData['Kos ID'] ?? '';
 
@@ -167,7 +167,7 @@ class _SimpanState extends State<Simpan> {
                         imagePath: imageUrls.isNotEmpty ? imageUrls[0] : '',
                         price: price,
                         name: name,
-                        distance: distance,
+                        distance: formatJarak(distance),
                         isFavorite: isFavorite,
                         documentId: kostDoc.id,
                         kosId: kosId,
@@ -399,7 +399,7 @@ class _SimpanState extends State<Simpan> {
                     child: Row(
                       children: [
                         Text(
-                          '$distance km',
+                          distance,
                           style: const TextStyle(
                             color: Color.fromARGB(255, 254, 254, 254),
                             fontSize: 17,
@@ -448,6 +448,16 @@ class _SimpanState extends State<Simpan> {
       }
     } else {
       return 'Rp $amount';
+    }
+  }
+
+  // Fungsi untuk mengonversi jarak
+  String formatJarak(int jarak) {
+    if (jarak >= 1000) {
+      double km = jarak / 1000.0;
+      return '${km.toStringAsFixed(1)} km';
+    } else {
+      return '$jarak meter';
     }
   }
 }
