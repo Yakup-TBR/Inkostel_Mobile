@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:inkostel/pages/signin.dart';
 import 'package:inkostel/utils/reusable.dart';
 import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/utils/color.dart';
@@ -69,7 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const Home()));
+                            builder: (context) => const SignInScreen()));
                   }).onError((error, stackTrace) {
                     print("Error ${error.toString()}");
                   });
