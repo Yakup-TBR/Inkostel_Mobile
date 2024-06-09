@@ -491,28 +491,35 @@ class _JualKosState extends State<JualKos> {
             }
           },
           items: [
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'lib/icons/home.png',
-                height: 30,
-              ),
-              label: 'Home',
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'lib/icons/home.png',
+              height: 30,
             ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'lib/icons/simpan.png',
-                height: 30,
-              ),
-              label: 'Save',
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'lib/icons/simpan.png',
+              height: 30,
             ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'lib/icons/gear.png',
-                height: 30,
-              ),
-              label: 'Settings',
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'lib/icons/plus_active.png',
+              height: 30,
             ),
-          ],
+            label: 'Save',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'lib/icons/gear.png',
+              height: 30,
+            ),
+            label: 'Settings',
+          ),
+        ],
         ),
       ),
     );
