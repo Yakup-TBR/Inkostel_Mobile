@@ -58,14 +58,6 @@ class _CariKosState extends State<CariKos> {
     bool checkedLebih1KM,
     double sliderValue,
   ) {
-    print('Applying filters:');
-    print('checked100Meters: $checked100Meters');
-    print('checked200Meters: $checked200Meters');
-    print('checked500Meters: $checked500Meters');
-    print('checked1KM: $checked1KM');
-    print('checkedLebih1KM: $checkedLebih1KM');
-    print('sliderValue: $sliderValue');
-
     setState(() {
       isChecked100Meters = checked100Meters;
       isChecked200Meters = checked200Meters;
