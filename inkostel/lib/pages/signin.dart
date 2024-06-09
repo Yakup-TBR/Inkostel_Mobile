@@ -67,7 +67,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const Home(),
+                        builder: (context) =>  Home(),
                       ),
                     );
                   } on FirebaseAuthException catch (e) {

@@ -204,7 +204,7 @@ class _DetailState extends State<Detail> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const CariKos()),
+                                  builder: (context) =>  CariKos(searchText: '',)),
                             );
                           },
                           child: Container(
@@ -688,7 +688,7 @@ class _DetailState extends State<Detail> {
             case 0:
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Home()),
+                MaterialPageRoute(builder: (context) =>  Home()),
               );
               break;
             case 1:

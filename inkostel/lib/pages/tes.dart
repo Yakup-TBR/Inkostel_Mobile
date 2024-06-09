@@ -223,7 +223,7 @@ class _TesState extends State<Tes> {
               // Navigasi ke halaman Home
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Home()),
+                MaterialPageRoute(builder: (context) =>  Home()),
               );
               break;
             case 1:

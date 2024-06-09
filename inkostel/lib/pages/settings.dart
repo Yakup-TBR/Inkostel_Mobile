@@ -460,7 +460,7 @@ class _PengaturanState extends State<Pengaturan> {
                 // Navigasi ke halaman Home
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Home()),
+                  MaterialPageRoute(builder: (context) =>  Home()),
                 );
                 break;
               case 1:

@@ -224,7 +224,7 @@ class _SimpanState extends State<Simpan> {
             case 0:
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Home()),
+                MaterialPageRoute(builder: (context) =>  Home()),
               );
               break;
             case 1:
@@ -306,7 +306,7 @@ class _SimpanState extends State<Simpan> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const CariKos()),
+            MaterialPageRoute(builder: (context) => const CariKos(searchText: '',)),
           );
         },
       ),

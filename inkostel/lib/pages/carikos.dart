@@ -16,11 +16,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:inkostel/service/user_model.dart';
 
 void main() {
-  runApp(const CariKos());
+  runApp(MaterialApp(
+    home: Home(),
+  ));
 }
 
 class CariKos extends StatefulWidget {
-  const CariKos({super.key});
+  final String searchText;
+
+  const CariKos({Key? key, required this.searchText}) : super(key: key);
 
   static Future<List<Kost>> fetchData() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -34,6 +38,7 @@ class CariKos extends StatefulWidget {
 }
 
 class _CariKosState extends State<CariKos> {
+  final TextEditingController _searchController = TextEditingController();
   List<Kost> _allKosts = [];
   List<Kost> _displayedKosts = [];
   bool _isLoading = true;
@@ -41,6 +46,7 @@ class _CariKosState extends State<CariKos> {
   int _batchSize = 3;
   int _currentBatch = 0;
   ScrollController _scrollController = ScrollController();
+
   String _selectedCategory = '';
   bool isChecked100Meters = false;
   bool isChecked200Meters = false;
@@ -158,14 +164,14 @@ class _CariKosState extends State<CariKos> {
     );
   }
 
-  final TextEditingController _searchController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
+    _searchController.text = widget.searchText;
     _filteredKosts();
     _fetchInitialData();
     _fetchUserProfile();
+    _searchKostNames(); // Call the search function to filter the initial data
     AwesomeNotifications().setListeners(
         onActionReceivedMethod: NotificationController.onActionReceivedMethod,
         onNotificationCreatedMethod:
@@ -201,8 +207,7 @@ class _CariKosState extends State<CariKos> {
     List<Kost> fetchedKostList = await CariKos.fetchData();
     setState(() {
       _allKosts = fetchedKostList;
-      _currentBatch = 0;
-      _displayedKosts = _allKosts.take(_batchSize).toList();
+      _filterKosts(widget.searchText);
       _isLoading = false;
     });
   }
@@ -933,7 +938,7 @@ class _CariKosState extends State<CariKos> {
               // Navigasi ke halaman Home
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Home()),
+                MaterialPageRoute(builder: (context) =>  Home()),
               );
               break;
             case 1:

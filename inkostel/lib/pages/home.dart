@@ -14,11 +14,9 @@ import 'package:inkostel/service/home_service.dart';
 import 'package:inkostel/pages/carikos_terdekat.dart';
 import 'package:inkostel/pages/carikos_termurah.dart';
 
-
-
-
 class Home extends StatefulWidget {
-  const Home({super.key});
+ Home({super.key});
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   // ignore: library_private_types_in_public_api
@@ -37,10 +35,9 @@ String getLabel(double value) {
   }
 }
 
-
-
 class _HomeState extends State<Home> {
   double currentSliderValue = 0.0;
+  // ignore: unused_field
   late Future<List<Kost>> _kostsFuture;
   final TextEditingController _searchController = TextEditingController();
   UserProfile? userProfile;
@@ -61,6 +58,7 @@ class _HomeState extends State<Home> {
         });
       }
     } catch (e) {
+      // ignore: avoid_print
       print("Error fetching user profile: $e");
     }
   }
@@ -97,32 +95,34 @@ class _HomeState extends State<Home> {
                       borderRadius: BorderRadius.circular(18),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+                          color: const Color.fromARGB(255, 0, 0, 0)
+                              .withOpacity(0.5),
                           spreadRadius: 0,
                           blurRadius: 4,
                           offset: const Offset(0, 1), // Atur posisi shadow
                         ),
                       ],
-                      image: userProfile != null && userProfile!.photoURL.isNotEmpty
+                      image: userProfile != null &&
+                              userProfile!.photoURL.isNotEmpty
                           ? DecorationImage(
                               image: NetworkImage(userProfile!.photoURL),
                               fit: BoxFit.cover,
                               onError: (exception, stackTrace) {
                                 // Handle the error, for example by showing a default image
-                                DecorationImage(
+                                const DecorationImage(
                                   image: AssetImage('lib/icons/orang.png'),
                                   fit: BoxFit.cover,
                                   colorFilter: ColorFilter.mode(
-                                      const Color.fromRGBO(100, 204, 197, 1),
+                                      Color.fromRGBO(100, 204, 197, 1),
                                       BlendMode.srcATop),
                                 );
                               },
                             )
-                          : DecorationImage(
+                          : const DecorationImage(
                               image: AssetImage('lib/icons/orang.png'),
                               fit: BoxFit.cover,
                               colorFilter: ColorFilter.mode(
-                                  const Color.fromRGBO(100, 204, 197, 1),
+                                  Color.fromRGBO(100, 204, 197, 1),
                                   BlendMode.srcATop),
                             ),
                     ),
@@ -136,12 +136,14 @@ class _HomeState extends State<Home> {
                       if (snapshot.hasData) {
                         return Text(
                           'Hai, ${snapshot.data!.username}',
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
                         );
                       } else {
-                        return Text(
+                        return const Text(
                           '',
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
                         );
                       }
                     },
@@ -178,17 +180,14 @@ class _HomeState extends State<Home> {
                               padding: const EdgeInsets.all(10.0),
                               child: InkWell(
                                 onTap: () {
-                                  // Navigasikan ke halaman carikos dengan parameter pencarian
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => CariKos(
-                                          // initialSearchQuery:
-                                          //     _searchController.text,
-                                          ),
-                                    ),
-                                  );
-                                },
+                      String searchText = _searchController.text;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CariKos(searchText: searchText),
+                        ),
+                      );
+                    },
                                 child: Image.asset(
                                   'lib/icons/search.png',
                                   color: const Color.fromRGBO(100, 204, 197, 1),
@@ -233,123 +232,6 @@ class _HomeState extends State<Home> {
               ),
               // ---------- End SearchBar,
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      // Action when nearest button is pressed
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateColor.resolveWith((states) {
-                        if (states.contains(MaterialState.pressed)) {
-                          return const Color.fromRGBO(100, 204, 197,
-                              1); // Ubah warna latar belakang menjadi biru ketika ditekan
-                        }
-                        return Colors
-                            .white; // Kembali ke warna latar belakang putih saat tidak ditekan
-                      }),
-                      foregroundColor: MaterialStateColor.resolveWith((states) {
-                        if (states.contains(MaterialState.pressed)) {
-                          return Colors
-                              .white; // Ubah warna teks menjadi putih ketika ditekan
-                        }
-                        return const Color.fromRGBO(100, 204, 197,
-                            1); // Kembali ke warna teks aslinya saat tidak ditekan
-                      }),
-                      side: MaterialStateProperty.all(const BorderSide(
-                        color: Color.fromRGBO(100, 204, 197,
-                            1), // Ubah warna border sesuai keinginan Anda
-                        width: 1.0, // Atur lebar border
-                      )),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(3.0),
-                      child: Text(
-                        'Putra',
-                        style: TextStyle(
-                          fontSize: 20, // Sesuaikan ukuran font di sini
-                        ),
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Action when cheapest button is pressed
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateColor.resolveWith((states) {
-                        if (states.contains(MaterialState.pressed)) {
-                          return const Color.fromRGBO(100, 204, 197,
-                              1); // Ubah warna latar belakang menjadi biru ketika ditekan
-                        }
-                        return Colors
-                            .white; // Kembali ke warna latar belakang putih saat tidak ditekan
-                      }),
-                      foregroundColor: MaterialStateColor.resolveWith((states) {
-                        if (states.contains(MaterialState.pressed)) {
-                          return Colors
-                              .white; // Ubah warna teks menjadi putih ketika ditekan
-                        }
-                        return const Color.fromRGBO(100, 204, 197,
-                            1); // Kembali ke warna teks aslinya saat tidak ditekan
-                      }),
-                      side: MaterialStateProperty.all(const BorderSide(
-                        color: Color.fromRGBO(100, 204, 197,
-                            1), // Ubah warna border sesuai keinginan Anda
-                        width: 1.0, // Atur lebar border
-                      )),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(3.0),
-                      child: Text(
-                        'Putri',
-                        style: TextStyle(
-                          fontSize: 20, // Sesuaikan ukuran font di sini
-                        ),
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Action when recommended button is pressed
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateColor.resolveWith((states) {
-                        if (states.contains(MaterialState.pressed)) {
-                          return const Color.fromRGBO(100, 204, 197,
-                              1); // Ubah warna latar belakang menjadi biru ketika ditekan
-                        }
-                        return Colors
-                            .white; // Kembali ke warna latar belakang putih saat tidak ditekan
-                      }),
-                      foregroundColor: MaterialStateColor.resolveWith((states) {
-                        if (states.contains(MaterialState.pressed)) {
-                          return Colors
-                              .white; // Ubah warna teks menjadi putih ketika ditekan
-                        }
-                        return const Color.fromRGBO(100, 204, 197,
-                            1); // Kembali ke warna teks aslinya saat tidak ditekan
-                      }),
-                      side: MaterialStateProperty.all(const BorderSide(
-                        color: Color.fromRGBO(100, 204, 197,
-                            1), // Ubah warna border sesuai keinginan Anda
-                        width: 1.0, // Atur lebar border
-                      )),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(3.0),
-                      child: Text(
-                        'Campur',
-                        style: TextStyle(
-                          fontSize: 20, // Sesuaikan ukuran font di sini
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
               // ---------- End Filter, Start Isi
               Expanded(
                 child: SingleChildScrollView(
@@ -371,7 +253,7 @@ class _HomeState extends State<Home> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const CariKos()),
+                                      builder: (context) => const CariKos(searchText: '',)),
                                 );
                               },
                               child: Text(
@@ -437,7 +319,8 @@ class _HomeState extends State<Home> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const CariKosTerdekat()),
+                                      builder: (context) =>
+                                          const CariKosTerdekat()),
                                 );
                               },
                               child: Text(
@@ -502,7 +385,8 @@ class _HomeState extends State<Home> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const CariKosTermurah()),
+                                      builder: (context) =>
+                                          const CariKosTermurah()),
                                 );
                               },
                               child: Text(
