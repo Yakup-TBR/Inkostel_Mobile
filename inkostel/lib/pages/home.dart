@@ -9,6 +9,8 @@ import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/service/kost_model.dart';
 import 'package:inkostel/utils/format_currency.dart';
+import 'package:inkostel/service/home_service.dart';
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -30,20 +32,17 @@ String getLabel(double value) {
   }
 }
 
+
+
 class _HomeState extends State<Home> {
   double currentSliderValue = 0.0;
   late Future<List<Kost>> _kostsFuture;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _kostsFuture = fetchData();
-  }
-
-  Future<List<Kost>> fetchData() async {
-    QuerySnapshot querySnapshot =
-        await FirebaseFirestore.instance.collection("Kos").get();
-    return querySnapshot.docs.map((doc) => Kost.fromFirestore(doc)).toList();
   }
 
   @override
@@ -105,7 +104,7 @@ class _HomeState extends State<Home> {
         body: Stack(
           children: [
             Column(children: [
-              // ----------SearchBar dan Tombol
+              // ----------SearchBar
               Row(
                 children: [
                   Expanded(
@@ -118,6 +117,7 @@ class _HomeState extends State<Home> {
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: TextField(
+                          controller: _searchController,
                           decoration: InputDecoration(
                             hintStyle: GoogleFonts.getFont(
                               'Poppins',
@@ -126,12 +126,26 @@ class _HomeState extends State<Home> {
                             hintText: 'Cari Kos Disini..',
                             suffixIcon: Padding(
                               padding: const EdgeInsets.all(10.0),
-                              child: Image.asset(
-                                'lib/icons/search.png',
-                                color: const Color.fromRGBO(100, 204, 197, 1),
-                                width: 20,
-                                height: 20,
-                                fit: BoxFit.fill,
+                              child: InkWell(
+                                onTap: () {
+                                  // Navigasikan ke halaman carikos dengan parameter pencarian
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CariKos(
+                                          // initialSearchQuery:
+                                          //     _searchController.text,
+                                          ),
+                                    ),
+                                  );
+                                },
+                                child: Image.asset(
+                                  'lib/icons/search.png',
+                                  color: const Color.fromRGBO(100, 204, 197, 1),
+                                  width: 20,
+                                  height: 20,
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                             ),
                             focusedBorder: const OutlineInputBorder(
@@ -149,7 +163,7 @@ class _HomeState extends State<Home> {
                                 width: 0.5,
                                 color: Color.fromRGBO(100, 204, 197, 1),
                               ),
-                            ), // Tidak ada perubahan ? Opsional dihapus nanti
+                            ),
                             enabledBorder: const OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(30)),
@@ -167,7 +181,7 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
-              // ---------- End SearchBar dan Tombol,
+              // ---------- End SearchBar,
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -395,7 +409,7 @@ class _HomeState extends State<Home> {
                             height: 260,
                             color: const Color.fromRGBO(254, 251, 246, 1),
                             child: FutureBuilder<List<Kost>>(
-                                future: fetchData(),
+                                future: fetchDataTerdekat(),
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
@@ -414,7 +428,7 @@ class _HomeState extends State<Home> {
                                       scrollDirection: Axis.horizontal,
                                       itemCount: snapshot.data!.length,
                                       itemBuilder: (context, index) {
-                                        return CardRekomendasi(
+                                        return CardTerdekat(
                                             kost: snapshot.data![index]);
                                       },
                                     );
@@ -460,7 +474,7 @@ class _HomeState extends State<Home> {
                             height: 260,
                             color: const Color.fromRGBO(254, 251, 246, 1),
                             child: FutureBuilder<List<Kost>>(
-                                future: fetchData(),
+                                future: fetchDataTermurah(),
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
@@ -606,9 +620,7 @@ class _CardRekomendasiState extends State<CardRekomendasi> {
             ),
             borderRadius: BorderRadius.circular(20.0),
             image: DecorationImage(
-              image:
-                  // Ubah Menjadi gambar data di database
-                  const AssetImage('images/kamar.png'),
+              image: NetworkImage(widget.kost.imageUrl[0]),
               colorFilter: ColorFilter.mode(
                   Colors.black.withOpacity(0.2), BlendMode.darken),
               fit: BoxFit.cover,
@@ -716,9 +728,7 @@ class _CardTerdekatState extends State<CardTerdekat> {
             ),
             borderRadius: BorderRadius.circular(20.0),
             image: DecorationImage(
-              image:
-                  // Ubah Menjadi gambar data di database
-                  const AssetImage('images/kamar.png'),
+              image: NetworkImage(widget.kost.imageUrl[0]),
               colorFilter: ColorFilter.mode(
                   Colors.black.withOpacity(0.2), BlendMode.darken),
               fit: BoxFit.cover,
@@ -826,9 +836,7 @@ class _CardTermurahState extends State<CardTermurah> {
             ),
             borderRadius: BorderRadius.circular(20.0),
             image: DecorationImage(
-              image:
-                  // Ubah Menjadi gambar data di database
-                  const AssetImage('images/kamar.png'),
+              image: NetworkImage(widget.kost.imageUrl[0]),
               colorFilter: ColorFilter.mode(
                   Colors.black.withOpacity(0.2), BlendMode.darken),
               fit: BoxFit.cover,
