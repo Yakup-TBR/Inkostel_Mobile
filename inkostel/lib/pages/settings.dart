@@ -51,7 +51,8 @@ class _PengaturanState extends State<Pengaturan> {
       theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
       home: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: isDarkMode ? Colors.black : const Color.fromRGBO(253, 252, 248, 1),
+        backgroundColor:
+            isDarkMode ? Colors.black : const Color.fromRGBO(253, 252, 248, 1),
         body: Stack(
           children: [
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -89,7 +90,8 @@ class _PengaturanState extends State<Pengaturan> {
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+                        color:
+                            const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
                         spreadRadius: 0,
                         blurRadius: 4,
                         offset: const Offset(0, 1), // Atur posisi shadow
@@ -116,17 +118,21 @@ class _PengaturanState extends State<Pengaturan> {
                                       .withOpacity(0.5),
                                   spreadRadius: 0,
                                   blurRadius: 4,
-                                  offset: const Offset(0, 1), // Atur posisi shadow
+                                  offset:
+                                      const Offset(0, 1), // Atur posisi shadow
                                 ),
                               ],
-                              image: userProfile != null && userProfile!.photoURL.isNotEmpty
+                              image: userProfile != null &&
+                                      userProfile!.photoURL.isNotEmpty
                                   ? DecorationImage(
-                                      image: NetworkImage(userProfile!.photoURL),
+                                      image:
+                                          NetworkImage(userProfile!.photoURL),
                                       fit: BoxFit.cover,
                                       onError: (exception, stackTrace) {
                                         // Handle the error, for example by showing a default image
                                         const DecorationImage(
-                                          image: AssetImage('lib/icons/orang.png'),
+                                          image:
+                                              AssetImage('lib/icons/orang.png'),
                                           fit: BoxFit.cover,
                                           colorFilter: ColorFilter.mode(
                                               Color.fromRGBO(100, 204, 197, 1),
@@ -155,9 +161,9 @@ class _PengaturanState extends State<Pengaturan> {
                                   style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                                 );
                               } else {
-                                return Text(
+                                return const Text(
                                   '',
-                                  style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                                 );
                               }
                             },
@@ -188,7 +194,8 @@ class _PengaturanState extends State<Pengaturan> {
                                 Shadow(
                                   color: isDarkMode
                                       ? Colors.black.withOpacity(0.3)
-                                      : const Color.fromARGB(0, 0, 0, 0).withOpacity(0.3),
+                                      : const Color.fromARGB(0, 0, 0, 0)
+                                          .withOpacity(0.3),
                                   blurRadius: 10,
                                   offset: const Offset(0, 3),
                                 ),
@@ -232,8 +239,8 @@ class _PengaturanState extends State<Pengaturan> {
                                       child: Image.asset(
                                         'lib/icons/about.png',
                                         color: isDarkMode
-                                          ? Colors.white
-                                          : const Color.fromRGBO(0, 0, 0, 1),
+                                            ? Colors.white
+                                            : const Color.fromRGBO(0, 0, 0, 1),
                                       ),
                                     ),
                                   ),
@@ -243,7 +250,9 @@ class _PengaturanState extends State<Pengaturan> {
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
                                       fontFamily: 'Poppins',
-                                      color: isDarkMode ? Colors.white : Colors.black,
+                                      color: isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
                                     ),
                                   ),
                                 ],
@@ -287,8 +296,8 @@ class _PengaturanState extends State<Pengaturan> {
                                       child: Image.asset(
                                         'lib/icons/tanggapan.png',
                                         color: isDarkMode
-                                          ? Colors.white
-                                          : const Color.fromRGBO(0, 0, 0, 1),
+                                            ? Colors.white
+                                            : const Color.fromRGBO(0, 0, 0, 1),
                                       ),
                                     ),
                                   ),
@@ -298,7 +307,9 @@ class _PengaturanState extends State<Pengaturan> {
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
                                       fontFamily: 'Poppins',
-                                      color: isDarkMode ? Colors.white : Colors.black,
+                                      color: isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
                                     ),
                                   ),
                                 ],
@@ -318,7 +329,8 @@ class _PengaturanState extends State<Pengaturan> {
                                 Shadow(
                                   color: isDarkMode
                                       ? Colors.black.withOpacity(0.3)
-                                      : const Color.fromARGB(0, 0, 0, 0).withOpacity(0.3),
+                                      : const Color.fromARGB(0, 0, 0, 0)
+                                          .withOpacity(0.3),
                                   blurRadius: 10,
                                   offset: const Offset(0, 3),
                                 ),
@@ -334,11 +346,13 @@ class _PengaturanState extends State<Pengaturan> {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: const Text('Konfirmasi Sign Out'),
-                                  content: const Text('Apakah Anda yakin ingin keluar?'),
+                                  content: const Text(
+                                      'Apakah Anda yakin ingin keluar?'),
                                   actions: [
                                     TextButton(
                                       onPressed: () {
-                                        Navigator.of(context).pop(); // Tutup dialog
+                                        Navigator.of(context)
+                                            .pop(); // Tutup dialog
                                       },
                                       child: const Text(
                                         'Tidak',
@@ -350,7 +364,8 @@ class _PengaturanState extends State<Pengaturan> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => SignInScreen()),
+                                              builder: (context) =>
+                                                  SignInScreen()),
                                         );
                                       },
                                       child: const Text(
@@ -373,7 +388,7 @@ class _PengaturanState extends State<Pengaturan> {
                               borderRadius: const BorderRadius.only(
                                 topRight: Radius.circular(15),
                                 topLeft: Radius.circular(15),
-                                 bottomLeft: Radius.circular(15),
+                                bottomLeft: Radius.circular(15),
                                 bottomRight: Radius.circular(15),
                               ),
                             ),
@@ -397,8 +412,8 @@ class _PengaturanState extends State<Pengaturan> {
                                       child: Image.asset(
                                         'lib/icons/signout.png',
                                         color: isDarkMode
-                                          ? Colors.white
-                                          : const Color.fromRGBO(0, 0, 0, 1),
+                                            ? Colors.white
+                                            : const Color.fromRGBO(0, 0, 0, 1),
                                       ),
                                     ),
                                   ),
@@ -408,7 +423,9 @@ class _PengaturanState extends State<Pengaturan> {
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
                                       fontFamily: 'Poppins',
-                                      color: isDarkMode ? Colors.white : Colors.black,
+                                      color: isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
                                     ),
                                   ),
                                 ],

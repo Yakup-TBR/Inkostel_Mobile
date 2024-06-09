@@ -11,6 +11,10 @@ import 'package:inkostel/service/kost_model.dart';
 import 'package:inkostel/service/user_model.dart';
 import 'package:inkostel/utils/format_currency.dart';
 import 'package:inkostel/service/home_service.dart';
+import 'package:inkostel/pages/carikos_terdekat.dart';
+import 'package:inkostel/pages/carikos_termurah.dart';
+
+
 
 
 class Home extends StatefulWidget {
@@ -433,7 +437,7 @@ class _HomeState extends State<Home> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const CariKos()),
+                                      builder: (context) => const CariKosTerdekat()),
                                 );
                               },
                               child: Text(
@@ -498,7 +502,7 @@ class _HomeState extends State<Home> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const CariKos()),
+                                      builder: (context) => const CariKosTermurah()),
                                 );
                               },
                               child: Text(
