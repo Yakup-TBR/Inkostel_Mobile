@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:inkostel/pages/carikos.dart';
+import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
@@ -642,7 +643,7 @@ class _DetailState extends State<Detail> {
             case 0:
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const CariKos()),
+                MaterialPageRoute(builder: (context) => const Home()),
               );
               break;
             case 1:
