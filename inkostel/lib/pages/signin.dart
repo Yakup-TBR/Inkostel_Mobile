@@ -47,19 +47,42 @@ class _SignInScreenState extends State<SignInScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                signInSignUpButton(context, true, () {
-                  FirebaseAuth.instance
-                      .signInWithEmailAndPassword(
-                          email: _emailTextController.text,
-                          password: _passwordTextController.text)
-                      .then((value) {
+                signInSignUpButton(context, true, () async {
+                  try {
+                    await FirebaseAuth.instance.signInWithEmailAndPassword(
+                      email: _emailTextController.text,
+                      password: _passwordTextController.text,
+                    );
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const Home()));
-                  }).onError((error, stackTrace) {
-                    print("Error ${error.toString()}");
-                  });
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Home(),
+                      ),
+                    );
+                  } on FirebaseAuthException catch (e) {
+                    String errorMessage;
+                    if (e.code == 'user-not-found' ||
+                        e.code == 'wrong-password' ||
+                        e.code == 'invalid-email' ||
+                        e.code == 'user-disabled' ||
+                        e.code == 'too-many-requests' ||
+                        e.code == 'invalid-credential') {
+                      errorMessage = "Email atau password salah.";
+                    } else {
+                      errorMessage = "Terjadi kesalahan. Silakan coba lagi.";
+                    }
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(errorMessage),
+                      ),
+                    );
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Terjadi kesalahan. Silakan coba lagi."),
+                      ),
+                    );
+                  }
                 }),
                 signUpOption()
               ],
@@ -92,3 +115,4 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 }
+

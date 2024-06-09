@@ -55,6 +55,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     //Ganti GetMaterialApp buat Run Login soalnya pakai Get.to
     //Kalo mau balikin lagi tinggal ganti ke MaterialApp
-    return MaterialApp(home: JualKos());
+    return MaterialApp(home: SplashScreen());
   }
 }
