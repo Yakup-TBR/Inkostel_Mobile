@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/pages/home.dart';
+import 'package:inkostel/pages/profile.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:flutter/services.dart';
@@ -100,78 +101,89 @@ class _PengaturanState extends State<Pengaturan> {
                       )
                     ],
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 40, left: 40, right: 24, bottom: 40),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 20),
-                          child: Container(
-                            width: 70,
-                            height: 70,
-                            decoration: BoxDecoration(
-                              color: const Color.fromRGBO(254, 251, 246, 1),
-                              borderRadius: BorderRadius.circular(18),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: const Color.fromARGB(255, 0, 0, 0)
-                                      .withOpacity(0.5),
-                                  spreadRadius: 0,
-                                  blurRadius: 4,
-                                  offset:
-                                      const Offset(0, 1), // Atur posisi shadow
-                                ),
-                              ],
-                              image: userProfile != null &&
-                                      userProfile!.photoURL.isNotEmpty
-                                  ? DecorationImage(
-                                      image:
-                                          NetworkImage(userProfile!.photoURL),
-                                      fit: BoxFit.cover,
-                                      onError: (exception, stackTrace) {
-                                        // Handle the error, for example by showing a default image
-                                        const DecorationImage(
-                                          image:
-                                              AssetImage('lib/icons/orang.png'),
-                                          fit: BoxFit.cover,
-                                          colorFilter: ColorFilter.mode(
-                                              Color.fromRGBO(100, 204, 197, 1),
-                                              BlendMode.srcATop),
-                                        );
-                                      },
-                                    )
-                                  : const DecorationImage(
-                                      image: AssetImage('lib/icons/orang.png'),
-                                      fit: BoxFit.cover,
-                                      colorFilter: ColorFilter.mode(
-                                          Color.fromRGBO(100, 204, 197, 1),
-                                          BlendMode.srcATop),
-                                    ),
+                  child: GestureDetector(
+                     onTap: () {
+                    // Tambahkan kode navigasi ke halaman profil di sini
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Profile(),
+                      ),
+                    );
+                  },
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          top: 40, left: 40, right: 24, bottom: 40),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 20),
+                            child: Container(
+                              width: 70,
+                              height: 70,
+                              decoration: BoxDecoration(
+                                color: const Color.fromRGBO(254, 251, 246, 1),
+                                borderRadius: BorderRadius.circular(18),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color.fromARGB(255, 0, 0, 0)
+                                        .withOpacity(0.5),
+                                    spreadRadius: 0,
+                                    blurRadius: 4,
+                                    offset:
+                                        const Offset(0, 1), // Atur posisi shadow
+                                  ),
+                                ],
+                                image: userProfile != null &&
+                                        userProfile!.photoURL.isNotEmpty
+                                    ? DecorationImage(
+                                        image:
+                                            NetworkImage(userProfile!.photoURL),
+                                        fit: BoxFit.cover,
+                                        onError: (exception, stackTrace) {
+                                          // Handle the error, for example by showing a default image
+                                          const DecorationImage(
+                                            image:
+                                                AssetImage('lib/icons/orang.png'),
+                                            fit: BoxFit.cover,
+                                            colorFilter: ColorFilter.mode(
+                                                Color.fromRGBO(100, 204, 197, 1),
+                                                BlendMode.srcATop),
+                                          );
+                                        },
+                                      )
+                                    : const DecorationImage(
+                                        image: AssetImage('lib/icons/orang.png'),
+                                        fit: BoxFit.cover,
+                                        colorFilter: ColorFilter.mode(
+                                            Color.fromRGBO(100, 204, 197, 1),
+                                            BlendMode.srcATop),
+                                      ),
+                              ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: FutureBuilder<UserProfile?>(
-                            future: getUserProfile(), // Panggil metode getUserProfile()
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return Text(
-                                  'Hai, ${snapshot.data!.username}',
-                                  style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                                );
-                              } else {
-                                return const Text(
-                                  '',
-                                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                                );
-                              }
-                            },
-                          ),
-                        )
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20),
+                            child: FutureBuilder<UserProfile?>(
+                              future: getUserProfile(), // Panggil metode getUserProfile()
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Text(
+                                    'Hai, ${snapshot.data!.username}',
+                                    style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                                  );
+                                } else {
+                                  return const Text(
+                                    '',
+                                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                                  );
+                                }
+                              },
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
