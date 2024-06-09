@@ -276,7 +276,7 @@ class _JualKosState extends State<JualKos> {
                               child: TextFormField(
                                 controller: alamatlinkController,
                                 decoration: const InputDecoration(
-                                  labelText: 'Link Map',
+                                  labelText: 'Link Map (Optional)',
                                 ),
                               ),
                             ),
@@ -289,7 +289,7 @@ class _JualKosState extends State<JualKos> {
                           // inputFormatters: [priceFormatter], // Apply formatter
                           keyboardType: TextInputType.number, // Set keyboard type
                           decoration: const InputDecoration(
-                            labelText: 'Jarak dari Telkom University',
+                            labelText: 'Jarak dari Telkom University (Meter)',
                           ),
                         ),
                         const SizedBox(height: 10),
