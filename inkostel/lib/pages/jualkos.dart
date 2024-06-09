@@ -484,6 +484,13 @@ class _JualKosState extends State<JualKos> {
                 // Navigasi ke halaman Add
                 Navigator.push(
                   context,
+                  MaterialPageRoute(builder: (context) => const JualKos()),
+                );
+                break;
+                case 3:
+                // Navigasi ke halaman Add
+                Navigator.push(
+                  context,
                   MaterialPageRoute(builder: (context) => const Pengaturan()),
                 );
                 break;

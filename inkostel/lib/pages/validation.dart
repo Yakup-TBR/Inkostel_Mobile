@@ -4,6 +4,7 @@ void main() {
   runApp(Validation());
 }
 
+// ignore: must_be_immutable
 class Validation extends StatelessWidget {
   Validation({Key? key});
 
