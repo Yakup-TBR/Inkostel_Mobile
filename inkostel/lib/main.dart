@@ -57,7 +57,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     //Ganti GetMaterialApp buat Run Login soalnya pakai Get.to
     //Kalo mau balikin lagi tinggal ganti ke MaterialApp
-    return const MaterialApp(home: AuthChecker());
+    return const MaterialApp(
+        debugShowCheckedModeBanner: false, home: AuthChecker());
   }
 }
 
@@ -72,7 +73,7 @@ class AuthChecker extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasData) {
-          return  Home();
+          return Home();
         } else {
           return const SplashScreen();
         }

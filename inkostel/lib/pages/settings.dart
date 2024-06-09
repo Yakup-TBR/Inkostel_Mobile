@@ -1,15 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/pages/home.dart';
-import 'package:inkostel/pages/profile.dart';
-import 'package:inkostel/pages/signin.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:flutter/services.dart';
 import 'package:inkostel/pages/splash.dart';
 import 'package:inkostel/service/user_model.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 class Pengaturan extends StatefulWidget {
   const Pengaturan({super.key});
@@ -40,6 +39,7 @@ class _PengaturanState extends State<Pengaturan> {
       print("Error fetching user profile: $e");
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -207,7 +207,7 @@ class _PengaturanState extends State<Pengaturan> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Aksi yang akan dijalankan ketika widget ditekan
+                            _launchURLTentang();
                           },
                           child: Container(
                             // ---- Tentang Inkostel
@@ -264,7 +264,7 @@ class _PengaturanState extends State<Pengaturan> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Aksi yang akan dijalankan ketika widget ditekan
+                            _launchURLTanggapan();
                           },
                           child: Container(
                             // ---- Kirim Tanggapan
@@ -515,5 +515,23 @@ class _PengaturanState extends State<Pengaturan> {
         ),
       ),
     );
+  }
+}
+
+_launchURLTentang() async {
+  Uri _url = Uri.parse('https://github.com/Yakup-TBR/Inkostel_Mobile');
+  if (await launchUrl(_url)) {
+    await launchUrl(_url);
+  } else {
+    throw 'Could not launch $_url';
+  }
+}
+
+_launchURLTanggapan() async {
+  Uri _url = Uri.parse('https://forms.gle/JmAGcCzSao6oTAnE7');
+  if (await launchUrl(_url)) {
+    await launchUrl(_url);
+  } else {
+    throw 'Could not launch $_url';
   }
 }

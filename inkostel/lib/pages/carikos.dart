@@ -293,6 +293,7 @@ class _CariKosState extends State<CariKos> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
         home: Scaffold(
       backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
       appBar: AppBar(

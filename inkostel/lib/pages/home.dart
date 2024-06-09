@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/Detailk.dart';
 import 'package:inkostel/pages/profile.dart';
@@ -16,6 +15,7 @@ import 'package:inkostel/pages/carikos_termurah.dart';
 
 class Home extends StatefulWidget {
  Home({super.key});
+  // ignore: unused_field
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -66,6 +66,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
