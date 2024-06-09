@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:inkostel/pages/settings.dart';
 import 'package:random_string/random_string.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -53,10 +54,10 @@ class _ProfileState extends State<Profile> {
   Widget _buildProfileUI(UserProfile user) {
     String userName = user.nama.isNotEmpty ? user.nama : 'User';
     String userUsername = user.username.isNotEmpty ? user.username : 'username';
-    String userPhone = user.nomorTelepon.isNotEmpty ? user.nomorTelepon : '+62 123456789';
+    String userPhone = user.nomorTelepon.isNotEmpty ? user.nomorTelepon : '';
     String userEmail = user.email.isNotEmpty ? user.email : 'user@example.com';
-    String userDescription = user.deskripsi.isNotEmpty ? user.deskripsi : 'Deskripsi belum diisi';
-    String userPhotoURL = user.photoURL.isNotEmpty ? user.photoURL : 'images/profile.png';
+    String userDescription = user.deskripsi.isNotEmpty ? user.deskripsi : '';
+    String userPhotoURL = user.photoURL.isNotEmpty ? user.photoURL : 'lib/icons/orang.png';
 
     return Stack(
       children: [
@@ -74,50 +75,76 @@ class _ProfileState extends State<Profile> {
 
   Widget _buildBottomNavigationBar() {
     return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
-      selectedItemColor: const Color.fromARGB(255, 232, 255, 240),
-      unselectedItemColor: Colors.grey,
-      showSelectedLabels: false,
-      showUnselectedLabels: false,
-      selectedFontSize: 14,
-      unselectedFontSize: 14,
-      onTap: (int index) {
-        switch (index) {
-          case 0:
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const CariKos()));
-            break;
-          case 1:
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const Simpan()));
-            break;
-          case 2:
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const JualKos()));
-            break;
-          case 3:
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const Tes()));
-            break;
-          default:
-        }
-      },
-      items: [
-        BottomNavigationBarItem(
-          icon: Image.asset('lib/icons/home.png', height: 30),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Image.asset('lib/icons/simpan.png', height: 30),
-          label: 'Search',
-        ),
-        BottomNavigationBarItem(
-          icon: Image.asset('lib/icons/plus.png', height: 30),
-          label: 'Save',
-        ),
-        BottomNavigationBarItem(
-          icon: Image.asset('lib/icons/gear_active.png', height: 30),
-          label: 'Settings',
-        ),
-      ],
-    );
+          // Bottom NavBar
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
+          selectedItemColor: const Color.fromARGB(255, 232, 255, 240),
+          unselectedItemColor: Colors.grey,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          selectedFontSize: 14,
+          unselectedFontSize: 14,
+          onTap: (int index) {
+            // Handle bottom navigation bar item tap here
+            switch (index) {
+              case 0:
+                // Navigasi ke halaman Home
+                break;
+              case 1:
+                // Navigasi ke halaman Search
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Simpan()),
+                );
+                break;
+              case 2:
+                // Navigasi ke halaman Save
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const JualKos()),
+                );
+                break;
+              case 3:
+                // Navigasi ke halaman Add
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Pengaturan()),
+                );
+                break;
+              default:
+            }
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'lib/icons/home_active.png',
+                height: 30,
+              ),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'lib/icons/simpan.png',
+                height: 30,
+              ),
+              label: 'Search',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'lib/icons/plus.png',
+                height: 30,
+              ),
+              label: 'Save',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'lib/icons/gear.png',
+                height: 30,
+              ),
+              label: 'Settings',
+            ),
+          ],
+        );
   }
 
   Future<UserProfile?> _getUserData() async {
@@ -215,6 +242,7 @@ class _ProfileState extends State<Profile> {
           width: profileSize,
           height: profileSize,
           decoration: BoxDecoration(
+            color: Colors.white, // Set the background color to white
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
@@ -232,8 +260,7 @@ class _ProfileState extends State<Profile> {
               width: profileSize,
               height: profileSize,
               fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) =>
-                  Image.asset('images/profile.png'),
+              errorBuilder: (context, error, stackTrace) =>Image.asset('lib/icons/orang.png'),
             ),
           ),
         ),

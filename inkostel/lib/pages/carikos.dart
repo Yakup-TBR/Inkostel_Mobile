@@ -49,6 +49,7 @@ class _CariKosState extends State<CariKos> {
   bool isChecked1KM = false;
   bool isCheckedLebih1KM = false;
   double _currentSliderValue = 0.0;
+  UserProfile? userProfile;
 
   void applyFilters(
     bool checked100Meters,
@@ -90,6 +91,7 @@ class _CariKosState extends State<CariKos> {
     super.initState();
     _filteredKosts();
     _fetchInitialData();
+    _fetchUserProfile();
     AwesomeNotifications().setListeners(
         onActionReceivedMethod: NotificationController.onActionReceivedMethod,
         onNotificationCreatedMethod:
@@ -106,6 +108,18 @@ class _CariKosState extends State<CariKos> {
         _loadMoreData();
       }
     });
+  }
+  Future<void> _fetchUserProfile() async {
+    try {
+      UserProfile? profile = await getUserProfile();
+      if (profile != null) {
+        setState(() {
+          userProfile = profile;
+        });
+      }
+    } catch (e) {
+      print("Error fetching user profile: $e");
+    }
   }
 
   Future<void> _fetchInitialData() async {
@@ -189,7 +203,7 @@ class _CariKosState extends State<CariKos> {
   //   if (downloadURL.isNotEmpty) {
   //     await FirebaseFirestore.instance
   //         .collection('Kos')
-  //         .doc(documentId)
+  //         .doc(documentId)S
   //         .update({
   //       'ImageURL': downloadURL,
   //     });
@@ -212,64 +226,74 @@ class _CariKosState extends State<CariKos> {
           padding: const EdgeInsets.only(left: 15),
           child: Row(
             children: [
-              FutureBuilder<UserProfile?>(
-                  future: getUserProfile(),
+              GestureDetector(
+                  onTap: () {
+                    // Tambahkan kode navigasi ke halaman profil di sini
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Profile(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(254, 251, 246, 1),
+                      borderRadius: BorderRadius.circular(18),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+                          spreadRadius: 0,
+                          blurRadius: 4,
+                          offset: const Offset(0, 1), // Atur posisi shadow
+                        ),
+                      ],
+                      image: userProfile != null && userProfile!.photoURL.isNotEmpty
+                          ? DecorationImage(
+                              image: NetworkImage(userProfile!.photoURL),
+                              fit: BoxFit.cover,
+                              onError: (exception, stackTrace) {
+                                // Handle the error, for example by showing a default image
+                                DecorationImage(
+                                  image: AssetImage('lib/icons/orang.png'),
+                                  fit: BoxFit.cover,
+                                  colorFilter: ColorFilter.mode(
+                                      const Color.fromRGBO(100, 204, 197, 1),
+                                      BlendMode.srcATop),
+                                );
+                              },
+                            )
+                          : DecorationImage(
+                              image: AssetImage('lib/icons/orang.png'),
+                              fit: BoxFit.cover,
+                              colorFilter: ColorFilter.mode(
+                                  const Color.fromRGBO(100, 204, 197, 1),
+                                  BlendMode.srcATop),
+                            ),
+                    ),
+                  ),
+                ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: FutureBuilder<UserProfile?>(
+                  future: getUserProfile(), // Panggil metode getUserProfile()
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: const Color.fromRGBO(254, 251, 246, 1),
-                          borderRadius: BorderRadius.circular(18),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
-                              spreadRadius: 0,
-                              blurRadius: 4,
-                              offset: const Offset(0, 1),
-                            ),
-                          ],
-                          image: DecorationImage(
-                            image: NetworkImage(snapshot.data!.photoURL),
-                            fit: BoxFit.cover,
-                            colorFilter: null, // Atur nilai ColorFilter menjadi null
-                          ),
-                        ),
-                        child: GestureDetector(
-                          onTap: () {
-                            // Tambahkan kode navigasi ke halaman profil di sini
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const Profile()),
-                            );
-                          },
-                        ),
+                      return Text(
+                        'Hai, ${snapshot.data!.username}',
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       );
                     } else {
-                      return Container(); // Return empty container if data is not available yet
+                      return Text(
+                        '',
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      );
                     }
                   },
                 ),
-              Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: FutureBuilder<UserProfile?>(
-                    future: getUserProfile(), // Panggil metode getUserProfile()
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return Text(
-                          'Hai, ${snapshot.data!.nama}',
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        );
-                      } else {
-                        return Text(
-                          'Hai, User',
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        );
-                      }
-                    },
-                  ),
-                )
+              )
             ],
           ),
         ),

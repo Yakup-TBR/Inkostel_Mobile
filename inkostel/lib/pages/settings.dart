@@ -144,13 +144,25 @@ class _PengaturanState extends State<Pengaturan> {
                             ),
                           ),
                         ),
-                        Text(
-                          userProfile != null ? userProfile!.nama : 'Loading...',
-                          style: GoogleFonts.getFont('Poppins',
-                              fontSize: 23,
-                              fontWeight: FontWeight.w600,
-                              color: isDarkMode ? Colors.white : Colors.black),
-                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: FutureBuilder<UserProfile?>(
+                            future: getUserProfile(), // Panggil metode getUserProfile()
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Text(
+                                  'Hai, ${snapshot.data!.username}',
+                                  style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                                );
+                              } else {
+                                return Text(
+                                  '',
+                                  style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                                );
+                              }
+                            },
+                          ),
+                        )
                       ],
                     ),
                   ),

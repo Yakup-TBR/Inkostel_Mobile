@@ -29,7 +29,25 @@ class _JualKosState extends State<JualKos> {
   TextEditingController hargaPerbulanController = TextEditingController();
   TextEditingController deskripsiController = TextEditingController();
   TextEditingController JarakController = TextEditingController();
+  UserProfile? userProfile;
 
+  void initState() {
+    super.initState();
+    _fetchUserProfile();
+  }
+
+  Future<void> _fetchUserProfile() async {
+    try {
+      UserProfile? profile = await getUserProfile();
+      if (profile != null) {
+        setState(() {
+          userProfile = profile;
+        });
+      }
+    } catch (e) {
+      print("Error fetching user profile: $e");
+    }
+  }
 
   // Define a list of facilities
   List<String> facilities = [
@@ -121,44 +139,54 @@ class _JualKosState extends State<JualKos> {
             padding: const EdgeInsets.only(left: 15),
             child: Row(
               children: [
-                FutureBuilder<UserProfile?>(
-                  future: getUserProfile(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: const Color.fromRGBO(254, 251, 246, 1),
-                          borderRadius: BorderRadius.circular(18),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
-                              spreadRadius: 0,
-                              blurRadius: 4,
-                              offset: const Offset(0, 1),
-                            ),
-                          ],
-                          image: DecorationImage(
-                            image: NetworkImage(snapshot.data!.photoURL),
-                            fit: BoxFit.cover,
-                            colorFilter: null, // Atur nilai ColorFilter menjadi null
-                          ),
-                        ),
-                        child: GestureDetector(
-                          onTap: () {
-                            // Tambahkan kode navigasi ke halaman profil di sini
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const Profile()),
-                            );
-                          },
-                        ),
-                      );
-                    } else {
-                      return Container(); // Return empty container if data is not available yet
-                    }
+                GestureDetector(
+                  onTap: () {
+                    // Tambahkan kode navigasi ke halaman profil di sini
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Profile(),
+                      ),
+                    );
                   },
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(254, 251, 246, 1),
+                      borderRadius: BorderRadius.circular(18),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+                          spreadRadius: 0,
+                          blurRadius: 4,
+                          offset: const Offset(0, 1), // Atur posisi shadow
+                        ),
+                      ],
+                      image: userProfile != null && userProfile!.photoURL.isNotEmpty
+                          ? DecorationImage(
+                              image: NetworkImage(userProfile!.photoURL),
+                              fit: BoxFit.cover,
+                              onError: (exception, stackTrace) {
+                                // Handle the error, for example by showing a default image
+                                DecorationImage(
+                                  image: AssetImage('lib/icons/orang.png'),
+                                  fit: BoxFit.cover,
+                                  colorFilter: ColorFilter.mode(
+                                      const Color.fromRGBO(100, 204, 197, 1),
+                                      BlendMode.srcATop),
+                                );
+                              },
+                            )
+                          : DecorationImage(
+                              image: AssetImage('lib/icons/orang.png'),
+                              fit: BoxFit.cover,
+                              colorFilter: ColorFilter.mode(
+                                  const Color.fromRGBO(100, 204, 197, 1),
+                                  BlendMode.srcATop),
+                            ),
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 20),
@@ -167,12 +195,12 @@ class _JualKosState extends State<JualKos> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return Text(
-                          'Hai, ${snapshot.data!.nama}',
+                          'Hai, ${snapshot.data!.username}',
                           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         );
                       } else {
                         return Text(
-                          'Hai, User',
+                          '',
                           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         );
                       }

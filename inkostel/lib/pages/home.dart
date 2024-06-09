@@ -126,12 +126,23 @@ class _HomeState extends State<Home> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 20),
-                  child: Text(
-                    userProfile != null ? 'Hai, ${userProfile!.nama}' : 'Loading...',
-                    style: GoogleFonts.getFont('Poppins',
-                        fontSize: 18, fontWeight: FontWeight.bold),
+                  child: FutureBuilder<UserProfile?>(
+                    future: getUserProfile(), // Panggil metode getUserProfile()
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Text(
+                          'Hai, ${snapshot.data!.username}',
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        );
+                      } else {
+                        return Text(
+                          '',
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        );
+                      }
+                    },
                   ),
-                ),
+                )
               ],
             ),
           ),
