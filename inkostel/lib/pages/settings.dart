@@ -8,6 +8,7 @@ import 'package:inkostel/pages/signin.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:flutter/services.dart';
+import 'package:inkostel/pages/splash.dart';
 import 'package:inkostel/service/user_model.dart';
 
 class Pengaturan extends StatefulWidget {
@@ -352,7 +353,7 @@ class _PengaturanState extends State<Pengaturan> {
                                         Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => SignInScreen()),
+                                              builder: (context) => SplashScreen()),
                                         );
                                       },
                                       child: const Text(
