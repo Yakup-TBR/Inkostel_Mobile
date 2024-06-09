@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:inkostel/pages/carikos.dart';
+import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
@@ -64,6 +65,14 @@ class _DetailState extends State<Detail> {
     await _fetchKost();
   }
 
+  bool _showPerYear = true;
+
+  void _togglePriceType() {
+    setState(() {
+      _showPerYear = !_showPerYear;
+    });
+  }
+
   bool isSimpanPressed = false;
   final PanelController _panelController = PanelController();
 
@@ -94,6 +103,44 @@ class _DetailState extends State<Detail> {
         throw Exception('Could not launch $_url');
       } else {
         await launch(_url.toString());
+      }
+    }
+
+    String hargaPertahun(int amount) {
+      if (amount >= 1000000) {
+        double result = amount / 1000000;
+        if (result % 1 == 0) {
+          return 'Rp ${result.toInt()} jt/thn';
+        } else {
+          return 'Rp ${result.toStringAsFixed(1)} jt/thn';
+        }
+      } else {
+        // Mengembalikan string dengan format 'Rp {amount} ribu/thn' jika amount kurang dari 1 juta
+        double result = amount / 1000;
+        return 'Rp ${result.toInt()} ribu/thn';
+      }
+    }
+
+    String formatJarak(int jarak) {
+      if (jarak >= 1000) {
+        double km = jarak / 1000.0;
+        return '${km.toStringAsFixed(1)} km';
+      } else {
+        return '$jarak m';
+      }
+    }
+
+    String hargaPerbulan(int amount) {
+      if (amount >= 1000) {
+        double result = amount / 1000;
+        if (result % 1 == 0) {
+          return 'Rp ${result.toInt()} k/bln';
+        } else {
+          return 'Rp ${result.toStringAsFixed(1)} ribu/bln';
+        }
+      } else {
+        // Mengembalikan string dengan format 'Rp {amount} ribu/bln' jika amount kurang dari 1000
+        return 'Rp $amount ribu/bln';
       }
     }
 
@@ -313,6 +360,39 @@ class _DetailState extends State<Detail> {
                                   ),
                                 ),
                                 const Spacer(),
+                                Padding(
+                                  padding:
+                                      EdgeInsets.only(top: 50, right: 15.0),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Align(
+                                        alignment: Alignment.topCenter,
+                                        child: Text(
+                                          'Jarak :',
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 17,
+                                            color: Color.fromARGB(255, 7, 4, 4),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 5),
+                                      Align(
+                                        alignment: Alignment.topCenter,
+                                        child: Text(
+                                          formatJarak(_kos!.jarakKost),
+                                          style: const TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 17,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -532,12 +612,17 @@ class _DetailState extends State<Detail> {
                                   ),
                                 ),
                                 const SizedBox(height: 5),
-                                Text(
-                                  formatCurrency(_kos!.hargaPertahun),
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                    fontFamily: 'Poppins',
+                                GestureDetector(
+                                  onTap: _togglePriceType,
+                                  child: Text(
+                                    _showPerYear
+                                        ? hargaPertahun(_kos!.hargaPertahun)
+                                        : hargaPerbulan(_kos!.hargaPerbulan),
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontFamily: 'Poppins',
+                                    ),
                                   ),
                                 ),
                               ],
@@ -600,7 +685,7 @@ class _DetailState extends State<Detail> {
             case 0:
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const CariKos()),
+                MaterialPageRoute(builder: (context) => const Home()),
               );
               break;
             case 1:

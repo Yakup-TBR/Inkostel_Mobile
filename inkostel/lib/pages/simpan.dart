@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/settings.dart';
@@ -305,7 +306,7 @@ class _SimpanState extends State<Simpan> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const Home()),
+            MaterialPageRoute(builder: (context) => const CariKos()),
           );
         },
       ),
@@ -404,7 +405,7 @@ class _SimpanState extends State<Simpan> {
                             fontSize: 17,
                           ),
                         ),
-                        const SizedBox(width: 5),
+                        const SizedBox(width: 260),
                         GestureDetector(
                           onTap: onTapFavorite,
                           child: Image.asset(
@@ -441,9 +442,9 @@ class _SimpanState extends State<Simpan> {
     } else if (amount >= 1000) {
       double result = amount / 1000;
       if (result % 1 == 0) {
-        return 'Rp ${result.toInt()} thn';
+        return 'Rp ${result.toInt()} k/bln';
       } else {
-        return 'Rp ${result.toStringAsFixed(1)} thn';
+        return 'Rp ${result.toStringAsFixed(1)} k/bln';
       }
     } else {
       return 'Rp $amount';

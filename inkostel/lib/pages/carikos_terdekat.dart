@@ -10,30 +10,34 @@ import 'package:inkostel/pages/profile.dart';
 import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/service/image_service.dart';
-// import 'package:inkostel/main.dart';
 import 'package:inkostel/service/kost_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:inkostel/service/user_model.dart';
 
 void main() {
-  runApp(const CariKos());
+  runApp(const CariKosTerdekat());
 }
 
-class CariKos extends StatefulWidget {
-  const CariKos({super.key});
+class CariKosTerdekat extends StatefulWidget {
+  const CariKosTerdekat({super.key});
 
   static Future<List<Kost>> fetchData() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection("Kos") // Ganti dengan nama koleksi yang sesuai
-        .get();
-    return querySnapshot.docs.map((doc) => Kost.fromFirestore(doc)).toList();
+    QuerySnapshot querySnapshot =
+      await FirebaseFirestore.instance.collection("Kos").get();
+  List<Kost> kostList =
+      querySnapshot.docs.map((doc) => Kost.fromFirestore(doc)).toList();
+
+  // Urutkan berdasarkan jarak terdekat
+  kostList.sort((a, b) => a.jarakKost.compareTo(b.jarakKost));
+
+  return kostList;
   }
 
   @override
-  _CariKosState createState() => _CariKosState();
+  _CariKosTerdekatState createState() => _CariKosTerdekatState();
 }
 
-class _CariKosState extends State<CariKos> {
+class _CariKosTerdekatState extends State<CariKosTerdekat> {
   List<Kost> _allKosts = [];
   List<Kost> _displayedKosts = [];
   bool _isLoading = true;
@@ -198,7 +202,7 @@ class _CariKosState extends State<CariKos> {
   }
 
   Future<void> _fetchInitialData() async {
-    List<Kost> fetchedKostList = await CariKos.fetchData();
+    List<Kost> fetchedKostList = await CariKosTerdekat.fetchData();
     setState(() {
       _allKosts = fetchedKostList;
       _currentBatch = 0;

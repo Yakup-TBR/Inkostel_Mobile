@@ -1,6 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:inkostel/pages/signin.dart';
 import 'package:inkostel/pages/validation.dart';
 import 'firebase_options.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,7 @@ import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/splash.dart';
 import 'package:inkostel/pages/tes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   // Inisiasi database
@@ -55,6 +57,26 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     //Ganti GetMaterialApp buat Run Login soalnya pakai Get.to
     //Kalo mau balikin lagi tinggal ganti ke MaterialApp
-    return MaterialApp(home: JualKos());
+    return const MaterialApp(home: AuthChecker());
+  }
+}
+
+class AuthChecker extends StatelessWidget {
+  const AuthChecker({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasData) {
+          return const Home();
+        } else {
+          return const SplashScreen();
+        }
+      },
+    );
   }
 }

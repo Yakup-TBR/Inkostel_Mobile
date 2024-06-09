@@ -4,6 +4,7 @@ class Kost {
   final String namaKost;
   final int jarakKost;
   final int hargaPertahun;
+  final int hargaPerbulan;
   final List<String> imageUrl;
   final String kosId;
   final String alamatKos;
@@ -25,6 +26,7 @@ class Kost {
     required this.fasilitas,
     required this.noWA,
     required this.urlMap,
+    required this.hargaPerbulan,
   });
 
   factory Kost.fromFirestore(DocumentSnapshot doc) {
@@ -41,6 +43,7 @@ class Kost {
       fasilitas: _convertToFasilitas(data['Fasilitas'] ?? {}),
       noWA: data['Nomor Telepon'] ?? '',
       urlMap: data['Link Map'] ?? '',
+      hargaPerbulan: data['Harga Perbulan'] ?? '',
     );
   }
 

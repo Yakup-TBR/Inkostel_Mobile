@@ -8,7 +8,14 @@ import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/service/kost_model.dart';
+import 'package:inkostel/service/user_model.dart';
 import 'package:inkostel/utils/format_currency.dart';
+import 'package:inkostel/service/home_service.dart';
+import 'package:inkostel/pages/carikos_terdekat.dart';
+import 'package:inkostel/pages/carikos_termurah.dart';
+
+
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -30,20 +37,32 @@ String getLabel(double value) {
   }
 }
 
+
+
 class _HomeState extends State<Home> {
   double currentSliderValue = 0.0;
   late Future<List<Kost>> _kostsFuture;
+  final TextEditingController _searchController = TextEditingController();
+  UserProfile? userProfile;
 
   @override
   void initState() {
     super.initState();
     _kostsFuture = fetchData();
+    _fetchUserProfile();
   }
 
-  Future<List<Kost>> fetchData() async {
-    QuerySnapshot querySnapshot =
-        await FirebaseFirestore.instance.collection("Kos").get();
-    return querySnapshot.docs.map((doc) => Kost.fromFirestore(doc)).toList();
+  Future<void> _fetchUserProfile() async {
+    try {
+      UserProfile? profile = await getUserProfile();
+      if (profile != null) {
+        setState(() {
+          userProfile = profile;
+        });
+      }
+    } catch (e) {
+      print("Error fetching user profile: $e");
+    }
   }
 
   @override
@@ -60,44 +79,74 @@ class _HomeState extends State<Home> {
             padding: const EdgeInsets.only(left: 15),
             child: Row(
               children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: const Color.fromRGBO(254, 251, 246, 1),
-                    borderRadius: BorderRadius.circular(18),
-                    boxShadow: [
-                      BoxShadow(
-                        color:
-                            const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
-                        spreadRadius: 0,
-                        blurRadius: 4,
-                        offset: const Offset(0, 1), // Atur posisi shadow
+                GestureDetector(
+                  onTap: () {
+                    // Tambahkan kode navigasi ke halaman profil di sini
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Profile(),
                       ),
-                    ],
-                  ),
-                  padding: const EdgeInsets.all(11),
-                  child: GestureDetector(
-                    onTap: () {
-                      // Tambahkan kode navigasi ke halaman profil di sini
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const Profile()),
-                      );
-                    },
-                    child: Image.asset(
-                      'lib/icons/orang.png',
-                      color: const Color.fromRGBO(100, 204, 197, 1),
+                    );
+                  },
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(254, 251, 246, 1),
+                      borderRadius: BorderRadius.circular(18),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+                          spreadRadius: 0,
+                          blurRadius: 4,
+                          offset: const Offset(0, 1), // Atur posisi shadow
+                        ),
+                      ],
+                      image: userProfile != null && userProfile!.photoURL.isNotEmpty
+                          ? DecorationImage(
+                              image: NetworkImage(userProfile!.photoURL),
+                              fit: BoxFit.cover,
+                              onError: (exception, stackTrace) {
+                                // Handle the error, for example by showing a default image
+                                DecorationImage(
+                                  image: AssetImage('lib/icons/orang.png'),
+                                  fit: BoxFit.cover,
+                                  colorFilter: ColorFilter.mode(
+                                      const Color.fromRGBO(100, 204, 197, 1),
+                                      BlendMode.srcATop),
+                                );
+                              },
+                            )
+                          : DecorationImage(
+                              image: AssetImage('lib/icons/orang.png'),
+                              fit: BoxFit.cover,
+                              colorFilter: ColorFilter.mode(
+                                  const Color.fromRGBO(100, 204, 197, 1),
+                                  BlendMode.srcATop),
+                            ),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 20),
-                  child: Text('Hai, Supri Basuki',
-                      style: GoogleFonts.getFont('Poppins',
-                          fontSize: 18, fontWeight: FontWeight.bold)),
-                ),
+                  child: FutureBuilder<UserProfile?>(
+                    future: getUserProfile(), // Panggil metode getUserProfile()
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Text(
+                          'Hai, ${snapshot.data!.username}',
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        );
+                      } else {
+                        return Text(
+                          '',
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        );
+                      }
+                    },
+                  ),
+                )
               ],
             ),
           ),
@@ -105,7 +154,7 @@ class _HomeState extends State<Home> {
         body: Stack(
           children: [
             Column(children: [
-              // ----------SearchBar dan Tombol
+              // ----------SearchBar
               Row(
                 children: [
                   Expanded(
@@ -118,6 +167,7 @@ class _HomeState extends State<Home> {
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: TextField(
+                          controller: _searchController,
                           decoration: InputDecoration(
                             hintStyle: GoogleFonts.getFont(
                               'Poppins',
@@ -126,12 +176,26 @@ class _HomeState extends State<Home> {
                             hintText: 'Cari Kos Disini..',
                             suffixIcon: Padding(
                               padding: const EdgeInsets.all(10.0),
-                              child: Image.asset(
-                                'lib/icons/search.png',
-                                color: const Color.fromRGBO(100, 204, 197, 1),
-                                width: 20,
-                                height: 20,
-                                fit: BoxFit.fill,
+                              child: InkWell(
+                                onTap: () {
+                                  // Navigasikan ke halaman carikos dengan parameter pencarian
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CariKos(
+                                          // initialSearchQuery:
+                                          //     _searchController.text,
+                                          ),
+                                    ),
+                                  );
+                                },
+                                child: Image.asset(
+                                  'lib/icons/search.png',
+                                  color: const Color.fromRGBO(100, 204, 197, 1),
+                                  width: 20,
+                                  height: 20,
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                             ),
                             focusedBorder: const OutlineInputBorder(
@@ -149,7 +213,7 @@ class _HomeState extends State<Home> {
                                 width: 0.5,
                                 color: Color.fromRGBO(100, 204, 197, 1),
                               ),
-                            ), // Tidak ada perubahan ? Opsional dihapus nanti
+                            ),
                             enabledBorder: const OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(30)),
@@ -167,7 +231,7 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
-              // ---------- End SearchBar dan Tombol,
+              // ---------- End SearchBar,
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -373,7 +437,7 @@ class _HomeState extends State<Home> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const CariKos()),
+                                      builder: (context) => const CariKosTerdekat()),
                                 );
                               },
                               child: Text(
@@ -395,7 +459,7 @@ class _HomeState extends State<Home> {
                             height: 260,
                             color: const Color.fromRGBO(254, 251, 246, 1),
                             child: FutureBuilder<List<Kost>>(
-                                future: fetchData(),
+                                future: fetchDataTerdekat(),
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
@@ -414,7 +478,7 @@ class _HomeState extends State<Home> {
                                       scrollDirection: Axis.horizontal,
                                       itemCount: snapshot.data!.length,
                                       itemBuilder: (context, index) {
-                                        return CardRekomendasi(
+                                        return CardTerdekat(
                                             kost: snapshot.data![index]);
                                       },
                                     );
@@ -438,7 +502,7 @@ class _HomeState extends State<Home> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const CariKos()),
+                                      builder: (context) => const CariKosTermurah()),
                                 );
                               },
                               child: Text(
@@ -460,7 +524,7 @@ class _HomeState extends State<Home> {
                             height: 260,
                             color: const Color.fromRGBO(254, 251, 246, 1),
                             child: FutureBuilder<List<Kost>>(
-                                future: fetchData(),
+                                future: fetchDataTermurah(),
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
@@ -606,9 +670,7 @@ class _CardRekomendasiState extends State<CardRekomendasi> {
             ),
             borderRadius: BorderRadius.circular(20.0),
             image: DecorationImage(
-              image:
-                  // Ubah Menjadi gambar data di database
-                  const AssetImage('images/kamar.png'),
+              image: NetworkImage(widget.kost.imageUrl[0]),
               colorFilter: ColorFilter.mode(
                   Colors.black.withOpacity(0.2), BlendMode.darken),
               fit: BoxFit.cover,
@@ -716,9 +778,7 @@ class _CardTerdekatState extends State<CardTerdekat> {
             ),
             borderRadius: BorderRadius.circular(20.0),
             image: DecorationImage(
-              image:
-                  // Ubah Menjadi gambar data di database
-                  const AssetImage('images/kamar.png'),
+              image: NetworkImage(widget.kost.imageUrl[0]),
               colorFilter: ColorFilter.mode(
                   Colors.black.withOpacity(0.2), BlendMode.darken),
               fit: BoxFit.cover,
@@ -826,9 +886,7 @@ class _CardTermurahState extends State<CardTermurah> {
             ),
             borderRadius: BorderRadius.circular(20.0),
             image: DecorationImage(
-              image:
-                  // Ubah Menjadi gambar data di database
-                  const AssetImage('images/kamar.png'),
+              image: NetworkImage(widget.kost.imageUrl[0]),
               colorFilter: ColorFilter.mode(
                   Colors.black.withOpacity(0.2), BlendMode.darken),
               fit: BoxFit.cover,
