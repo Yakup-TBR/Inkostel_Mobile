@@ -124,6 +124,7 @@ Future<void> updateProfileName(String newName) async {
   await FirebaseFirestore.instance.collection('users').doc(user.uid).update(updateData);
 }
 
+
 Future<void> updateProfilePhoneNumber(String newPhoneNumber) async {
   User? user = FirebaseAuth.instance.currentUser;
   if (user == null) {

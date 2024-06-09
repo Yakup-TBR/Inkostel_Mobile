@@ -1,10 +1,13 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:random_string/random_string.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/signin.dart';
@@ -22,13 +25,12 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   final double coverHeight = 170;
   final double profileSize = 110;
-  final GlobalKey<ScaffoldState> _scaffoldKey =
-      GlobalKey<ScaffoldState>(); // Tambahkan global key
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey, // Gunakan global key pada Scaffold
+      key: _scaffoldKey,
       body: FutureBuilder<UserProfile?>(
         future: _getUserData(),
         builder: (context, snapshot) {
@@ -40,118 +42,98 @@ class _ProfileState extends State<Profile> {
             return const SignInScreen();
           } else {
             UserProfile user = snapshot.data!;
-            String userName = user.nama.isNotEmpty ? user.nama : 'User';
-            String userUsername =
-                user.username.isNotEmpty ? user.username : 'username';
-            String userPhone = user.nomorTelepon.isNotEmpty
-                ? user.nomorTelepon
-                : '+62 123456789';
-            String userEmail =
-                user.email.isNotEmpty ? user.email : 'user@example.com';
-            String userDescription = user.deskripsi.isNotEmpty
-                ? user.deskripsi
-                : 'Deskripsi belum diisi';
-            String userPhotoURL =
-                user.photoURL.isNotEmpty ? user.photoURL : 'images/profile.png';
+            return _buildProfileUI(user);
+          }
+        },
+      ),
+      bottomNavigationBar: _buildBottomNavigationBar(),
+    );
+  }
 
-            return Stack(
-              children: [
-                ListView(
-                  padding: EdgeInsets.zero,
-                  children: <Widget>[
-                    buildTop(context, userPhotoURL),
-                    buildBottom(context, userName, userUsername, userPhone,
-                        userEmail, userDescription),
-                    const SizedBox(height: 100),
-                  ],
-                ),
-              ],
-            );
-          }
-        },
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
-        selectedItemColor: const Color.fromARGB(255, 232, 255, 240),
-        unselectedItemColor: Colors.grey,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        selectedFontSize: 14,
-        unselectedFontSize: 14,
-        onTap: (int index) {
-          switch (index) {
-            case 0:
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const CariKos()),
-              );
-              break;
-            case 1:
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Simpan()),
-              );
-              break;
-            case 2:
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const JualKos()),
-              );
-              break;
-            case 3:
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Tes()),
-              );
-              break;
-            default:
-          }
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              'lib/icons/home.png',
-              height: 30,
-            ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              'lib/icons/simpan.png',
-              height: 30,
-            ),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              'lib/icons/plus.png',
-              height: 30,
-            ),
-            label: 'Save',
-          ),
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              'lib/icons/gear_active.png',
-              height: 30,
-            ),
-            label: 'Settings',
-          ),
-        ],
-      ),
+  Widget _buildProfileUI(UserProfile user) {
+    String userName = user.nama.isNotEmpty ? user.nama : 'User';
+    String userUsername = user.username.isNotEmpty ? user.username : 'username';
+    String userPhone = user.nomorTelepon.isNotEmpty ? user.nomorTelepon : '+62 123456789';
+    String userEmail = user.email.isNotEmpty ? user.email : 'user@example.com';
+    String userDescription = user.deskripsi.isNotEmpty ? user.deskripsi : 'Deskripsi belum diisi';
+    String userPhotoURL = user.photoURL.isNotEmpty ? user.photoURL : 'images/profile.png';
+
+    return Stack(
+      children: [
+        ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            buildTop(context, userPhotoURL),
+            buildBottom(context, userName, userUsername, userEmail, userPhone, userDescription),
+            const SizedBox(height: 100),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBottomNavigationBar() {
+    return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
+      selectedItemColor: const Color.fromARGB(255, 232, 255, 240),
+      unselectedItemColor: Colors.grey,
+      showSelectedLabels: false,
+      showUnselectedLabels: false,
+      selectedFontSize: 14,
+      unselectedFontSize: 14,
+      onTap: (int index) {
+        switch (index) {
+          case 0:
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const CariKos()));
+            break;
+          case 1:
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const Simpan()));
+            break;
+          case 2:
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const JualKos()));
+            break;
+          case 3:
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const Tes()));
+            break;
+          default:
+        }
+      },
+      items: [
+        BottomNavigationBarItem(
+          icon: Image.asset('lib/icons/home.png', height: 30),
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Image.asset('lib/icons/simpan.png', height: 30),
+          label: 'Search',
+        ),
+        BottomNavigationBarItem(
+          icon: Image.asset('lib/icons/plus.png', height: 30),
+          label: 'Save',
+        ),
+        BottomNavigationBarItem(
+          icon: Image.asset('lib/icons/gear_active.png', height: 30),
+          label: 'Settings',
+        ),
+      ],
     );
   }
 
   Future<UserProfile?> _getUserData() async {
     if (FirebaseAuth.instance.currentUser != null) {
+      print('User is signed in');
       await createUserProfileIfNotExists();
       var userProfile = await getUserProfile();
       if (userProfile != null) {
+        print('UserProfile fetched: $userProfile');
         return userProfile;
       } else {
+        print('No UserProfile found');
         return null;
       }
     } else {
+      print('No user signed in');
       return null;
     }
   }
@@ -260,7 +242,7 @@ class _ProfileState extends State<Profile> {
           right: 0,
           child: GestureDetector(
             onTap: () {
-              editProfile(context);
+              _showEditOptions(context);
             },
             child: Container(
               width: 30,
@@ -284,7 +266,7 @@ class _ProfileState extends State<Profile> {
   }
 
   Widget buildBottom(BuildContext context, String name, String username,
-      String phone, String email, String description) {
+      String email, String phone, String description) {
     return Container(
       color: Colors.white,
       child: Column(
@@ -304,15 +286,8 @@ class _ProfileState extends State<Profile> {
             style: GoogleFonts.getFont(
               'Poppins',
               fontSize: 18,
-              color: Colors.grey,
-            ),
-          ),
-          Text(
-            phone,
-            style: GoogleFonts.getFont(
-              'Poppins',
-              fontSize: 18,
-              color: Colors.grey,
+              fontWeight: FontWeight.w300,
+              color: const Color(0xFF436850),
             ),
           ),
           Text(
@@ -320,136 +295,140 @@ class _ProfileState extends State<Profile> {
             style: GoogleFonts.getFont(
               'Poppins',
               fontSize: 18,
-              color: Colors.grey,
+              fontWeight: FontWeight.w300,
+              color: const Color(0xFF436850),
             ),
           ),
-          const SizedBox(height: 30),
-          Text(
-            description,
-            style: GoogleFonts.getFont(
-              'Poppins',
-              fontSize: 18,
-              color: Colors.black,
-            ),
-            textAlign: TextAlign.center,
+          const Divider(
+            thickness: 1,
+            color: Colors.grey,
+            indent: 40,
+            endIndent: 40,
+          ),
+          _buildProfileInfo('Nomor Telepon', phone, context, Icons.phone),
+          _buildProfileInfo('Deskripsi', description, context, Icons.description),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfileInfo(
+      String title, String content, BuildContext context, IconData icon) {
+    return ListTile(
+      leading: Icon(icon, color: const Color(0xFF436850)),
+      title: Text(
+        title,
+        style: GoogleFonts.getFont(
+          'Poppins',
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: const Color(0xFF436850),
+        ),
+      ),
+      subtitle: Text(
+        content,
+        style: GoogleFonts.getFont(
+          'Poppins',
+          fontSize: 14,
+          fontWeight: FontWeight.w300,
+          color: const Color(0xFF436850),
+        ),
+      ),
+    );
+  }
+
+  void _showEditOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => Wrap(
+        children: [
+          ListTile(
+            leading: const Icon(Icons.photo_library),
+            title: const Text('Edit Photo'),
+            onTap: () {
+              _pickImage(ImageSource.gallery);
+              Navigator.of(context).pop();
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.person),
+            title: const Text('Edit Nama'),
+            onTap: () {
+              Navigator.of(context).pop();
+              _editProfileField(context, 'Nama', '');
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.phone),
+            title: const Text('Edit Nomor Telepon'),
+            onTap: () {
+              Navigator.of(context).pop();
+              _editProfileField(context, 'Nomor Telepon', '');
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.description),
+            title: const Text('Edit Deskripsi'),
+            onTap: () {
+              Navigator.of(context).pop();
+              _editProfileField(context, 'Deskripsi', '');
+            },
           ),
         ],
       ),
     );
   }
 
-  void editProfile(BuildContext context) async {
-    UserProfile? userProfile = await _getUserData();
-
-    if (userProfile == null) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to fetch user data.')));
-      }
-      return;
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        _updateProfileImageURL(pickedFile);
+      });
     }
+  }
 
-    TextEditingController nameController =
-        TextEditingController(text: userProfile.nama);
-    TextEditingController numberController = TextEditingController(
-        text: userProfile.nomorTelepon.replaceFirst('+62', ''));
-    TextEditingController descriptionController =
-        TextEditingController(text: userProfile.deskripsi);
+  Future<void> _updateProfileImageURL(XFile pickedFile) async {
+    final storage = FirebaseStorage.instance;
+    final ref = storage
+        .ref()
+        .child('user_profiles')
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .child('profile_image.jpg');
+    final uploadTask = ref.putFile(File(pickedFile.path));
+    final snapshot = await uploadTask.whenComplete(() {});
+    final downloadURL = await snapshot.ref.getDownloadURL();
+    updateProfileImageURL(downloadURL); // This should update the profile image URL in your user profile.
+    setState(() {});
+  }
+
+  Future<void> _editProfileField(
+      BuildContext context, String field, String currentValue) async {
+    TextEditingController _controller = TextEditingController(text: currentValue);
 
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (context) {
         return AlertDialog(
-          title: const Text('Edit Profil'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                OutlinedButton(
-                  onPressed: () {
-                    showImageSourceDialog(context);
-                  },
-                  child: Text(
-                    'Ubah Gambar Profil',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 76, 165, 175),
-                    ),
-                  ),
-                  style: ButtonStyle(
-                    side:
-                        MaterialStateProperty.resolveWith<BorderSide>((states) {
-                      return BorderSide(color: Colors.grey, width: 1);
-                    }),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                TextField(
-                  controller: nameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Nama',
-                    labelStyle:
-                        TextStyle(color: Color.fromARGB(255, 76, 165, 175)),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                TextField(
-                  controller: numberController,
-                  decoration: const InputDecoration(
-                    labelText: 'Nomor',
-                    prefixText: '+62 ',
-                    labelStyle:
-                        TextStyle(color: Color.fromARGB(255, 76, 165, 175)),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                TextField(
-                  controller: descriptionController,
-                  decoration: const InputDecoration(
-                    labelText: 'Deskripsi',
-                    labelStyle:
-                        TextStyle(color: Color.fromARGB(255, 76, 165, 175)),
-                  ),
-                ),
-              ],
-            ),
+          title: Text('Edit $field'),
+          content: TextField(
+            controller: _controller,
+            decoration: InputDecoration(hintText: "Enter new $field"),
           ),
           actions: <Widget>[
             TextButton(
+              child: const Text('CANCEL'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text(
-                'Batal',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 76, 165, 175),
-                ),
-              ),
             ),
             TextButton(
-              onPressed: () async {
-                String newName = nameController.text;
-                String newNumber = '+62' + numberController.text;
-                String newDescription = descriptionController.text;
-
-                await updateProfileName(newName);
-                await updateProfilePhoneNumber(newNumber);
-                await updateProfileDescription(newDescription);
-
-                if (mounted) {
-                  Navigator.of(context).pop();
-                  // Tambahkan sedikit penundaan sebelum menampilkan Snackbar
-                  Future.delayed(Duration(milliseconds: 300), () {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Profile updated successfully.')));
-                  });
-                }
+              child: const Text('SAVE'),
+              onPressed: () {
+                _saveProfileField(field, _controller.text);
+                Navigator.of(context).pop();
               },
-              child: const Text(
-                'Simpan',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 76, 165, 175),
-                ),
-              ),
             ),
           ],
         );
@@ -457,117 +436,18 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  void showImageSourceDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Pilih Sumber Gambar'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('Galeri'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _getImageFromGallery(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.camera_alt),
-                title: const Text('Kamera'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _getImageFromCamera(context);
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Future<String> uploadImageToFirebase(String imagePath, String imageName) async {
-    try {
-      File imageFile = File(imagePath);
-      Reference storageRef = FirebaseStorage.instance.ref().child('images/$imageName');
-      UploadTask uploadTask = storageRef.putFile(imageFile);
-      TaskSnapshot taskSnapshot = await uploadTask;
-      String downloadUrl = await taskSnapshot.ref.getDownloadURL();
-      return downloadUrl;
-    } catch (e) {
-      print(e);
-      throw e;
+  void _saveProfileField(String field, String newValue) {
+    switch (field) {
+      case 'Nama':
+        updateProfileName(newValue);
+        break;
+      case 'Nomor Telepon':
+        updateProfilePhoneNumber(newValue);
+        break;
+      case 'Deskripsi':
+        updateProfileDescription(newValue);
+        break;
     }
-  }
-
-  void _showAlertDialog(BuildContext context, String title, String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _uploadImageToStorage(BuildContext parentContext, File imageFile) async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      return;
-    }
-
-    String filePath = 'profile/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.png';
-    String downloadURL = await uploadImageToFirebase(imageFile.path, filePath);
-    await updateProfileImageURL(downloadURL);
-  }
-
-  void _handleImageUpload(BuildContext parentContext, File imageFile) async {
-    try {
-      await _uploadImageToStorage(parentContext, imageFile);
-      if (parentContext.mounted) {
-        // Handle success feedback here (e.g., show a SnackBar or other UI element)
-        ScaffoldMessenger.of(parentContext).showSnackBar(
-          SnackBar(content: Text('Profile picture updated successfully.'))
-        );
-      }
-    } catch (e) {
-      if (parentContext.mounted) {
-        // Handle error feedback here (e.g., show a SnackBar or other UI element)
-        ScaffoldMessenger.of(parentContext).showSnackBar(
-          SnackBar(content: Text('Failed to upload profile picture.'))
-        );
-      }
-    }
-  }
-
-  void _getImageFromGallery(BuildContext parentContext) async {
-    final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      File imageFile = File(pickedImage.path);
-      _handleImageUpload(parentContext, imageFile);
-    }
-  }
-
-  void _getImageFromCamera(BuildContext parentContext) async {
-    final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.camera);
-    if (pickedImage != null) {
-      File imageFile = File(pickedImage.path);
-      _handleImageUpload(parentContext, imageFile);
-    }
+    setState(() {});
   }
 }
