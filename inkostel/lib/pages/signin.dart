@@ -13,8 +13,8 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  TextEditingController _passwordTextController = TextEditingController();
-  TextEditingController _emailTextController = TextEditingController();
+  final TextEditingController _passwordTextController = TextEditingController();
+  final TextEditingController _emailTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -23,37 +23,48 @@ class _SignInScreenState extends State<SignInScreen> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [
-          hexStringToColor("8DE9D5"),
-          hexStringToColor("32C4C0")
-        ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
+          gradient: LinearGradient(
+            colors: [
+              hexStringToColor("8DE9D5"),
+              hexStringToColor("32C4C0")
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.fromLTRB(
-                20, MediaQuery.of(context).size.height * 0.2, 20, 0),
+              20,
+              MediaQuery.of(context).size.height * 0.2,
+              20,
+              0,
+            ),
             child: Column(
               children: <Widget>[
                 logoWidget("assets/images/2.png"),
-                const SizedBox(
-                  height: 30,
+                const SizedBox(height: 30),
+                reusableTextField(
+                  "Enter Username",
+                  Icons.person_outline,
+                  false,
+                  _emailTextController,
                 ),
-                reusableTextField("Enter Username", Icons.person_outline, false,
-                    _emailTextController),
-                const SizedBox(
-                  height: 20,
+                const SizedBox(height: 20),
+                reusableTextField(
+                  "Enter Password",
+                  Icons.lock_outline,
+                  true,
+                  _passwordTextController,
                 ),
-                reusableTextField("Enter Password", Icons.lock_outline, true,
-                    _passwordTextController),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 signInSignUpButton(context, true, () async {
                   try {
                     await FirebaseAuth.instance.signInWithEmailAndPassword(
                       email: _emailTextController.text,
                       password: _passwordTextController.text,
                     );
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const Home(),
@@ -84,7 +95,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     );
                   }
                 }),
-                signUpOption()
+                signUpOption(),
               ],
             ),
           ),
@@ -103,16 +114,17 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
         GestureDetector(
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const SignUpScreen()));
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SignUpScreen()),
+            );
           },
           child: const Text(
             " Sign Up",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
-        )
+        ),
       ],
     );
   }
 }
-
