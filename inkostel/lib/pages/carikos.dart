@@ -15,7 +15,6 @@ import 'package:inkostel/service/kost_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:inkostel/service/user_model.dart';
 
-
 void main() {
   runApp(const CariKos());
 }
@@ -57,31 +56,114 @@ class _CariKosState extends State<CariKos> {
     bool checked500Meters,
     bool checked1KM,
     bool checkedLebih1KM,
+    double sliderValue,
   ) {
+    print('Applying filters:');
+    print('checked100Meters: $checked100Meters');
+    print('checked200Meters: $checked200Meters');
+    print('checked500Meters: $checked500Meters');
+    print('checked1KM: $checked1KM');
+    print('checkedLebih1KM: $checkedLebih1KM');
+    print('sliderValue: $sliderValue');
+
     setState(() {
       isChecked100Meters = checked100Meters;
       isChecked200Meters = checked200Meters;
       isChecked500Meters = checked500Meters;
       isChecked1KM = checked1KM;
       isCheckedLebih1KM = checkedLebih1KM;
+      _currentSliderValue = sliderValue;
       _filteredKosts();
     });
   }
 
   void _filteredKosts() {
-    List<Kost> filteredKosts = _allKosts.where((kost) {
-      if (isChecked100Meters && kost.jarakKost <= 100) return true;
-      if (isChecked200Meters && kost.jarakKost > 100 && kost.jarakKost <= 300)
-        return true;
-      if (isChecked500Meters && kost.jarakKost > 300 && kost.jarakKost <= 500)
-        return true;
-      if (isChecked1KM && kost.jarakKost > 500 && kost.jarakKost <= 1000)
-        return true;
-      if (isCheckedLebih1KM && kost.jarakKost > 1000) return true;
-      return false;
-    }).toList();
-    _displayedKosts =
-        filteredKosts.take((_currentBatch + 1) * _batchSize).toList();
+    setState(() {
+      _displayedKosts = _allKosts.where((kost) {
+        bool matchesDistance = true;
+        bool matchesPrice = true;
+
+        // Filter jarak
+        if (isChecked100Meters) {
+          matchesDistance = matchesDistance && kost.jarakKost <= 100;
+        }
+        if (isChecked200Meters) {
+          matchesDistance = matchesDistance &&
+              (kost.jarakKost >= 100 && kost.jarakKost <= 300);
+        }
+        if (isChecked500Meters) {
+          matchesDistance = matchesDistance &&
+              (kost.jarakKost >= 300 && kost.jarakKost <= 500);
+        }
+        if (isChecked1KM) {
+          matchesDistance = matchesDistance &&
+              (kost.jarakKost >= 500 && kost.jarakKost <= 1000);
+        }
+        if (isCheckedLebih1KM) {
+          matchesDistance = matchesDistance && kost.jarakKost >= 1000;
+        }
+
+        // Debug print for distance filtering
+        print(
+            'kost.jarakKost: ${kost.jarakKost}, matchesDistance: $matchesDistance');
+
+        // Filter harga
+        if (_currentSliderValue < 500) {
+          matchesPrice = kost.hargaPertahun < 5000000;
+        } else if (_currentSliderValue >= 500 && _currentSliderValue < 1000) {
+          matchesPrice =
+              kost.hargaPertahun >= 5000000 && kost.hargaPertahun <= 7000000;
+        } else if (_currentSliderValue >= 1000 && _currentSliderValue < 1500) {
+          matchesPrice =
+              kost.hargaPertahun >= 7000000 && kost.hargaPertahun <= 10000000;
+        } else if (_currentSliderValue >= 1500 && _currentSliderValue < 2000) {
+          matchesPrice =
+              kost.hargaPertahun >= 10000000 && kost.hargaPertahun <= 15000000;
+        } else {
+          matchesPrice = kost.hargaPertahun >= 15000000;
+        }
+
+        // Debug print for price filtering
+        print(
+            'kost.hargaPertahun: ${kost.hargaPertahun}, matchesPrice: $matchesPrice');
+
+        return matchesDistance && matchesPrice;
+      }).toList();
+    });
+  }
+
+  String _getLabel(double value) {
+    if (value < 500) {
+      return "< 5 Juta";
+    } else if (value >= 500 && value < 1000) {
+      return "5 - 7 Juta";
+    } else if (value >= 1000 && value < 1500) {
+      return "7 - 10 Juta";
+    } else if (value >= 1500 && value < 2000) {
+      return "10 - 15 Juta";
+    } else {
+      return "> 15 Juta";
+    }
+  }
+
+  void _showFilterDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return FilterDialog(
+          applyFilters: (bool checked100Meters,
+              bool checked200Meters,
+              bool checked500Meters,
+              bool checked1KM,
+              bool checkedLebih1KM,
+              double sliderValue) {
+            applyFilters(checked100Meters, checked200Meters, checked500Meters,
+                checked1KM, checkedLebih1KM, sliderValue);
+            Navigator.of(context).pop();
+          },
+        );
+      },
+    );
   }
 
   final TextEditingController _searchController = TextEditingController();
@@ -109,6 +191,7 @@ class _CariKosState extends State<CariKos> {
       }
     });
   }
+
   Future<void> _fetchUserProfile() async {
     try {
       UserProfile? profile = await getUserProfile();
@@ -210,9 +293,6 @@ class _CariKosState extends State<CariKos> {
   //   }
   // }
 
-
-  
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -227,54 +307,56 @@ class _CariKosState extends State<CariKos> {
           child: Row(
             children: [
               GestureDetector(
-                  onTap: () {
-                    // Tambahkan kode navigasi ke halaman profil di sini
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const Profile(),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: const Color.fromRGBO(254, 251, 246, 1),
-                      borderRadius: BorderRadius.circular(18),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
-                          spreadRadius: 0,
-                          blurRadius: 4,
-                          offset: const Offset(0, 1), // Atur posisi shadow
-                        ),
-                      ],
-                      image: userProfile != null && userProfile!.photoURL.isNotEmpty
-                          ? DecorationImage(
-                              image: NetworkImage(userProfile!.photoURL),
-                              fit: BoxFit.cover,
-                              onError: (exception, stackTrace) {
-                                // Handle the error, for example by showing a default image
-                                DecorationImage(
-                                  image: AssetImage('lib/icons/orang.png'),
-                                  fit: BoxFit.cover,
-                                  colorFilter: ColorFilter.mode(
-                                      const Color.fromRGBO(100, 204, 197, 1),
-                                      BlendMode.srcATop),
-                                );
-                              },
-                            )
-                          : DecorationImage(
-                              image: AssetImage('lib/icons/orang.png'),
-                              fit: BoxFit.cover,
-                              colorFilter: ColorFilter.mode(
-                                  const Color.fromRGBO(100, 204, 197, 1),
-                                  BlendMode.srcATop),
-                            ),
+                onTap: () {
+                  // Tambahkan kode navigasi ke halaman profil di sini
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Profile(),
                     ),
+                  );
+                },
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(254, 251, 246, 1),
+                    borderRadius: BorderRadius.circular(18),
+                    boxShadow: [
+                      BoxShadow(
+                        color:
+                            const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+                        spreadRadius: 0,
+                        blurRadius: 4,
+                        offset: const Offset(0, 1), // Atur posisi shadow
+                      ),
+                    ],
+                    image:
+                        userProfile != null && userProfile!.photoURL.isNotEmpty
+                            ? DecorationImage(
+                                image: NetworkImage(userProfile!.photoURL),
+                                fit: BoxFit.cover,
+                                onError: (exception, stackTrace) {
+                                  // Handle the error, for example by showing a default image
+                                  const DecorationImage(
+                                    image: AssetImage('lib/icons/orang.png'),
+                                    fit: BoxFit.cover,
+                                    colorFilter: ColorFilter.mode(
+                                        Color.fromRGBO(100, 204, 197, 1),
+                                        BlendMode.srcATop),
+                                  );
+                                },
+                              )
+                            : const DecorationImage(
+                                image: AssetImage('lib/icons/orang.png'),
+                                fit: BoxFit.cover,
+                                colorFilter: ColorFilter.mode(
+                                    Color.fromRGBO(100, 204, 197, 1),
+                                    BlendMode.srcATop),
+                              ),
                   ),
                 ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 20),
                 child: FutureBuilder<UserProfile?>(
@@ -283,12 +365,14 @@ class _CariKosState extends State<CariKos> {
                     if (snapshot.hasData) {
                       return Text(
                         'Hai, ${snapshot.data!.username}',
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       );
                     } else {
-                      return Text(
+                      return const Text(
                         '',
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       );
                     }
                   },
@@ -620,7 +704,7 @@ class _CariKosState extends State<CariKos> {
                                           builder: (context, snapshot) {
                                             if (snapshot.connectionState ==
                                                 ConnectionState.waiting) {
-                                              return CircularProgressIndicator();
+                                              return const CircularProgressIndicator();
                                             }
                                             if (snapshot.hasError) {
                                               return Text(
@@ -941,9 +1025,9 @@ class _CariKosState extends State<CariKos> {
     } else if (amount >= 1000) {
       double result = amount / 1000;
       if (result % 1 == 0) {
-        return 'Rp ${result.toInt()} k/bln';
+        return 'Rp ${result.toInt()} thn';
       } else {
-        return 'Rp ${result.toStringAsFixed(1)} k/bln';
+        return 'Rp ${result.toStringAsFixed(1)} thn';
       }
     } else {
       return 'Rp $amount';
@@ -959,12 +1043,12 @@ class FilterDialog extends StatefulWidget {
     bool isChecked500Meters,
     bool isChecked1KM,
     bool isCheckedLebih1KM,
+    double sliderValue,
   ) applyFilters;
 
   FilterDialog({required this.applyFilters, Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _FilterDialogState createState() => _FilterDialogState();
 }
 
@@ -975,35 +1059,6 @@ class _FilterDialogState extends State<FilterDialog> {
   bool isChecked500Meters = false;
   bool isChecked1KM = false;
   bool isCheckedLebih1KM = false;
-
-  void _applyFilters() {
-    Navigator.of(context).pop();
-    final cariKosState = context.findAncestorStateOfType<_CariKosState>();
-    if (cariKosState != null) {
-      cariKosState.applyFilters(
-        isChecked100Meters,
-        isChecked200Meters,
-        isChecked500Meters,
-        isChecked1KM,
-        isCheckedLebih1KM,
-        // _currentSliderValue,
-      );
-    }
-  }
-
-  String _getLabel(double value) {
-    if (value < 500) {
-      return "< 5 Juta";
-    } else if (value >= 500 && value < 1000) {
-      return "5 - 7 Juta";
-    } else if (value >= 1000 && value < 1500) {
-      return "7 - 10 Juta";
-    } else if (value >= 1500 && value < 2000) {
-      return "10 - 15 Juta";
-    } else {
-      return "> 15 Juta";
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -1035,13 +1090,6 @@ class _FilterDialogState extends State<FilterDialog> {
               onChanged: (bool? value) {
                 setState(() {
                   isChecked100Meters = value!;
-                  widget.applyFilters(
-                    isChecked100Meters,
-                    isChecked200Meters,
-                    isChecked500Meters,
-                    isChecked1KM,
-                    isCheckedLebih1KM,
-                  );
                 });
               },
               activeColor: const Color.fromRGBO(100, 204, 197, 1),
@@ -1053,13 +1101,6 @@ class _FilterDialogState extends State<FilterDialog> {
               onChanged: (bool? value) {
                 setState(() {
                   isChecked200Meters = value!;
-                  widget.applyFilters(
-                    isChecked100Meters,
-                    isChecked200Meters,
-                    isChecked500Meters,
-                    isChecked1KM,
-                    isCheckedLebih1KM,
-                  );
                 });
               },
               activeColor: const Color.fromRGBO(100, 204, 197, 1),
@@ -1071,13 +1112,6 @@ class _FilterDialogState extends State<FilterDialog> {
               onChanged: (bool? value) {
                 setState(() {
                   isChecked500Meters = value!;
-                  widget.applyFilters(
-                    isChecked100Meters,
-                    isChecked200Meters,
-                    isChecked500Meters,
-                    isChecked1KM,
-                    isCheckedLebih1KM,
-                  );
                 });
               },
               activeColor: const Color.fromRGBO(100, 204, 197, 1),
@@ -1089,13 +1123,6 @@ class _FilterDialogState extends State<FilterDialog> {
               onChanged: (bool? value) {
                 setState(() {
                   isChecked1KM = value!;
-                  widget.applyFilters(
-                    isChecked100Meters,
-                    isChecked200Meters,
-                    isChecked500Meters,
-                    isChecked1KM,
-                    isCheckedLebih1KM,
-                  );
                 });
               },
               activeColor: const Color.fromRGBO(100, 204, 197, 1),
@@ -1107,13 +1134,6 @@ class _FilterDialogState extends State<FilterDialog> {
               onChanged: (bool? value) {
                 setState(() {
                   isCheckedLebih1KM = value!;
-                  widget.applyFilters(
-                    isChecked100Meters,
-                    isChecked200Meters,
-                    isChecked500Meters,
-                    isChecked1KM,
-                    isCheckedLebih1KM,
-                  );
                 });
               },
               activeColor: const Color.fromRGBO(100, 204, 197, 1),
@@ -1156,11 +1176,47 @@ class _FilterDialogState extends State<FilterDialog> {
                     ),
                   ),
                 ),
+                TextButton(
+                  onPressed: () {
+                    widget.applyFilters(
+                      isChecked100Meters,
+                      isChecked200Meters,
+                      isChecked500Meters,
+                      isChecked1KM,
+                      isCheckedLebih1KM,
+                      _currentSliderValue,
+                    );
+                    Navigator.of(context)
+                        .pop(); // Close the dialog after applying filters
+                  },
+                  child: Text(
+                    'Terapkan',
+                    style: GoogleFonts.getFont(
+                      'Poppins',
+                      fontSize: 17,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
               ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  String _getLabel(double value) {
+    if (value < 500) {
+      return "< 5 Juta";
+    } else if (value >= 500 && value < 1000) {
+      return "5 - 7 Juta";
+    } else if (value >= 1000 && value < 1500) {
+      return "7 - 10 Juta";
+    } else if (value >= 1500 && value < 2000) {
+      return "10 - 15 Juta";
+    } else {
+      return "> 15 Juta";
+    }
   }
 }
