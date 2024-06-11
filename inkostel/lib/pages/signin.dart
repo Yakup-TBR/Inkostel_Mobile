@@ -120,7 +120,7 @@ class _SignInScreenState extends State<SignInScreen> {
             );
           },
           child: const Text(
-            " Sign Up",
+            "Sign Up",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
