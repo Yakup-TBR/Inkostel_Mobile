@@ -294,44 +294,44 @@ class _CariKosState extends State<CariKos> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
-      backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
-      appBar: AppBar(
-        // ----------Appbar
-        backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
-        toolbarHeight: 100,
-        title: Padding(
-          padding: const EdgeInsets.only(left: 15),
-          child: Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  // Tambahkan kode navigasi ke halaman profil di sini
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Profile(),
-                    ),
-                  );
-                },
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: const Color.fromRGBO(254, 251, 246, 1),
-                    borderRadius: BorderRadius.circular(18),
-                    boxShadow: [
-                      BoxShadow(
-                        color:
-                            const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
-                        spreadRadius: 0,
-                        blurRadius: 4,
-                        offset: const Offset(0, 1), // Atur posisi shadow
-                      ),
-                    ],
-                    image:
-                        userProfile != null && userProfile!.photoURL.isNotEmpty
+          backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
+          appBar: AppBar(
+            // ----------Appbar
+            backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
+            toolbarHeight: 100,
+            title: Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      // Tambahkan kode navigasi ke halaman profil di sini
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Profile(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(254, 251, 246, 1),
+                        borderRadius: BorderRadius.circular(18),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color.fromARGB(255, 0, 0, 0)
+                                .withOpacity(0.5),
+                            spreadRadius: 0,
+                            blurRadius: 4,
+                            offset: const Offset(0, 1), // Atur posisi shadow
+                          ),
+                        ],
+                        image: userProfile != null &&
+                                userProfile!.photoURL.isNotEmpty
                             ? DecorationImage(
                                 image: NetworkImage(userProfile!.photoURL),
                                 fit: BoxFit.cover,
@@ -353,653 +353,684 @@ class _CariKosState extends State<CariKos> {
                                     Color.fromRGBO(100, 204, 197, 1),
                                     BlendMode.srcATop),
                               ),
+                      ),
+                    ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: FutureBuilder<UserProfile?>(
+                      future:
+                          getUserProfile(), // Panggil metode getUserProfile()
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Text(
+                            'Hai, ${snapshot.data!.username}',
+                            style: const TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          );
+                        } else {
+                          return const Text(
+                            '',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          );
+                        }
+                      },
+                    ),
+                  )
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: FutureBuilder<UserProfile?>(
-                  future: getUserProfile(), // Panggil metode getUserProfile()
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Text(
-                        'Hai, ${snapshot.data!.username}',
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      );
-                    } else {
-                      return const Text(
-                        '',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      );
-                    }
-                  },
-                ),
-              )
-            ],
+            ),
           ),
-        ),
-      ),
-      body: Stack(
-        children: [
-          Column(children: [
-            // ----------SearchBar dan Tombol
-            Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 22),
-                    child: Container(
-                      height: 45,
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(254, 251, 246, 1),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: TextField(
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          hintStyle: GoogleFonts.getFont(
-                            'Poppins',
-                            fontSize: 16,
+          body: Stack(
+            children: [
+              Column(children: [
+                // ----------SearchBar dan Tombol
+                Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 22),
+                        child: Container(
+                          height: 45,
+                          decoration: BoxDecoration(
+                            color: const Color.fromRGBO(254, 251, 246, 1),
+                            borderRadius: BorderRadius.circular(30),
                           ),
-
-                          hintText: 'Cari Kos Disini..',
-                          suffixIcon: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: InkWell(
-                              onTap: () {
-                                // Call the search function here
-                                _searchKostNames();
-                              },
-                              child: Image.asset(
-                                'lib/icons/search.png',
-                                color: const Color.fromRGBO(100, 204, 197, 1),
-                                width: 20,
-                                height: 20,
-                                fit: BoxFit.fill,
+                          child: TextField(
+                            controller: _searchController,
+                            decoration: InputDecoration(
+                              hintStyle: GoogleFonts.getFont(
+                                'Poppins',
+                                fontSize: 16,
                               ),
-                            ),
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(30)),
-                            borderSide: BorderSide(
-                              width: 0.8,
-                              color: Color.fromRGBO(100, 204, 197, 1),
-                            ),
-                          ),
-                          disabledBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(30)),
-                            borderSide: BorderSide(
-                              width: 0.5,
-                              color: Color.fromRGBO(100, 204, 197, 1),
-                            ),
-                          ), // Tidak ada perubahan ? Opsional dihapus nanti
-                          enabledBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(30)),
-                            borderSide: BorderSide(
-                              width: 0.8,
-                              color: Color.fromRGBO(100, 204, 197, 1),
-                            ),
-                          ),
-                          contentPadding:
-                              const EdgeInsets.only(left: 20, top: 8),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: GestureDetector(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => FilterDialog(
-                          applyFilters: applyFilters,
-                        ),
-                      );
-                    },
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 255, 255, 255),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: const Color.fromRGBO(100, 204, 197, 1),
-                          width: 0.5,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color.fromARGB(31, 106, 106, 106)
-                                .withOpacity(0.6),
-                            spreadRadius: 0,
-                            blurRadius: 2,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      padding: const EdgeInsets.all(7),
-                      child: Image.asset(
-                        'lib/icons/filter.png',
-                        color: const Color.fromRGBO(100, 204, 197, 1),
-                      ),
-                    ),
-                  ),
-                ),
-                const Row()
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () => _toggleFilter('putra'),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateColor.resolveWith((states) {
-                      return _selectedCategory == 'putra'
-                          ? const Color.fromRGBO(100, 204, 197, 1)
-                          : Colors.white;
-                    }),
-                    foregroundColor: MaterialStateColor.resolveWith((states) {
-                      return _selectedCategory == 'putra'
-                          ? Colors.white
-                          : const Color.fromRGBO(100, 204, 197, 1);
-                    }),
-                    side: MaterialStateProperty.all(const BorderSide(
-                      color: Color.fromRGBO(100, 204, 197, 1),
-                      width: 1.0,
-                    )),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(3.0),
-                    child: Text(
-                      'Putra',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () => _toggleFilter('putri'),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateColor.resolveWith((states) {
-                      return _selectedCategory == 'putri'
-                          ? const Color.fromRGBO(100, 204, 197, 1)
-                          : Colors.white;
-                    }),
-                    foregroundColor: MaterialStateColor.resolveWith((states) {
-                      return _selectedCategory == 'putri'
-                          ? Colors.white
-                          : const Color.fromRGBO(100, 204, 197, 1);
-                    }),
-                    side: MaterialStateProperty.all(const BorderSide(
-                      color: Color.fromRGBO(100, 204, 197, 1),
-                      width: 1.0,
-                    )),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(3.0),
-                    child: Text(
-                      'Putri',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () => _toggleFilter('campur'),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateColor.resolveWith((states) {
-                      return _selectedCategory == 'campur'
-                          ? const Color.fromRGBO(100, 204, 197, 1)
-                          : Colors.white;
-                    }),
-                    foregroundColor: MaterialStateColor.resolveWith((states) {
-                      return _selectedCategory == 'campur'
-                          ? Colors.white
-                          : const Color.fromRGBO(100, 204, 197, 1);
-                    }),
-                    side: MaterialStateProperty.all(const BorderSide(
-                      color: Color.fromRGBO(100, 204, 197, 1),
-                      width: 1.0,
-                    )),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(3.0),
-                    child: Text(
-                      'Campur',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Expanded(
-                child: _isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : ListView.builder(
-                        controller: _scrollController,
-                        // itemCount: _kostList.length + 1,
-                        itemCount: _displayedKosts.length + 1,
-                        itemBuilder: (context, index) {
-                          if (index == _displayedKosts.length) {
-                            return _isLoadingMore
-                                ? const Center(
-                                    child: CircularProgressIndicator())
-                                : Container();
-                          }
-                          final Kost kost = _displayedKosts[index];
-                          return Container(
-                            width: double.infinity,
-                            margin: const EdgeInsets.all(1),
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 255, 255, 255),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Column(
-                              children: [
-                                Visibility(
-                                  visible: false,
-                                  child: Text(kost.kosId),
-                                ),
-                                const SizedBox(height: 20),
-                                SizedBox(
-                                  width: 370,
-                                  height: 200,
-                                  child: Stack(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Detail(kosId: kost.kosId),
-                                            ),
-                                          );
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                              color: const Color.fromARGB(
-                                                  109, 134, 146, 134),
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(20.0),
-                                            image: DecorationImage(
-                                              image: NetworkImage(kost.imageUrl[
-                                                  0]), // Menggunakan imageUrls dari objek _kos
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        top: 10,
-                                        right: 10,
-                                        child: Container(
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            border: Border.all(
-                                              color:
-                                                  Colors.black.withOpacity(0.5),
-                                              width: 1,
-                                            ),
-                                          ),
-                                          child: Text(
-                                            formatCurrency(kost.hargaPertahun),
-                                            style: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        bottom: 35,
-                                        left: 10,
-                                        child: Text(
-                                          kost.namaKost,
-                                          style: const TextStyle(
-                                            color: Color.fromARGB(
-                                                255, 255, 255, 255),
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        bottom: 10,
-                                        left: 10,
-                                        child: Text(
-                                          formatJarak(kost.jarakKost),
-                                          style: const TextStyle(
-                                            color: Color.fromARGB(
-                                                255, 255, 255, 255),
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                      //UNTUK SIMPAN KOS
-                                      Positioned(
-                                        bottom: 10,
-                                        right: 10,
-                                        child: StreamBuilder<QuerySnapshot>(
-                                          stream: FirebaseFirestore.instance
-                                              .collection('SimpanKos')
-                                              .where('User ID',
-                                                  isEqualTo: FirebaseAuth
-                                                      .instance
-                                                      .currentUser
-                                                      ?.uid)
-                                              .snapshots(),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.connectionState ==
-                                                ConnectionState.waiting) {
-                                              return const CircularProgressIndicator();
-                                            }
-                                            if (snapshot.hasError) {
-                                              return Text(
-                                                  'Error: ${snapshot.error}');
-                                            }
-                                            if (!snapshot.hasData ||
-                                                snapshot.data!.docs.isEmpty) {
-                                              // Tidak ada data yang tersimpan untuk pengguna saat ini
-                                              return GestureDetector(
-                                                onTap: () async {
-                                                  final user = FirebaseAuth
-                                                      .instance.currentUser;
-                                                  if (user != null) {
-                                                    final userId = user.uid;
-                                                    kost.toggleFavoriteStatus();
-                                                    if (kost.isFavorite) {
-                                                      AwesomeNotifications()
-                                                          .createNotification(
-                                                        content:
-                                                            NotificationContent(
-                                                          id: 1,
-                                                          channelKey:
-                                                              'notif_simpan',
-                                                          title:
-                                                              'Kos ${kost.namaKost} telah Disimpan!',
-                                                          body:
-                                                              'Ketuk untuk melihat',
-                                                        ),
-                                                      );
-                                                    }
-                                                    await FirebaseFirestore
-                                                        .instance
-                                                        .collection('Kos')
-                                                        .doc(kost.kosId)
-                                                        .update(
-                                                            kost.toFirestore());
 
-                                                    final simpanKosDocId =
-                                                        '${userId}_${kost.kosId}';
-                                                    if (kost.isFavorite) {
-                                                      await FirebaseFirestore
-                                                          .instance
-                                                          .collection(
-                                                              'SimpanKos')
-                                                          .doc(simpanKosDocId)
-                                                          .set({
-                                                        'Nama Kos':
-                                                            kost.namaKost,
-                                                        'Harga Pertahun':
-                                                            kost.hargaPertahun,
-                                                        'ImageURLs':
-                                                            kost.imageUrl,
-                                                        'Kos ID': kost.kosId,
-                                                        'User ID': userId,
-                                                        'Alamat Kos':
-                                                            kost.alamatKos,
-                                                        'Jarak': kost.jarakKost,
-                                                        'isFavorite':
-                                                            kost.isFavorite,
-                                                      });
-                                                    } else {
-                                                      await FirebaseFirestore
-                                                          .instance
-                                                          .collection(
-                                                              'SimpanKos')
-                                                          .doc(simpanKosDocId)
-                                                          .delete();
-                                                    }
-
-                                                    await FirebaseFirestore
-                                                        .instance
-                                                        .collection('Kos')
-                                                        .doc(kost.kosId)
-                                                        .update({
-                                                      'isFavorite_${userId}':
-                                                          kost.isFavorite
-                                                    });
-                                                  } else {
-                                                    print(
-                                                        'Pengguna tidak login');
-                                                  }
-                                                },
-                                                child: Row(
-                                                  children: [
-                                                    const SizedBox(width: 5),
-                                                    Image.asset(
-                                                      'lib/icons/simpan_active.png',
-                                                      color: Colors.grey,
-                                                      width: 30,
-                                                      height: 30,
-                                                      errorBuilder: (context,
-                                                          error, stackTrace) {
-                                                        return const Icon(
-                                                            Icons.error,
-                                                            color: Colors.red);
-                                                      },
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            } else {
-                                              // Data telah disimpan oleh pengguna saat ini
-                                              final user = FirebaseAuth
-                                                  .instance.currentUser;
-                                              final userId = user?.uid;
-                                              final docs = snapshot.data!.docs;
-                                              final isKostSaved = docs.any(
-                                                  (doc) =>
-                                                      doc['Kos ID'] ==
-                                                          kost.kosId &&
-                                                      doc['User ID'] == userId);
-                                              return GestureDetector(
-                                                onTap: () async {
-                                                  if (user != null) {
-                                                    kost.toggleFavoriteStatus();
-                                                    if (kost.isFavorite) {
-                                                      AwesomeNotifications()
-                                                          .createNotification(
-                                                        content:
-                                                            NotificationContent(
-                                                          id: 1,
-                                                          channelKey:
-                                                              'notif_simpan',
-                                                          title:
-                                                              'Kos ${kost.namaKost} telah Disimpan!',
-                                                          body:
-                                                              'Ketuk untuk melihat',
-                                                        ),
-                                                      );
-                                                    }
-                                                    await FirebaseFirestore
-                                                        .instance
-                                                        .collection('Kos')
-                                                        .doc(kost.kosId)
-                                                        .update(
-                                                            kost.toFirestore());
-
-                                                    final simpanKosDocId =
-                                                        '${userId}_${kost.kosId}';
-                                                    if (kost.isFavorite) {
-                                                      await FirebaseFirestore
-                                                          .instance
-                                                          .collection(
-                                                              'SimpanKos')
-                                                          .doc(simpanKosDocId)
-                                                          .set({
-                                                        'Nama Kos':
-                                                            kost.namaKost,
-                                                        'Harga Pertahun':
-                                                            kost.hargaPertahun,
-                                                        'ImageURLs':
-                                                            kost.imageUrl,
-                                                        'Kos ID': kost.kosId,
-                                                        'User ID': userId,
-                                                        'Alamat Kos':
-                                                            kost.alamatKos,
-                                                        'Jarak': kost.jarakKost,
-                                                        'isFavorite':
-                                                            kost.isFavorite,
-                                                      });
-                                                    } else {
-                                                      await FirebaseFirestore
-                                                          .instance
-                                                          .collection(
-                                                              'SimpanKos')
-                                                          .doc(simpanKosDocId)
-                                                          .delete();
-                                                    }
-
-                                                    await FirebaseFirestore
-                                                        .instance
-                                                        .collection('Kos')
-                                                        .doc(kost.kosId)
-                                                        .update({
-                                                      'isFavorite_${userId}':
-                                                          kost.isFavorite
-                                                    });
-                                                  } else {
-                                                    print(
-                                                        'Pengguna tidak login');
-                                                  }
-                                                },
-                                                child: Row(
-                                                  children: [
-                                                    const SizedBox(width: 5),
-                                                    Image.asset(
-                                                      'lib/icons/simpan_active.png',
-                                                      color: isKostSaved
-                                                          ? const Color
-                                                              .fromRGBO(
-                                                              100, 204, 197, 1)
-                                                          : Colors.grey,
-                                                      width: 30,
-                                                      height: 30,
-                                                      errorBuilder: (context,
-                                                          error, stackTrace) {
-                                                        return const Icon(
-                                                            Icons.error,
-                                                            color: Colors.red);
-                                                      },
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                    ],
+                              hintText: 'Cari Kos Disini..',
+                              suffixIcon: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: InkWell(
+                                  onTap: () {
+                                    // Call the search function here
+                                    _searchKostNames();
+                                  },
+                                  child: Image.asset(
+                                    'lib/icons/search.png',
+                                    color:
+                                        const Color.fromRGBO(100, 204, 197, 1),
+                                    width: 20,
+                                    height: 20,
+                                    fit: BoxFit.fill,
                                   ),
                                 ),
-                              ],
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30)),
+                                borderSide: BorderSide(
+                                  width: 0.8,
+                                  color: Color.fromRGBO(100, 204, 197, 1),
+                                ),
+                              ),
+                              disabledBorder: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30)),
+                                borderSide: BorderSide(
+                                  width: 0.5,
+                                  color: Color.fromRGBO(100, 204, 197, 1),
+                                ),
+                              ), // Tidak ada perubahan ? Opsional dihapus nanti
+                              enabledBorder: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30)),
+                                borderSide: BorderSide(
+                                  width: 0.8,
+                                  color: Color.fromRGBO(100, 204, 197, 1),
+                                ),
+                              ),
+                              contentPadding:
+                                  const EdgeInsets.only(left: 20, top: 8),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      child: GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => FilterDialog(
+                              applyFilters: applyFilters,
                             ),
                           );
                         },
-                      )),
-          ]),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        // Bottom NavBar
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
-        selectedItemColor: const Color.fromARGB(255, 232, 255, 240),
-        unselectedItemColor: Colors.grey,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        selectedFontSize: 14,
-        unselectedFontSize: 14,
-        onTap: (int index) {
-          // Handle bottom navigation bar item tap here
-          switch (index) {
-            case 0:
-              // Navigasi ke halaman Home
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) =>  Home()),
-              );
-              break;
-            case 1:
-              // Navigasi ke halaman Search
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Simpan()),
-              );
-              break;
-            case 2:
-              // Navigasi ke halaman Save
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const JualKos()),
-              );
-              break;
-            case 3:
-              // Navigasi ke halaman Add
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Pengaturan()),
-              );
-              break;
-            default:
-          }
-        },
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 255, 255, 255),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: const Color.fromRGBO(100, 204, 197, 1),
+                              width: 0.5,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color.fromARGB(31, 106, 106, 106)
+                                    .withOpacity(0.6),
+                                spreadRadius: 0,
+                                blurRadius: 2,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          padding: const EdgeInsets.all(7),
+                          child: Image.asset(
+                            'lib/icons/filter.png',
+                            color: const Color.fromRGBO(100, 204, 197, 1),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const Row()
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => _toggleFilter('putra'),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateColor.resolveWith((states) {
+                          return _selectedCategory == 'putra'
+                              ? const Color.fromRGBO(100, 204, 197, 1)
+                              : Colors.white;
+                        }),
+                        foregroundColor:
+                            MaterialStateColor.resolveWith((states) {
+                          return _selectedCategory == 'putra'
+                              ? Colors.white
+                              : const Color.fromRGBO(100, 204, 197, 1);
+                        }),
+                        side: MaterialStateProperty.all(const BorderSide(
+                          color: Color.fromRGBO(100, 204, 197, 1),
+                          width: 1.0,
+                        )),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.all(3.0),
+                        child: Text(
+                          'Putra',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => _toggleFilter('putri'),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateColor.resolveWith((states) {
+                          return _selectedCategory == 'putri'
+                              ? const Color.fromRGBO(100, 204, 197, 1)
+                              : Colors.white;
+                        }),
+                        foregroundColor:
+                            MaterialStateColor.resolveWith((states) {
+                          return _selectedCategory == 'putri'
+                              ? Colors.white
+                              : const Color.fromRGBO(100, 204, 197, 1);
+                        }),
+                        side: MaterialStateProperty.all(const BorderSide(
+                          color: Color.fromRGBO(100, 204, 197, 1),
+                          width: 1.0,
+                        )),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.all(3.0),
+                        child: Text(
+                          'Putri',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => _toggleFilter('campur'),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateColor.resolveWith((states) {
+                          return _selectedCategory == 'campur'
+                              ? const Color.fromRGBO(100, 204, 197, 1)
+                              : Colors.white;
+                        }),
+                        foregroundColor:
+                            MaterialStateColor.resolveWith((states) {
+                          return _selectedCategory == 'campur'
+                              ? Colors.white
+                              : const Color.fromRGBO(100, 204, 197, 1);
+                        }),
+                        side: MaterialStateProperty.all(const BorderSide(
+                          color: Color.fromRGBO(100, 204, 197, 1),
+                          width: 1.0,
+                        )),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.all(3.0),
+                        child: Text(
+                          'Campur',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Expanded(
+                    child: _isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : ListView.builder(
+                            controller: _scrollController,
+                            // itemCount: _kostList.length + 1,
+                            itemCount: _displayedKosts.length + 1,
+                            itemBuilder: (context, index) {
+                              if (index == _displayedKosts.length) {
+                                return _isLoadingMore
+                                    ? const Center(
+                                        child: CircularProgressIndicator())
+                                    : Container();
+                              }
+                              final Kost kost = _displayedKosts[index];
+                              return Container(
+                                width: double.infinity,
+                                margin: const EdgeInsets.all(1),
+                                decoration: BoxDecoration(
+                                  color:
+                                      const Color.fromARGB(255, 255, 255, 255),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Visibility(
+                                      visible: false,
+                                      child: Text(kost.kosId),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    SizedBox(
+                                      width: 370,
+                                      height: 200,
+                                      child: Stack(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Detail(kosId: kost.kosId),
+                                                ),
+                                              );
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                border: Border.all(
+                                                  color: const Color.fromARGB(
+                                                      109, 134, 146, 134),
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(20.0),
+                                                image: DecorationImage(
+                                                  image: NetworkImage(kost
+                                                          .imageUrl[
+                                                      0]), // Menggunakan imageUrls dari objek _kos
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            top: 10,
+                                            right: 10,
+                                            child: Container(
+                                              padding: const EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                border: Border.all(
+                                                  color: Colors.black
+                                                      .withOpacity(0.5),
+                                                  width: 1,
+                                                ),
+                                              ),
+                                              child: Text(
+                                                formatCurrency(
+                                                    kost.hargaPertahun),
+                                                style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            bottom: 35,
+                                            left: 10,
+                                            child: Text(
+                                              kost.namaKost,
+                                              style: const TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 255, 255, 255),
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            bottom: 10,
+                                            left: 10,
+                                            child: Text(
+                                              formatJarak(kost.jarakKost),
+                                              style: const TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 255, 255, 255),
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          //UNTUK SIMPAN KOS
+                                          Positioned(
+                                            bottom: 10,
+                                            right: 10,
+                                            child: StreamBuilder<QuerySnapshot>(
+                                              stream: FirebaseFirestore.instance
+                                                  .collection('SimpanKos')
+                                                  .where('User ID',
+                                                      isEqualTo: FirebaseAuth
+                                                          .instance
+                                                          .currentUser
+                                                          ?.uid)
+                                                  .snapshots(),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.connectionState ==
+                                                    ConnectionState.waiting) {
+                                                  return const CircularProgressIndicator();
+                                                }
+                                                if (snapshot.hasError) {
+                                                  return Text(
+                                                      'Error: ${snapshot.error}');
+                                                }
+                                                if (!snapshot.hasData ||
+                                                    snapshot
+                                                        .data!.docs.isEmpty) {
+                                                  // Tidak ada data yang tersimpan untuk pengguna saat ini
+                                                  return GestureDetector(
+                                                    onTap: () async {
+                                                      final user = FirebaseAuth
+                                                          .instance.currentUser;
+                                                      if (user != null) {
+                                                        final userId = user.uid;
+                                                        kost.toggleFavoriteStatus();
+                                                        if (kost.isFavorite) {
+                                                          AwesomeNotifications()
+                                                              .createNotification(
+                                                            content:
+                                                                NotificationContent(
+                                                              id: 1,
+                                                              channelKey:
+                                                                  'notif_simpan',
+                                                              title:
+                                                                  'Kos ${kost.namaKost} telah Disimpan!',
+                                                              body:
+                                                                  'Ketuk untuk melihat',
+                                                            ),
+                                                          );
+                                                        }
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection('Kos')
+                                                            .doc(kost.kosId)
+                                                            .update(kost
+                                                                .toFirestore());
 
-        items: [
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              'lib/icons/home_active.png',
-              height: 30,
-            ),
-            label: 'Home',
+                                                        final simpanKosDocId =
+                                                            '${userId}_${kost.kosId}';
+                                                        if (kost.isFavorite) {
+                                                          await FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'SimpanKos')
+                                                              .doc(
+                                                                  simpanKosDocId)
+                                                              .set({
+                                                            'Nama Kos':
+                                                                kost.namaKost,
+                                                            'Harga Pertahun': kost
+                                                                .hargaPertahun,
+                                                            'ImageURLs':
+                                                                kost.imageUrl,
+                                                            'Kos ID':
+                                                                kost.kosId,
+                                                            'User ID': userId,
+                                                            'Alamat Kos':
+                                                                kost.alamatKos,
+                                                            'Jarak':
+                                                                kost.jarakKost,
+                                                            'isFavorite':
+                                                                kost.isFavorite,
+                                                          });
+                                                        } else {
+                                                          await FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'SimpanKos')
+                                                              .doc(
+                                                                  simpanKosDocId)
+                                                              .delete();
+                                                        }
+
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection('Kos')
+                                                            .doc(kost.kosId)
+                                                            .update({
+                                                          'isFavorite_${userId}':
+                                                              kost.isFavorite
+                                                        });
+                                                      } else {
+                                                        print(
+                                                            'Pengguna tidak login');
+                                                      }
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        const SizedBox(
+                                                            width: 5),
+                                                        Image.asset(
+                                                          'lib/icons/simpan_active.png',
+                                                          color: Colors.grey,
+                                                          width: 30,
+                                                          height: 30,
+                                                          errorBuilder:
+                                                              (context, error,
+                                                                  stackTrace) {
+                                                            return const Icon(
+                                                                Icons.error,
+                                                                color:
+                                                                    Colors.red);
+                                                          },
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                } else {
+                                                  // Data telah disimpan oleh pengguna saat ini
+                                                  final user = FirebaseAuth
+                                                      .instance.currentUser;
+                                                  final userId = user?.uid;
+                                                  final docs =
+                                                      snapshot.data!.docs;
+                                                  final isKostSaved = docs.any(
+                                                      (doc) =>
+                                                          doc['Kos ID'] ==
+                                                              kost.kosId &&
+                                                          doc['User ID'] ==
+                                                              userId);
+                                                  return GestureDetector(
+                                                    onTap: () async {
+                                                      if (user != null) {
+                                                        kost.toggleFavoriteStatus();
+                                                        if (kost.isFavorite) {
+                                                          AwesomeNotifications()
+                                                              .createNotification(
+                                                            content:
+                                                                NotificationContent(
+                                                              id: 1,
+                                                              channelKey:
+                                                                  'notif_simpan',
+                                                              title:
+                                                                  'Kos ${kost.namaKost} telah Disimpan!',
+                                                              body:
+                                                                  'Ketuk untuk melihat',
+                                                            ),
+                                                          );
+                                                        }
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection('Kos')
+                                                            .doc(kost.kosId)
+                                                            .update(kost
+                                                                .toFirestore());
+
+                                                        final simpanKosDocId =
+                                                            '${userId}_${kost.kosId}';
+                                                        if (kost.isFavorite) {
+                                                          await FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'SimpanKos')
+                                                              .doc(
+                                                                  simpanKosDocId)
+                                                              .set({
+                                                            'Nama Kos':
+                                                                kost.namaKost,
+                                                            'Harga Pertahun': kost
+                                                                .hargaPertahun,
+                                                            'ImageURLs':
+                                                                kost.imageUrl,
+                                                            'Kos ID':
+                                                                kost.kosId,
+                                                            'User ID': userId,
+                                                            'Alamat Kos':
+                                                                kost.alamatKos,
+                                                            'Jarak':
+                                                                kost.jarakKost,
+                                                            'isFavorite':
+                                                                kost.isFavorite,
+                                                          });
+                                                        } else {
+                                                          await FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'SimpanKos')
+                                                              .doc(
+                                                                  simpanKosDocId)
+                                                              .delete();
+                                                        }
+
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection('Kos')
+                                                            .doc(kost.kosId)
+                                                            .update({
+                                                          'isFavorite_${userId}':
+                                                              kost.isFavorite
+                                                        });
+                                                      } else {
+                                                        print(
+                                                            'Pengguna tidak login');
+                                                      }
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        const SizedBox(
+                                                            width: 5),
+                                                        Image.asset(
+                                                          'lib/icons/simpan_active.png',
+                                                          color: isKostSaved
+                                                              ? const Color
+                                                                  .fromRGBO(100,
+                                                                  204, 197, 1)
+                                                              : Colors.grey,
+                                                          width: 30,
+                                                          height: 30,
+                                                          errorBuilder:
+                                                              (context, error,
+                                                                  stackTrace) {
+                                                            return const Icon(
+                                                                Icons.error,
+                                                                color:
+                                                                    Colors.red);
+                                                          },
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          )),
+              ]),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              'lib/icons/simpan.png',
-              height: 30,
-            ),
-            label: 'Search',
+          bottomNavigationBar: BottomNavigationBar(
+            // Bottom NavBar
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
+            selectedItemColor: const Color.fromARGB(255, 232, 255, 240),
+            unselectedItemColor: Colors.grey,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            selectedFontSize: 14,
+            unselectedFontSize: 14,
+            onTap: (int index) {
+              // Handle bottom navigation bar item tap here
+              switch (index) {
+                case 0:
+                  // Navigasi ke halaman Home
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Home()),
+                  );
+                  break;
+                case 1:
+                  // Navigasi ke halaman Search
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Simpan()),
+                  );
+                  break;
+                case 2:
+                  // Navigasi ke halaman Save
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const JualKos()),
+                  );
+                  break;
+                case 3:
+                  // Navigasi ke halaman Add
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Pengaturan()),
+                  );
+                  break;
+                default:
+              }
+            },
+
+            items: [
+              BottomNavigationBarItem(
+                icon: Image.asset(
+                  'lib/icons/home_active.png',
+                  height: 30,
+                ),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Image.asset(
+                  'lib/icons/simpan.png',
+                  height: 30,
+                ),
+                label: 'Search',
+              ),
+              BottomNavigationBarItem(
+                icon: Image.asset(
+                  'lib/icons/plus.png',
+                  height: 30,
+                ),
+                label: 'Save',
+              ),
+              BottomNavigationBarItem(
+                icon: Image.asset(
+                  'lib/icons/gear.png',
+                  height: 30,
+                ),
+                label: 'Settings',
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              'lib/icons/plus.png',
-              height: 30,
-            ),
-            label: 'Save',
-          ),
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              'lib/icons/gear.png',
-              height: 30,
-            ),
-            label: 'Settings',
-          ),
-        ],
-      ),
-    ));
+        ));
   }
 
   // Fungsi untuk mengonversi jarak
