@@ -14,7 +14,7 @@ import 'package:inkostel/pages/carikos_terdekat.dart';
 import 'package:inkostel/pages/carikos_termurah.dart';
 
 class Home extends StatefulWidget {
- Home({super.key});
+  Home({super.key});
   // ignore: unused_field
   final TextEditingController _searchController = TextEditingController();
 
@@ -89,6 +89,7 @@ class _HomeState extends State<Home> {
                     );
                   },
                   child: Container(
+                    key: const Key('orang_image'), // Menambahkan key pada Container
                     width: 50,
                     height: 50,
                     decoration: BoxDecoration(
@@ -111,7 +112,7 @@ class _HomeState extends State<Home> {
                               onError: (exception, stackTrace) {
                                 // Handle the error, for example by showing a default image
                                 const DecorationImage(
-                                  image: AssetImage('lib/icons/orang.png'),
+                                  image: AssetImage('lib/icons/orang.png',),
                                   fit: BoxFit.cover,
                                   colorFilter: ColorFilter.mode(
                                       Color.fromRGBO(100, 204, 197, 1),
@@ -181,16 +182,17 @@ class _HomeState extends State<Home> {
                               padding: const EdgeInsets.all(10.0),
                               child: InkWell(
                                 onTap: () {
-                      String searchText = _searchController.text;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CariKos(searchText: searchText),
-                        ),
-                      );
-                    },
+                                  String searchText = _searchController.text;
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          CariKos(searchText: searchText),
+                                    ),
+                                  );
+                                },
                                 child: Image.asset(
-                                  'lib/icons/search.png',
+                                  'lib/icons/search.png', key: const Key('search_image'),
                                   color: const Color.fromRGBO(100, 204, 197, 1),
                                   width: 20,
                                   height: 20,
@@ -254,11 +256,14 @@ class _HomeState extends State<Home> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const CariKos(searchText: '',)),
+                                      builder: (context) => const CariKos(
+                                            searchText: '',
+                                          )),
                                 );
                               },
                               child: Text(
                                 'See All',
+                                key: const Key('seeAllRekomendasi'),
                                 style: GoogleFonts.getFont(
                                   'Poppins',
                                   color: const Color.fromRGBO(100, 204, 197, 1),
@@ -326,6 +331,7 @@ class _HomeState extends State<Home> {
                               },
                               child: Text(
                                 'See All',
+                                key: const Key('seeAllTerdekat'),
                                 style: GoogleFonts.getFont(
                                   'Poppins',
                                   color: const Color.fromRGBO(100, 204, 197, 1),
@@ -392,6 +398,7 @@ class _HomeState extends State<Home> {
                               },
                               child: Text(
                                 'See All',
+                                key: const Key('seeAllTermurah'),
                                 style: GoogleFonts.getFont(
                                   'Poppins',
                                   color: const Color.fromRGBO(100, 204, 197, 1),
@@ -490,28 +497,28 @@ class _HomeState extends State<Home> {
           items: [
             BottomNavigationBarItem(
               icon: Image.asset(
-                'lib/icons/home_active.png',
+                'lib/icons/home_active.png', key: const Key('homeActive_image'),
                 height: 30,
               ),
               label: 'Home',
             ),
             BottomNavigationBarItem(
               icon: Image.asset(
-                'lib/icons/simpan.png',
+                'lib/icons/simpan.png', key: const Key('simpan_image'),
                 height: 30,
               ),
               label: 'Search',
             ),
             BottomNavigationBarItem(
               icon: Image.asset(
-                'lib/icons/plus.png',
+                'lib/icons/plus.png', key: const Key('plus_image'),
                 height: 30,
               ),
               label: 'Save',
             ),
             BottomNavigationBarItem(
               icon: Image.asset(
-                'lib/icons/gear.png',
+                'lib/icons/gear.png', key: const Key('gear_image'),
                 height: 30,
               ),
               label: 'Settings',
