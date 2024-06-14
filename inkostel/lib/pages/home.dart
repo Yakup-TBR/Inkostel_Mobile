@@ -79,6 +79,7 @@ class _HomeState extends State<Home> {
             child: Row(
               children: [
                 GestureDetector(
+                  key: Key('profileButton'),
                   onTap: () {
                     // Tambahkan kode navigasi ke halaman profil di sini
                     Navigator.push(
@@ -89,7 +90,7 @@ class _HomeState extends State<Home> {
                     );
                   },
                   child: Container(
-                    key: const Key('orang_image'), // Menambahkan key pada Container
+                    key: const Key('orang_image'),
                     width: 50,
                     height: 50,
                     decoration: BoxDecoration(
@@ -112,7 +113,9 @@ class _HomeState extends State<Home> {
                               onError: (exception, stackTrace) {
                                 // Handle the error, for example by showing a default image
                                 const DecorationImage(
-                                  image: AssetImage('lib/icons/orang.png',),
+                                  image: AssetImage(
+                                    'lib/icons/orang.png',
+                                  ),
                                   fit: BoxFit.cover,
                                   colorFilter: ColorFilter.mode(
                                       Color.fromRGBO(100, 204, 197, 1),
@@ -163,6 +166,7 @@ class _HomeState extends State<Home> {
                 children: [
                   Expanded(
                     child: Padding(
+                      key: Key('searchBar'),
                       padding: const EdgeInsets.only(left: 22, right: 22),
                       child: Container(
                         height: 45,
@@ -192,7 +196,8 @@ class _HomeState extends State<Home> {
                                   );
                                 },
                                 child: Image.asset(
-                                  'lib/icons/search.png', key: const Key('search_image'),
+                                  'lib/icons/search.png',
+                                  key: const Key('search_image'),
                                   color: const Color.fromRGBO(100, 204, 197, 1),
                                   width: 20,
                                   height: 20,
@@ -314,7 +319,7 @@ class _HomeState extends State<Home> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Terdekat',
+                            Text('Terdekat dari Tel-U',
                                 style: GoogleFonts.getFont(
                                   'Poppins',
                                   fontSize: 25,
@@ -497,31 +502,39 @@ class _HomeState extends State<Home> {
           items: [
             BottomNavigationBarItem(
               icon: Image.asset(
-                'lib/icons/home_active.png', key: const Key('homeActive_image'),
+                'lib/icons/home_active.png',
+                key: const Key('homeActive_image'),
                 height: 30,
               ),
               label: 'Home',
+              key: Key('homeNavItem'),
             ),
             BottomNavigationBarItem(
               icon: Image.asset(
-                'lib/icons/simpan.png', key: const Key('simpan_image'),
+                'lib/icons/simpan.png',
+                key: const Key('simpan_image'),
                 height: 30,
               ),
               label: 'Search',
+              key: Key('simpanNavItem'),
             ),
             BottomNavigationBarItem(
               icon: Image.asset(
-                'lib/icons/plus.png', key: const Key('plus_image'),
+                'lib/icons/plus.png',
+                key: const Key('plus_image'),
                 height: 30,
               ),
               label: 'Save',
+              key: Key('saveNavItem'),
             ),
             BottomNavigationBarItem(
               icon: Image.asset(
-                'lib/icons/gear.png', key: const Key('gear_image'),
+                'lib/icons/gear.png',
+                key: const Key('gear_image'),
                 height: 30,
               ),
               label: 'Settings',
+              key: Key('SetNavItem'),
             ),
           ],
         ),
