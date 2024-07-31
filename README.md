@@ -5,8 +5,6 @@
 <h4 align="left">Inkostel Mobile is an Android application that makes it easy for users to search for and promote boarding houses around Telkom University.
 </h4>
 
-###
-
 <h4 align="left">Utilizing the Flutter Framework using the Dart programming language, and using Firebase as the application database.</h4>
 
 ###
@@ -23,8 +21,9 @@
 <h4>https://github.com/RIPO12345</h4>
 
 ###
-<h3>Code With</h3>
 
+<h3 align="left">>Code With</h3>
+###
 <div align="left">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" height="40" alt="flutter logo" />
   <img width="12" />
