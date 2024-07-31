@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/Detailk.dart';
-import 'package:inkostel/pages/profile.dart';
-import 'package:inkostel/pages/simpan.dart';
+import 'package:inkostel/pages/carikos.dart';
+import 'package:inkostel/pages/carikos_terdekat.dart';
+import 'package:inkostel/pages/carikos_termurah.dart';
 import 'package:inkostel/pages/jualkos.dart';
+import 'package:inkostel/pages/profile.dart';
 import 'package:inkostel/pages/settings.dart';
+import 'package:inkostel/pages/simpan.dart';
+import 'package:inkostel/service/home_service.dart';
 import 'package:inkostel/service/kost_model.dart';
 import 'package:inkostel/service/user_model.dart';
 import 'package:inkostel/utils/format_currency.dart';
-import 'package:inkostel/service/home_service.dart';
-import 'package:inkostel/pages/carikos_terdekat.dart';
-import 'package:inkostel/pages/carikos_termurah.dart';
 
 class Home extends StatefulWidget {
   Home({super.key});
@@ -79,7 +79,7 @@ class _HomeState extends State<Home> {
             child: Row(
               children: [
                 GestureDetector(
-                  key: Key('profileButton'),
+                  key: const Key('profileButton'),
                   onTap: () {
                     // Tambahkan kode navigasi ke halaman profil di sini
                     Navigator.push(
@@ -166,7 +166,7 @@ class _HomeState extends State<Home> {
                 children: [
                   Expanded(
                     child: Padding(
-                      key: Key('searchBar'),
+                      key: const Key('searchBar'),
                       padding: const EdgeInsets.only(left: 22, right: 22),
                       child: Container(
                         height: 45,
@@ -507,7 +507,7 @@ class _HomeState extends State<Home> {
                 height: 30,
               ),
               label: 'Home',
-              key: Key('homeNavItem'),
+              key: const Key('homeNavItem'),
             ),
             BottomNavigationBarItem(
               icon: Image.asset(
@@ -516,7 +516,7 @@ class _HomeState extends State<Home> {
                 height: 30,
               ),
               label: 'Search',
-              key: Key('simpanNavItem'),
+              key: const Key('simpanNavItem'),
             ),
             BottomNavigationBarItem(
               icon: Image.asset(
@@ -525,7 +525,7 @@ class _HomeState extends State<Home> {
                 height: 30,
               ),
               label: 'Save',
-              key: Key('saveNavItem'),
+              key: const Key('saveNavItem'),
             ),
             BottomNavigationBarItem(
               icon: Image.asset(
@@ -534,7 +534,7 @@ class _HomeState extends State<Home> {
                 height: 30,
               ),
               label: 'Settings',
-              key: Key('SetNavItem'),
+              key: const Key('SetNavItem'),
             ),
           ],
         ),

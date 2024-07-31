@@ -1,11 +1,13 @@
+// ignore_for_file: avoid_print, use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/pages/home.dart';
+import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/profile.dart';
 import 'package:inkostel/pages/simpan.dart';
-import 'package:inkostel/pages/jualkos.dart';
-import 'package:flutter/services.dart';
 import 'package:inkostel/pages/splash.dart';
 import 'package:inkostel/service/user_model.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -380,7 +382,7 @@ class _PengaturanState extends State<Pengaturan> {
                                         Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => SplashScreen()),
+                                              builder: (context) => const SplashScreen()),
                                         );
                                       },
                                       child: const Text(

@@ -1,5 +1,8 @@
+// ignore_for_file: unused_element, library_private_types_in_public_api
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/notification_controller.dart';
@@ -9,9 +12,7 @@ import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/profile.dart';
 import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
-import 'package:inkostel/service/image_service.dart';
 import 'package:inkostel/service/kost_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:inkostel/service/user_model.dart';
 
 void main() {
@@ -42,8 +43,10 @@ class _CariKosTerdekatState extends State<CariKosTerdekat> {
   List<Kost> _displayedKosts = [];
   bool _isLoading = true;
   bool _isLoadingMore = false;
+  // ignore: prefer_final_fields
   int _batchSize = 3;
   int _currentBatch = 0;
+  // ignore: prefer_final_fields
   ScrollController _scrollController = ScrollController();
   String _selectedCategory = '';
   bool isChecked100Meters = false;
@@ -100,8 +103,6 @@ class _CariKosTerdekatState extends State<CariKosTerdekat> {
         }
 
         // Debug print for distance filtering
-        print(
-            'kost.jarakKost: ${kost.jarakKost}, matchesDistance: $matchesDistance');
 
         // Filter harga
         if (_currentSliderValue < 500) {
@@ -120,6 +121,7 @@ class _CariKosTerdekatState extends State<CariKosTerdekat> {
         }
 
         // Debug print for price filtering
+        // ignore: avoid_print
         print(
             'kost.hargaPertahun: ${kost.hargaPertahun}, matchesPrice: $matchesPrice');
 
@@ -197,6 +199,7 @@ class _CariKosTerdekatState extends State<CariKosTerdekat> {
         });
       }
     } catch (e) {
+      // ignore: avoid_print
       print("Error fetching user profile: $e");
     }
   }
@@ -222,7 +225,6 @@ class _CariKosTerdekatState extends State<CariKosTerdekat> {
 
     setState(() {
       _currentBatch++;
-      int nextBatchEnd = _currentBatch * _batchSize;
       List<Kost> newBatch = _allKosts
           .skip((_currentBatch - 1) * _batchSize)
           .take(_batchSize)
@@ -775,10 +777,12 @@ class _CariKosTerdekatState extends State<CariKosTerdekat> {
                                                         .collection('Kos')
                                                         .doc(kost.kosId)
                                                         .update({
+                                                      // ignore: unnecessary_brace_in_string_interps
                                                       'isFavorite_${userId}':
                                                           kost.isFavorite
                                                     });
                                                   } else {
+                                                    // ignore: avoid_print
                                                     print(
                                                         'Pengguna tidak login');
                                                   }
@@ -875,10 +879,12 @@ class _CariKosTerdekatState extends State<CariKosTerdekat> {
                                                         .collection('Kos')
                                                         .doc(kost.kosId)
                                                         .update({
+                                                      // ignore: unnecessary_brace_in_string_interps
                                                       'isFavorite_${userId}':
                                                           kost.isFavorite
                                                     });
                                                   } else {
+                                                    // ignore: avoid_print
                                                     print(
                                                         'Pengguna tidak login');
                                                   }
@@ -1042,6 +1048,7 @@ class FilterDialog extends StatefulWidget {
     double sliderValue,
   ) applyFilters;
 
+  // ignore: use_super_parameters, prefer_const_constructors_in_immutables
   FilterDialog({required this.applyFilters, Key? key}) : super(key: key);
 
   @override

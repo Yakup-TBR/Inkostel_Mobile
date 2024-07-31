@@ -1,19 +1,20 @@
+// ignore_for_file: use_key_in_widget_constructors
+
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/service/kost_model.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:inkostel/utils/format_currency.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,9 +32,11 @@ class MyApp extends StatelessWidget {
 class Detail extends StatefulWidget {
   final String kosId;
 
+  // ignore: use_super_parameters
   const Detail({required this.kosId, Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _DetailState createState() => _DetailState();
 }
 
@@ -58,6 +61,7 @@ class _DetailState extends State<Detail> {
     });
   }
 
+  // ignore: unused_element
   Future<void> _reloadKost() async {
     setState(() {
       _isLoading = true;
@@ -74,24 +78,26 @@ class _DetailState extends State<Detail> {
   }
 
   bool isSimpanPressed = false;
-  final PanelController _panelController = PanelController();
 
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Scaffold(
-        appBar: AppBar(title: Text('Loading...')),
-        body: Center(child: CircularProgressIndicator()),
+        appBar: AppBar(title: const Text('Loading...')),
+        body: const Center(child: CircularProgressIndicator()),
       );
     }
 
+    // ignore: no_leading_underscores_for_local_identifiers
     final Uri _wa = Uri.parse('https://wa.me/${_kos?.noWA}');
+    // ignore: no_leading_underscores_for_local_identifiers
     Future<void> _launchwa() async {
       if (!await launchUrl(_wa)) {
         throw Exception('Could not launch $_wa');
       }
     }
 
+    // ignore: no_leading_underscores_for_local_identifiers
     Future<void> _launchUrl() async {
       if (_kos?.urlMap == null || _kos!.urlMap.isEmpty) {
         // Menonaktifkan tombol jika URL kosong
@@ -211,7 +217,7 @@ class _DetailState extends State<Detail> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => CariKos(
+                                  builder: (context) => const CariKos(
                                         searchText: '',
                                       )),
                             );
@@ -301,6 +307,7 @@ class _DetailState extends State<Detail> {
                                       {'isFavorite_$userId': _kos?.isFavorite});
                             } else {
                               // Tangani kasus ketika pengguna tidak login
+                              // ignore: avoid_print
                               print('Pengguna tidak login');
                             }
                           },
@@ -441,7 +448,7 @@ class _DetailState extends State<Detail> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top: 10, left: 20),
+                            padding: const EdgeInsets.only(top: 10, left: 20),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -450,7 +457,7 @@ class _DetailState extends State<Detail> {
                                     children: [
                                       Icon(
                                         MdiIcons.airConditioner,
-                                        color: Color.fromRGBO(100, 204, 197, 1),
+                                        color: const Color.fromRGBO(100, 204, 197, 1),
                                         size: 20,
                                       ),
                                       const SizedBox(width: 1),
@@ -472,10 +479,10 @@ class _DetailState extends State<Detail> {
                                     children: [
                                       Icon(
                                         MdiIcons.wifi,
-                                        color: Color.fromRGBO(100, 204, 197, 1),
+                                        color: const Color.fromRGBO(100, 204, 197, 1),
                                         size: 20,
                                       ),
-                                      SizedBox(width: 1),
+                                      const SizedBox(width: 1),
                                       const Text(
                                         'WIFI',
                                         style: TextStyle(
@@ -494,7 +501,7 @@ class _DetailState extends State<Detail> {
                                     children: [
                                       Icon(
                                         MdiIcons.fridgeOutline,
-                                        color: Color.fromRGBO(100, 204, 197, 1),
+                                        color: const Color.fromRGBO(100, 204, 197, 1),
                                         size: 20,
                                       ),
                                       const SizedBox(width: 1),
@@ -510,7 +517,7 @@ class _DetailState extends State<Detail> {
                                       ),
                                     ],
                                   ),
-                                SizedBox(width: 5),
+                                const SizedBox(width: 5),
                                 if (_kos?.fasilitas['Tempat Parkir'] == true)
                                   Row(
                                     children: [
@@ -540,7 +547,7 @@ class _DetailState extends State<Detail> {
                                     children: [
                                       Icon(
                                         MdiIcons.toilet,
-                                        color: Color.fromRGBO(100, 204, 197, 1),
+                                        color: const Color.fromRGBO(100, 204, 197, 1),
                                         size: 20,
                                       ),
                                       const SizedBox(width: 1),
@@ -573,7 +580,7 @@ class _DetailState extends State<Detail> {
                                     color: Color.fromRGBO(0, 0, 0, 1),
                                   ),
                                 ),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 Align(
                                   alignment: Alignment.topLeft,
                                   child: Text(

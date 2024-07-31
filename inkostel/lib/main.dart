@@ -1,10 +1,11 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:flutter/material.dart';
 import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/splash.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
+import 'firebase_options.dart';
 
 void main() async {
   // Inisiasi database
@@ -35,6 +36,7 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
+  // ignore: use_super_parameters
   const MyApp({Key? key}) : super(key: key);
 
   @override

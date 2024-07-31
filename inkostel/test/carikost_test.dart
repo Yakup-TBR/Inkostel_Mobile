@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:inkostel/pages/carikos.dart';
 
 void main() {
   testWidgets('Image asset loads correctly', (WidgetTester tester) async {
     // Build the widget
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(const MaterialApp(
       home: Scaffold(
         body: ImageWidget(),
       ),
@@ -26,7 +25,7 @@ void main() {
 
   testWidgets('Image error handled correctly', (WidgetTester tester) async {
     // Build the widget with error
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(const MaterialApp(
       home: Scaffold(
         body: ImageWidget(
           isError: true,
@@ -45,6 +44,7 @@ void main() {
 class ImageWidget extends StatelessWidget {
   final bool isError;
 
+  // ignore: use_super_parameters
   const ImageWidget({Key? key, this.isError = false}) : super(key: key);
 
   @override
@@ -53,14 +53,14 @@ class ImageWidget extends StatelessWidget {
       children: [
         const SizedBox(width: 5),
         isError
-            ? Icon(Icons.error, color: Colors.red)
+            ? const Icon(Icons.error, color: Colors.red)
             : Image.asset(
                 'lib/icons/simpan_active.png',
                 color: Colors.grey,
                 width: 30,
                 height: 30,
                 errorBuilder: (context, error, stackTrace) {
-                  return Icon(Icons.error, color: Colors.red);
+                  return const Icon(Icons.error, color: Colors.red);
                 },
               ),
       ],

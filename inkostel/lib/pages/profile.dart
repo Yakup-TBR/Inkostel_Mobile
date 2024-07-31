@@ -1,22 +1,19 @@
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:inkostel/pages/settings.dart';
-import 'package:random_string/random_string.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:inkostel/pages/carikos.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:inkostel/pages/jualkos.dart';
+import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/signin.dart';
 import 'package:inkostel/pages/simpan.dart';
-import 'package:inkostel/pages/tes.dart';
 import 'package:inkostel/service/user_model.dart';
 
 class Profile extends StatefulWidget {
+  // ignore: use_super_parameters
   const Profile({Key? key}) : super(key: key);
 
   @override

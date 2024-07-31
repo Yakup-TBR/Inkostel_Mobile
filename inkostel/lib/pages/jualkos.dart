@@ -1,4 +1,8 @@
+// ignore_for_file: avoid_print, use_rethrow_when_possible
+
 import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,8 +13,6 @@ import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/service/database.dart';
 import 'package:inkostel/service/user_model.dart';
 import 'package:random_string/random_string.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class JualKos extends StatefulWidget {
   const JualKos({super.key});
@@ -28,9 +30,11 @@ class _JualKosState extends State<JualKos> {
   TextEditingController hargaPertahunController = TextEditingController();
   TextEditingController hargaPerbulanController = TextEditingController();
   TextEditingController deskripsiController = TextEditingController();
+  // ignore: non_constant_identifier_names
   TextEditingController JarakController = TextEditingController();
   UserProfile? userProfile;
 
+  // ignore: annotate_overrides
   void initState() {
     super.initState();
     _fetchUserProfile();
@@ -67,7 +71,7 @@ class _JualKosState extends State<JualKos> {
     'Kamar Mandi Dalam': false,
   };
 
-  List<File> _imageFiles = [];
+  final List<File> _imageFiles = [];
 
   // Function to handle selecting an image from the gallery or camera
   Future<void> _pickImage(ImageSource source) async {
@@ -103,29 +107,6 @@ class _JualKosState extends State<JualKos> {
     }
   }
 
-  Future<void> _uploadImagesAndSaveUrls(List<File> imageFiles) async {
-    List<String> imageUrls = [];
-    for (int i = 0; i < imageFiles.length; i++) {
-      String imageName = 'kost_image_${DateTime.now().millisecondsSinceEpoch}_$i.jpg';
-      String downloadUrl = await uploadImageToFirebase(imageFiles[i].path, imageName);
-      imageUrls.add(downloadUrl);
-    }
-
-    // Simpan URL gambar ke Firestore
-    for (String url in imageUrls) {
-      await FirebaseFirestore.instance.collection('images').add({
-        'url': url,
-        'uploaded_at': Timestamp.now(),
-      });
-    }
-    Fluttertoast.showToast(
-      msg: "Images uploaded and URLs saved successfully!",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER,
-      backgroundColor: Colors.green,
-      textColor: Colors.white,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -170,20 +151,20 @@ class _JualKosState extends State<JualKos> {
                               fit: BoxFit.cover,
                               onError: (exception, stackTrace) {
                                 // Handle the error, for example by showing a default image
-                                DecorationImage(
+                                const DecorationImage(
                                   image: AssetImage('lib/icons/orang.png'),
                                   fit: BoxFit.cover,
                                   colorFilter: ColorFilter.mode(
-                                      const Color.fromRGBO(100, 204, 197, 1),
+                                      Color.fromRGBO(100, 204, 197, 1),
                                       BlendMode.srcATop),
                                 );
                               },
                             )
-                          : DecorationImage(
+                          : const DecorationImage(
                               image: AssetImage('lib/icons/orang.png'),
                               fit: BoxFit.cover,
                               colorFilter: ColorFilter.mode(
-                                  const Color.fromRGBO(100, 204, 197, 1),
+                                  Color.fromRGBO(100, 204, 197, 1),
                                   BlendMode.srcATop),
                             ),
                     ),
@@ -200,9 +181,9 @@ class _JualKosState extends State<JualKos> {
                           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         );
                       } else {
-                        return Text(
+                        return const Text(
                           '',
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         );
                       }
                     },

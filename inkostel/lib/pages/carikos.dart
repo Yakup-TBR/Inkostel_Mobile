@@ -1,5 +1,8 @@
+// ignore_for_file: use_super_parameters, unused_element, unnecessary_brace_in_string_interps
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/notification_controller.dart';
@@ -9,10 +12,8 @@ import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/profile.dart';
 import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/simpan.dart';
-import 'package:inkostel/service/image_service.dart';
 // import 'package:inkostel/main.dart';
 import 'package:inkostel/service/kost_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:inkostel/service/user_model.dart';
 
 
@@ -35,6 +36,7 @@ class CariKos extends StatefulWidget {
   }
 
   @override
+  // ignore: library_private_types_in_public_api
   _CariKosState createState() => _CariKosState();
 }
 
@@ -44,9 +46,9 @@ class _CariKosState extends State<CariKos> {
   List<Kost> _displayedKosts = [];
   bool _isLoading = true;
   bool _isLoadingMore = false;
-  int _batchSize = 3;
+  final int _batchSize = 3;
   int _currentBatch = 0;
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   String _selectedCategory = '';
   bool isChecked100Meters = false;
@@ -103,6 +105,7 @@ class _CariKosState extends State<CariKos> {
         }
 
         // Debug print for distance filtering
+        // ignore: avoid_print
         print(
             'kost.jarakKost: ${kost.jarakKost}, matchesDistance: $matchesDistance');
 
@@ -123,6 +126,7 @@ class _CariKosState extends State<CariKos> {
         }
 
         // Debug print for price filtering
+        // ignore: avoid_print
         print(
             'kost.hargaPertahun: ${kost.hargaPertahun}, matchesPrice: $matchesPrice');
 
@@ -200,6 +204,7 @@ class _CariKosState extends State<CariKos> {
         });
       }
     } catch (e) {
+      // ignore: avoid_print
       print("Error fetching user profile: $e");
     }
   }
@@ -224,6 +229,7 @@ class _CariKosState extends State<CariKos> {
 
     setState(() {
       _currentBatch++;
+      // ignore: unused_local_variable
       int nextBatchEnd = _currentBatch * _batchSize;
       List<Kost> newBatch = _allKosts
           .skip((_currentBatch - 1) * _batchSize)
@@ -801,6 +807,7 @@ class _CariKosState extends State<CariKos> {
                                                               kost.isFavorite
                                                         });
                                                       } else {
+                                                        // ignore: avoid_print
                                                         print(
                                                             'Pengguna tidak login');
                                                       }
@@ -910,6 +917,7 @@ class _CariKosState extends State<CariKos> {
                                                               kost.isFavorite
                                                         });
                                                       } else {
+                                                        // ignore: avoid_print
                                                         print(
                                                             'Pengguna tidak login');
                                                       }
@@ -1076,9 +1084,10 @@ class FilterDialog extends StatefulWidget {
     double sliderValue,
   ) applyFilters;
 
-  FilterDialog({required this.applyFilters, Key? key}) : super(key: key);
+  const FilterDialog({required this.applyFilters, Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _FilterDialogState createState() => _FilterDialogState();
 }
 
