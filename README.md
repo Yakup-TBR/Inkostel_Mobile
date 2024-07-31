@@ -2,12 +2,12 @@
 
 ###
 
-<p align="left">Inkostel Mobile is an Android application that makes it easy for users to search for and promote boarding houses around Telkom University.
-</p>
+<h4 align="left">Inkostel Mobile is an Android application that makes it easy for users to search for and promote boarding houses around Telkom University.
+</h4>
 
 ###
 
-<h2 align="left">Utilizing the Flutter Framework using the Dart programming language, and using Firebase as the application database.</h2>
+<h4 align="left">Utilizing the Flutter Framework using the Dart programming language, and using Firebase as the application database.</h4>
 
 ###
 
