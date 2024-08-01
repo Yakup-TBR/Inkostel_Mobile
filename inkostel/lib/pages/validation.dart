@@ -6,6 +6,7 @@ void main() {
 
 // ignore: must_be_immutable
 class Validation extends StatelessWidget {
+  // ignore: use_key_in_widget_constructors
   Validation({Key? key});
 
   @override

@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Location CRUD',
       home: LocationScreen(),
     );
@@ -16,7 +16,10 @@ class MyApp extends StatelessWidget {
 }
 
 class LocationScreen extends StatefulWidget {
+  const LocationScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _LocationScreenState createState() => _LocationScreenState();
 }
 

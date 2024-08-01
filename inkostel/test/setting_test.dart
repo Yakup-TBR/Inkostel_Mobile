@@ -4,7 +4,7 @@ import 'package:inkostel/pages/settings.dart';
 
 void main() {
   testWidgets('Bottom navigation bar test', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(const MaterialApp(
       home: Pengaturan(),
     ));
 

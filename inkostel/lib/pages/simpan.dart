@@ -4,8 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:inkostel/pages/Detailk.dart';
 import 'package:inkostel/pages/carikos.dart';
+import 'package:inkostel/pages/detailk.dart';
 import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/settings.dart';
@@ -95,17 +95,6 @@ class _SimpanState extends State<Simpan> {
     }
   }
 
-  Future<void> _removeFromSaved(String documentId, String kosId) async {
-    await FirebaseFirestore.instance
-        .collection('SimpanKos')
-        .doc(documentId)
-        .delete();
-
-    await FirebaseFirestore.instance
-        .collection('Kos')
-        .doc(kosId)
-        .update({'isFavorite': false});
-  }
 
   @override
   void dispose() {

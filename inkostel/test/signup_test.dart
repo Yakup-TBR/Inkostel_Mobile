@@ -4,7 +4,7 @@ import 'package:inkostel/pages/signup.dart';
 
 void main() {
   testWidgets('Sign Up Screen UI Test', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(const MaterialApp(
       home: SignUpScreen(),
     ));
 
@@ -21,7 +21,7 @@ void main() {
   });
 
   testWidgets('Sign Up with Valid Credentials', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(const MaterialApp(
       home: SignUpScreen(),
     ));
 
@@ -38,7 +38,7 @@ void main() {
   });
 
   testWidgets('Sign Up with Invalid Credentials', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(const MaterialApp(
       home: SignUpScreen(),
     ));
 

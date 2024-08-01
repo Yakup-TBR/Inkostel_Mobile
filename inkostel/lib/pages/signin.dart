@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:inkostel/utils/reusable.dart';
+import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/signup.dart';
 import 'package:inkostel/utils/color.dart';
-import 'package:inkostel/pages/home.dart';
+import 'package:inkostel/utils/reusable.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -65,6 +65,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       password: _passwordTextController.text,
                     );
                     Navigator.pushReplacement(
+                      // ignore: use_build_context_synchronously
                       context,
                       MaterialPageRoute(
                         builder: (context) =>  Home(),
@@ -82,14 +83,16 @@ class _SignInScreenState extends State<SignInScreen> {
                     } else {
                       errorMessage = "Terjadi kesalahan. Silakan coba lagi.";
                     }
+                    // ignore: use_build_context_synchronously
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(errorMessage),
                       ),
                     );
                   } catch (e) {
+                    // ignore: use_build_context_synchronously
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
+                      const SnackBar(
                         content: Text("Terjadi kesalahan. Silakan coba lagi."),
                       ),
                     );

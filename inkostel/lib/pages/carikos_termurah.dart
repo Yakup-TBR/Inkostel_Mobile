@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inkostel/notification_controller.dart';
-import 'package:inkostel/pages/Detailk.dart';
+import 'package:inkostel/pages/detailk.dart';
 import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/profile.dart';
@@ -501,17 +501,17 @@ class _CariKosTermurahState extends State<CariKosTermurah> {
                 ElevatedButton(
                   onPressed: () => _toggleFilter('putra'),
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateColor.resolveWith((states) {
+                    backgroundColor: WidgetStateColor.resolveWith((states) {
                       return _selectedCategory == 'putra'
                           ? const Color.fromRGBO(100, 204, 197, 1)
                           : Colors.white;
                     }),
-                    foregroundColor: MaterialStateColor.resolveWith((states) {
+                    foregroundColor: WidgetStateColor.resolveWith((states) {
                       return _selectedCategory == 'putra'
                           ? Colors.white
                           : const Color.fromRGBO(100, 204, 197, 1);
                     }),
-                    side: MaterialStateProperty.all(const BorderSide(
+                    side: WidgetStateProperty.all(const BorderSide(
                       color: Color.fromRGBO(100, 204, 197, 1),
                       width: 1.0,
                     )),
@@ -527,17 +527,17 @@ class _CariKosTermurahState extends State<CariKosTermurah> {
                 ElevatedButton(
                   onPressed: () => _toggleFilter('putri'),
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateColor.resolveWith((states) {
+                    backgroundColor: WidgetStateColor.resolveWith((states) {
                       return _selectedCategory == 'putri'
                           ? const Color.fromRGBO(100, 204, 197, 1)
                           : Colors.white;
                     }),
-                    foregroundColor: MaterialStateColor.resolveWith((states) {
+                    foregroundColor: WidgetStateColor.resolveWith((states) {
                       return _selectedCategory == 'putri'
                           ? Colors.white
                           : const Color.fromRGBO(100, 204, 197, 1);
                     }),
-                    side: MaterialStateProperty.all(const BorderSide(
+                    side: WidgetStateProperty.all(const BorderSide(
                       color: Color.fromRGBO(100, 204, 197, 1),
                       width: 1.0,
                     )),
@@ -553,17 +553,17 @@ class _CariKosTermurahState extends State<CariKosTermurah> {
                 ElevatedButton(
                   onPressed: () => _toggleFilter('campur'),
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateColor.resolveWith((states) {
+                    backgroundColor: WidgetStateColor.resolveWith((states) {
                       return _selectedCategory == 'campur'
                           ? const Color.fromRGBO(100, 204, 197, 1)
                           : Colors.white;
                     }),
-                    foregroundColor: MaterialStateColor.resolveWith((states) {
+                    foregroundColor: WidgetStateColor.resolveWith((states) {
                       return _selectedCategory == 'campur'
                           ? Colors.white
                           : const Color.fromRGBO(100, 204, 197, 1);
                     }),
-                    side: MaterialStateProperty.all(const BorderSide(
+                    side: WidgetStateProperty.all(const BorderSide(
                       color: Color.fromRGBO(100, 204, 197, 1),
                       width: 1.0,
                     )),

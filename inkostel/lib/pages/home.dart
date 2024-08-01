@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:inkostel/pages/Detailk.dart';
 import 'package:inkostel/pages/carikos.dart';
 import 'package:inkostel/pages/carikos_terdekat.dart';
 import 'package:inkostel/pages/carikos_termurah.dart';
+import 'package:inkostel/pages/detailk.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/profile.dart';
 import 'package:inkostel/pages/settings.dart';
@@ -73,6 +73,7 @@ class _HomeState extends State<Home> {
         appBar: AppBar(
           // ----------Appbar
           backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
+          scrolledUnderElevation: 0.0,
           toolbarHeight: 100,
           title: Padding(
             padding: const EdgeInsets.only(left: 15),

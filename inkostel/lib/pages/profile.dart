@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,6 +19,7 @@ class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _ProfileState createState() => _ProfileState();
 }
 
@@ -429,7 +432,7 @@ class _ProfileState extends State<Profile> {
 
   Future<void> _editProfileField(
       BuildContext context, String field, String currentValue) async {
-    TextEditingController _controller = TextEditingController(text: currentValue);
+    TextEditingController controller = TextEditingController(text: currentValue);
 
     showDialog(
       context: context,
@@ -437,7 +440,7 @@ class _ProfileState extends State<Profile> {
         return AlertDialog(
           title: Text('Edit $field'),
           content: TextField(
-            controller: _controller,
+            controller: controller,
             decoration: InputDecoration(hintText: "Enter new $field"),
           ),
           actions: <Widget>[
@@ -450,7 +453,7 @@ class _ProfileState extends State<Profile> {
             TextButton(
               child: const Text('SAVE'),
               onPressed: () {
-                _saveProfileField(field, _controller.text);
+                _saveProfileField(field, controller.text);
                 Navigator.of(context).pop();
               },
             ),

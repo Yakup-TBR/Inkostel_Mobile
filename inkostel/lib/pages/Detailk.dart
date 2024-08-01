@@ -1,5 +1,3 @@
-// ignore_for_file: use_key_in_widget_constructors
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -17,10 +15,12 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
@@ -104,12 +104,14 @@ class _DetailState extends State<Detail> {
         return;
       }
 
-      final Uri _url = Uri.parse(_kos!.urlMap);
+      final Uri url = Uri.parse(_kos!.urlMap);
 
-      if (!await canLaunch(_url.toString())) {
-        throw Exception('Could not launch $_url');
+      // ignore: deprecated_member_use
+      if (!await canLaunch(url.toString())) {
+        throw Exception('Could not launch $url');
       } else {
-        await launch(_url.toString());
+        // ignore: deprecated_member_use
+        await launch(url.toString());
       }
     }
 

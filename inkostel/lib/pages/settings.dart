@@ -534,19 +534,19 @@ class _PengaturanState extends State<Pengaturan> {
 }
 
 _launchURLTentang() async {
-  Uri _url = Uri.parse('https://github.com/Yakup-TBR/Inkostel_Mobile');
-  if (await launchUrl(_url)) {
-    await launchUrl(_url);
+  Uri url = Uri.parse('https://github.com/Yakup-TBR/Inkostel_Mobile');
+  if (await launchUrl(url)) {
+    await launchUrl(url);
   } else {
-    throw 'Could not launch $_url';
+    throw 'Could not launch $url';
   }
 }
 
 _launchURLTanggapan() async {
-  Uri _url = Uri.parse('https://forms.gle/JmAGcCzSao6oTAnE7');
-  if (await launchUrl(_url)) {
-    await launchUrl(_url);
+  Uri url = Uri.parse('https://forms.gle/JmAGcCzSao6oTAnE7');
+  if (await launchUrl(url)) {
+    await launchUrl(url);
   } else {
-    throw 'Could not launch $_url';
+    throw 'Could not launch $url';
   }
 }

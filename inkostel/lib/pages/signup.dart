@@ -1,20 +1,22 @@
+// ignore_for_file: avoid_print
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:inkostel/pages/signin.dart';
-import 'package:inkostel/utils/reusable.dart';
 import 'package:inkostel/utils/color.dart';
+import 'package:inkostel/utils/reusable.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  const SignUpScreen({super.key});
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  TextEditingController _passwordTextController = TextEditingController();
-  TextEditingController _emailTextController = TextEditingController();
-  TextEditingController _usernameTextController = TextEditingController();
+  final TextEditingController _passwordTextController = TextEditingController();
+  final TextEditingController _emailTextController = TextEditingController();
+  final TextEditingController _usernameTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     print("Created New Account");
                     // Tampilkan Snackbar setelah berhasil mendaftar
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
+                      const SnackBar(
                         content: Text('Akun berhasil didaftarkan'),
                       ),
                     );

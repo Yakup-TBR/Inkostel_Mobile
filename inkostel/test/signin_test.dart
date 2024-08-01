@@ -5,7 +5,7 @@ import 'package:inkostel/pages/signin.dart';
 void main() {
   testWidgets('Sign In Screen UI Test', (WidgetTester tester) async {
     // Build our SignInScreen widget and trigger a frame.
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(const MaterialApp(
       home: SignInScreen(),
     ));
 
@@ -25,7 +25,7 @@ void main() {
   });
 
   testWidgets('Sign In with Invalid Credentials', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(const MaterialApp(
       home: SignInScreen(),
     ));
 

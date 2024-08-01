@@ -381,6 +381,7 @@ class _JualKosState extends State<JualKos> {
                         const SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () async {
+                            // ignore: non_constant_identifier_names
                             String Id = randomAlphaNumeric(8);
 
                             // Upload images to Firebase Storage
@@ -395,7 +396,7 @@ class _JualKosState extends State<JualKos> {
                             Map<String, dynamic> kosDataMap = {
                               "Kos ID": Id,
                               "Nama Kos": namaKosController.text,
-                              "Nomor Telepon": "62" + nomorTelponController.text,
+                              "Nomor Telepon": "62${nomorTelponController.text}",
                               "Alamat Kos": alamatKos1Controller.text,
                               "Link Map": alamatlinkController.text,
                               "Harga Pertahun": int.tryParse(hargaPertahunController.text) ?? 0,

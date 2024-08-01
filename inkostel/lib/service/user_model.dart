@@ -1,10 +1,13 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:random_string/random_string.dart';
 
 class UserProfile {
@@ -166,6 +169,7 @@ Future<String> uploadImageToFirebase(String imagePath, String imageName) async {
     return downloadUrl;
   } catch (e) {
     print(e);
+    // ignore: use_rethrow_when_possible
     throw e;
   }
 }
@@ -188,6 +192,7 @@ Future<void> pickImage(BuildContext context, ImageSource source) async {
 }
 
 // Method to upload multiple images to Firebase Storage and save URLs to Firestore
+// ignore: unused_element
 Future<void> _uploadImagesAndSaveUrls(List<File> imageFiles) async {
   List<String> imageUrls = [];
   for (int i = 0; i < imageFiles.length; i++) {
