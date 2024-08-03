@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:inkostel/pages/home.dart';
 import 'package:inkostel/pages/jualkos.dart';
 import 'package:inkostel/pages/settings.dart';
 import 'package:inkostel/pages/signin.dart';
@@ -57,7 +58,8 @@ class _ProfileState extends State<Profile> {
     String userPhone = user.nomorTelepon.isNotEmpty ? user.nomorTelepon : '';
     String userEmail = user.email.isNotEmpty ? user.email : 'user@example.com';
     String userDescription = user.deskripsi.isNotEmpty ? user.deskripsi : '';
-    String userPhotoURL = user.photoURL.isNotEmpty ? user.photoURL : 'lib/icons/orang.png';
+    String userPhotoURL =
+        user.photoURL.isNotEmpty ? user.photoURL : 'lib/icons/orang.png';
 
     return Stack(
       children: [
@@ -65,7 +67,8 @@ class _ProfileState extends State<Profile> {
           padding: EdgeInsets.zero,
           children: <Widget>[
             buildTop(context, userPhotoURL),
-            buildBottom(context, userName, userUsername, userEmail, userPhone, userDescription),
+            buildBottom(context, userName, userUsername, userEmail, userPhone,
+                userDescription),
             const SizedBox(height: 100),
           ],
         ),
@@ -75,76 +78,79 @@ class _ProfileState extends State<Profile> {
 
   Widget _buildBottomNavigationBar() {
     return BottomNavigationBar(
-          // Bottom NavBar
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
-          selectedItemColor: const Color.fromARGB(255, 232, 255, 240),
-          unselectedItemColor: Colors.grey,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          selectedFontSize: 14,
-          unselectedFontSize: 14,
-          onTap: (int index) {
-            // Handle bottom navigation bar item tap here
-            switch (index) {
-              case 0:
-                // Navigasi ke halaman Home
-                break;
-              case 1:
-                // Navigasi ke halaman Search
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Simpan()),
-                );
-                break;
-              case 2:
-                // Navigasi ke halaman Save
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const JualKos()),
-                );
-                break;
-              case 3:
-                // Navigasi ke halaman Add
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Pengaturan()),
-                );
-                break;
-              default:
-            }
-          },
-          items: [
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'lib/icons/home_active.png',
-                height: 30,
-              ),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'lib/icons/simpan.png',
-                height: 30,
-              ),
-              label: 'Search',
-            ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'lib/icons/plus.png',
-                height: 30,
-              ),
-              label: 'Save',
-            ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                'lib/icons/gear.png',
-                height: 30,
-              ),
-              label: 'Settings',
-            ),
-          ],
-        );
+      // Bottom NavBar
+      type: BottomNavigationBarType.fixed,
+      backgroundColor: const Color.fromRGBO(100, 204, 197, 1),
+      selectedItemColor: const Color.fromARGB(255, 232, 255, 240),
+      unselectedItemColor: Colors.grey,
+      showSelectedLabels: false,
+      showUnselectedLabels: false,
+      selectedFontSize: 14,
+      unselectedFontSize: 14,
+      onTap: (int index) {
+        // Handle bottom navigation bar item tap here
+        switch (index) {
+          case 0:
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Home()),
+            );
+            break;
+          case 1:
+            // Navigasi ke halaman Search
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Simpan()),
+            );
+            break;
+          case 2:
+            // Navigasi ke halaman Save
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const JualKos()),
+            );
+            break;
+          case 3:
+            // Navigasi ke halaman Add
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Pengaturan()),
+            );
+            break;
+          default:
+        }
+      },
+      items: [
+        BottomNavigationBarItem(
+          icon: Image.asset(
+            'lib/icons/home_active.png',
+            height: 30,
+          ),
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Image.asset(
+            'lib/icons/simpan.png',
+            height: 30,
+          ),
+          label: 'Search',
+        ),
+        BottomNavigationBarItem(
+          icon: Image.asset(
+            'lib/icons/plus.png',
+            height: 30,
+          ),
+          label: 'Save',
+        ),
+        BottomNavigationBarItem(
+          icon: Image.asset(
+            'lib/icons/gear.png',
+            height: 30,
+          ),
+          label: 'Settings',
+        ),
+      ],
+    );
   }
 
   Future<UserProfile?> _getUserData() async {
@@ -260,7 +266,8 @@ class _ProfileState extends State<Profile> {
               width: profileSize,
               height: profileSize,
               fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) =>Image.asset('lib/icons/orang.png'),
+              errorBuilder: (context, error, stackTrace) =>
+                  Image.asset('lib/icons/orang.png'),
             ),
           ),
         ),
@@ -333,7 +340,8 @@ class _ProfileState extends State<Profile> {
             endIndent: 40,
           ),
           _buildProfileInfo('Nomor Telepon', phone, context, Icons.phone),
-          _buildProfileInfo('Deskripsi', description, context, Icons.description),
+          _buildProfileInfo(
+              'Deskripsi', description, context, Icons.description),
           const SizedBox(height: 20),
         ],
       ),
@@ -426,13 +434,15 @@ class _ProfileState extends State<Profile> {
     final uploadTask = ref.putFile(File(pickedFile.path));
     final snapshot = await uploadTask.whenComplete(() {});
     final downloadURL = await snapshot.ref.getDownloadURL();
-    updateProfileImageURL(downloadURL); // This should update the profile image URL in your user profile.
+    updateProfileImageURL(
+        downloadURL); // This should update the profile image URL in your user profile.
     setState(() {});
   }
 
   Future<void> _editProfileField(
       BuildContext context, String field, String currentValue) async {
-    TextEditingController controller = TextEditingController(text: currentValue);
+    TextEditingController controller =
+        TextEditingController(text: currentValue);
 
     showDialog(
       context: context,

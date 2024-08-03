@@ -386,7 +386,7 @@ class _SimpanState extends State<Simpan> {
                   ),
                   Positioned(
                     bottom: 10,
-                    left: 10,
+                    left: 1,
                     child: Row(
                       children: [
                         Text(

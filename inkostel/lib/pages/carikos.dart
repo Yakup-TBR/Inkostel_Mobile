@@ -16,7 +16,6 @@ import 'package:inkostel/pages/simpan.dart';
 import 'package:inkostel/service/kost_model.dart';
 import 'package:inkostel/service/user_model.dart';
 
-
 void main() {
   runApp(MaterialApp(
     home: Home(),
@@ -306,6 +305,7 @@ class _CariKosState extends State<CariKos> {
           appBar: AppBar(
             // ----------Appbar
             backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
+            scrolledUnderElevation: 0.0,
             toolbarHeight: 100,
             title: Padding(
               padding: const EdgeInsets.only(left: 15),
@@ -502,95 +502,98 @@ class _CariKosState extends State<CariKos> {
                     const Row()
                   ],
                 ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () => _toggleFilter('putra'),
-                      style: ButtonStyle(
-                        backgroundColor:
-                            WidgetStateColor.resolveWith((states) {
-                          return _selectedCategory == 'putra'
-                              ? const Color.fromRGBO(100, 204, 197, 1)
-                              : Colors.white;
-                        }),
-                        foregroundColor:
-                            WidgetStateColor.resolveWith((states) {
-                          return _selectedCategory == 'putra'
-                              ? Colors.white
-                              : const Color.fromRGBO(100, 204, 197, 1);
-                        }),
-                        side: WidgetStateProperty.all(const BorderSide(
-                          color: Color.fromRGBO(100, 204, 197, 1),
-                          width: 1.0,
-                        )),
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.all(3.0),
-                        child: Text(
-                          'Putra',
-                          style: TextStyle(fontSize: 20),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () => _toggleFilter('putra'),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              WidgetStateColor.resolveWith((states) {
+                            return _selectedCategory == 'putra'
+                                ? const Color.fromRGBO(100, 204, 197, 1)
+                                : Colors.white;
+                          }),
+                          foregroundColor:
+                              WidgetStateColor.resolveWith((states) {
+                            return _selectedCategory == 'putra'
+                                ? Colors.white
+                                : const Color.fromRGBO(100, 204, 197, 1);
+                          }),
+                          side: WidgetStateProperty.all(const BorderSide(
+                            color: Color.fromRGBO(100, 204, 197, 1),
+                            width: 1.0,
+                          )),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(3.0),
+                          child: Text(
+                            'Putra',
+                            style: TextStyle(fontSize: 20),
+                          ),
                         ),
                       ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () => _toggleFilter('putri'),
-                      style: ButtonStyle(
-                        backgroundColor:
-                            WidgetStateColor.resolveWith((states) {
-                          return _selectedCategory == 'putri'
-                              ? const Color.fromRGBO(100, 204, 197, 1)
-                              : Colors.white;
-                        }),
-                        foregroundColor:
-                            WidgetStateColor.resolveWith((states) {
-                          return _selectedCategory == 'putri'
-                              ? Colors.white
-                              : const Color.fromRGBO(100, 204, 197, 1);
-                        }),
-                        side: WidgetStateProperty.all(const BorderSide(
-                          color: Color.fromRGBO(100, 204, 197, 1),
-                          width: 1.0,
-                        )),
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.all(3.0),
-                        child: Text(
-                          'Putri',
-                          style: TextStyle(fontSize: 20),
+                      ElevatedButton(
+                        onPressed: () => _toggleFilter('putri'),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              WidgetStateColor.resolveWith((states) {
+                            return _selectedCategory == 'putri'
+                                ? const Color.fromRGBO(100, 204, 197, 1)
+                                : Colors.white;
+                          }),
+                          foregroundColor:
+                              WidgetStateColor.resolveWith((states) {
+                            return _selectedCategory == 'putri'
+                                ? Colors.white
+                                : const Color.fromRGBO(100, 204, 197, 1);
+                          }),
+                          side: WidgetStateProperty.all(const BorderSide(
+                            color: Color.fromRGBO(100, 204, 197, 1),
+                            width: 1.0,
+                          )),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(3.0),
+                          child: Text(
+                            'Putri',
+                            style: TextStyle(fontSize: 20),
+                          ),
                         ),
                       ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () => _toggleFilter('campur'),
-                      style: ButtonStyle(
-                        backgroundColor:
-                            WidgetStateColor.resolveWith((states) {
-                          return _selectedCategory == 'campur'
-                              ? const Color.fromRGBO(100, 204, 197, 1)
-                              : Colors.white;
-                        }),
-                        foregroundColor:
-                            WidgetStateColor.resolveWith((states) {
-                          return _selectedCategory == 'campur'
-                              ? Colors.white
-                              : const Color.fromRGBO(100, 204, 197, 1);
-                        }),
-                        side: WidgetStateProperty.all(const BorderSide(
-                          color: Color.fromRGBO(100, 204, 197, 1),
-                          width: 1.0,
-                        )),
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.all(3.0),
-                        child: Text(
-                          'Campur',
-                          style: TextStyle(fontSize: 20),
+                      ElevatedButton(
+                        onPressed: () => _toggleFilter('campur'),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              WidgetStateColor.resolveWith((states) {
+                            return _selectedCategory == 'campur'
+                                ? const Color.fromRGBO(100, 204, 197, 1)
+                                : Colors.white;
+                          }),
+                          foregroundColor:
+                              WidgetStateColor.resolveWith((states) {
+                            return _selectedCategory == 'campur'
+                                ? Colors.white
+                                : const Color.fromRGBO(100, 204, 197, 1);
+                          }),
+                          side: WidgetStateProperty.all(const BorderSide(
+                            color: Color.fromRGBO(100, 204, 197, 1),
+                            width: 1.0,
+                          )),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(3.0),
+                          child: Text(
+                            'Campur',
+                            style: TextStyle(fontSize: 20),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 Expanded(
                     child: _isLoading
@@ -609,7 +612,8 @@ class _CariKosState extends State<CariKos> {
                               final Kost kost = _displayedKosts[index];
                               return Container(
                                 width: double.infinity,
-                                margin: const EdgeInsets.all(1),
+                                margin: const EdgeInsets.only(
+                                    bottom: 10, left: 1, right: 1),
                                 decoration: BoxDecoration(
                                   color:
                                       const Color.fromARGB(255, 255, 255, 255),

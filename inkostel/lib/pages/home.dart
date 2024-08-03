@@ -332,7 +332,9 @@ class _HomeState extends State<Home> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const CariKosTerdekat()),
+                                          const CariKosTerdekat(
+                                            searchText: '',
+                                          )),
                                 );
                               },
                               child: Text(
@@ -399,7 +401,9 @@ class _HomeState extends State<Home> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const CariKosTermurah()),
+                                          const CariKosTermurah(
+                                            searchText: '',
+                                          )),
                                 );
                               },
                               child: Text(

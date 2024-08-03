@@ -16,22 +16,26 @@ import 'package:inkostel/service/kost_model.dart';
 import 'package:inkostel/service/user_model.dart';
 
 void main() {
-  runApp(const CariKosTerdekat());
+  runApp( MaterialApp(
+    home: Home(),
+  ));
 }
 
 class CariKosTerdekat extends StatefulWidget {
-  const CariKosTerdekat({super.key});
+    final String searchText;
+
+  const CariKosTerdekat({super.key, required this.searchText});
 
   static Future<List<Kost>> fetchData() async {
     QuerySnapshot querySnapshot =
-      await FirebaseFirestore.instance.collection("Kos").get();
-  List<Kost> kostList =
-      querySnapshot.docs.map((doc) => Kost.fromFirestore(doc)).toList();
+        await FirebaseFirestore.instance.collection("Kos").get();
+    List<Kost> kostList =
+        querySnapshot.docs.map((doc) => Kost.fromFirestore(doc)).toList();
 
-  // Urutkan berdasarkan jarak terdekat
-  kostList.sort((a, b) => a.jarakKost.compareTo(b.jarakKost));
+    // Urutkan berdasarkan jarak terdekat
+    kostList.sort((a, b) => a.jarakKost.compareTo(b.jarakKost));
 
-  return kostList;
+    return kostList;
   }
 
   @override
@@ -294,11 +298,14 @@ class _CariKosTerdekatState extends State<CariKosTerdekat> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+          debugShowCheckedModeBanner: false,
+
         home: Scaffold(
       backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
       appBar: AppBar(
         // ----------Appbar
         backgroundColor: const Color.fromRGBO(253, 252, 248, 1),
+        scrolledUnderElevation: 0.0,
         toolbarHeight: 100,
         title: Padding(
           padding: const EdgeInsets.only(left: 15),
@@ -490,89 +497,92 @@ class _CariKosTerdekatState extends State<CariKosTerdekat> {
                 const Row()
               ],
             ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () => _toggleFilter('putra'),
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateColor.resolveWith((states) {
-                      return _selectedCategory == 'putra'
-                          ? const Color.fromRGBO(100, 204, 197, 1)
-                          : Colors.white;
-                    }),
-                    foregroundColor: WidgetStateColor.resolveWith((states) {
-                      return _selectedCategory == 'putra'
-                          ? Colors.white
-                          : const Color.fromRGBO(100, 204, 197, 1);
-                    }),
-                    side: WidgetStateProperty.all(const BorderSide(
-                      color: Color.fromRGBO(100, 204, 197, 1),
-                      width: 1.0,
-                    )),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(3.0),
-                    child: Text(
-                      'Putra',
-                      style: TextStyle(fontSize: 20),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => _toggleFilter('putra'),
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateColor.resolveWith((states) {
+                        return _selectedCategory == 'putra'
+                            ? const Color.fromRGBO(100, 204, 197, 1)
+                            : Colors.white;
+                      }),
+                      foregroundColor: WidgetStateColor.resolveWith((states) {
+                        return _selectedCategory == 'putra'
+                            ? Colors.white
+                            : const Color.fromRGBO(100, 204, 197, 1);
+                      }),
+                      side: WidgetStateProperty.all(const BorderSide(
+                        color: Color.fromRGBO(100, 204, 197, 1),
+                        width: 1.0,
+                      )),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(3.0),
+                      child: Text(
+                        'Putra',
+                        style: TextStyle(fontSize: 20),
+                      ),
                     ),
                   ),
-                ),
-                ElevatedButton(
-                  onPressed: () => _toggleFilter('putri'),
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateColor.resolveWith((states) {
-                      return _selectedCategory == 'putri'
-                          ? const Color.fromRGBO(100, 204, 197, 1)
-                          : Colors.white;
-                    }),
-                    foregroundColor: WidgetStateColor.resolveWith((states) {
-                      return _selectedCategory == 'putri'
-                          ? Colors.white
-                          : const Color.fromRGBO(100, 204, 197, 1);
-                    }),
-                    side: WidgetStateProperty.all(const BorderSide(
-                      color: Color.fromRGBO(100, 204, 197, 1),
-                      width: 1.0,
-                    )),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(3.0),
-                    child: Text(
-                      'Putri',
-                      style: TextStyle(fontSize: 20),
+                  ElevatedButton(
+                    onPressed: () => _toggleFilter('putri'),
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateColor.resolveWith((states) {
+                        return _selectedCategory == 'putri'
+                            ? const Color.fromRGBO(100, 204, 197, 1)
+                            : Colors.white;
+                      }),
+                      foregroundColor: WidgetStateColor.resolveWith((states) {
+                        return _selectedCategory == 'putri'
+                            ? Colors.white
+                            : const Color.fromRGBO(100, 204, 197, 1);
+                      }),
+                      side: WidgetStateProperty.all(const BorderSide(
+                        color: Color.fromRGBO(100, 204, 197, 1),
+                        width: 1.0,
+                      )),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(3.0),
+                      child: Text(
+                        'Putri',
+                        style: TextStyle(fontSize: 20),
+                      ),
                     ),
                   ),
-                ),
-                ElevatedButton(
-                  onPressed: () => _toggleFilter('campur'),
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateColor.resolveWith((states) {
-                      return _selectedCategory == 'campur'
-                          ? const Color.fromRGBO(100, 204, 197, 1)
-                          : Colors.white;
-                    }),
-                    foregroundColor: WidgetStateColor.resolveWith((states) {
-                      return _selectedCategory == 'campur'
-                          ? Colors.white
-                          : const Color.fromRGBO(100, 204, 197, 1);
-                    }),
-                    side: WidgetStateProperty.all(const BorderSide(
-                      color: Color.fromRGBO(100, 204, 197, 1),
-                      width: 1.0,
-                    )),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(3.0),
-                    child: Text(
-                      'Campur',
-                      style: TextStyle(fontSize: 20),
+                  ElevatedButton(
+                    onPressed: () => _toggleFilter('campur'),
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateColor.resolveWith((states) {
+                        return _selectedCategory == 'campur'
+                            ? const Color.fromRGBO(100, 204, 197, 1)
+                            : Colors.white;
+                      }),
+                      foregroundColor: WidgetStateColor.resolveWith((states) {
+                        return _selectedCategory == 'campur'
+                            ? Colors.white
+                            : const Color.fromRGBO(100, 204, 197, 1);
+                      }),
+                      side: WidgetStateProperty.all(const BorderSide(
+                        color: Color.fromRGBO(100, 204, 197, 1),
+                        width: 1.0,
+                      )),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(3.0),
+                      child: Text(
+                        'Campur',
+                        style: TextStyle(fontSize: 20),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             Expanded(
                 child: _isLoading
@@ -591,7 +601,8 @@ class _CariKosTerdekatState extends State<CariKosTerdekat> {
                           final Kost kost = _displayedKosts[index];
                           return Container(
                             width: double.infinity,
-                            margin: const EdgeInsets.all(1),
+                            margin: const EdgeInsets.only(
+                                bottom: 10, left: 1, right: 1),
                             decoration: BoxDecoration(
                               color: const Color.fromARGB(255, 255, 255, 255),
                               borderRadius: BorderRadius.circular(10),
@@ -943,7 +954,7 @@ class _CariKosTerdekatState extends State<CariKosTerdekat> {
               // Navigasi ke halaman Home
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) =>  Home()),
+                MaterialPageRoute(builder: (context) => Home()),
               );
               break;
             case 1:
