@@ -117,6 +117,32 @@ Future<void> createUserProfileIfNotExists() async {
   }
 }
 
+Future<void> createUserProfileFirestore(String usernameField, String emailField) async {
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user == null) {
+    throw Exception("User not logged in");
+  }
+
+  DocumentReference userDocRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
+  DocumentSnapshot userDoc = await userDocRef.get();
+
+  if (!userDoc.exists) {
+    String email = emailField;
+    String username = usernameField;
+    Map<String, dynamic> userData = {
+      'Email': email,
+      'Username': username,
+      'Nama': user.displayName ?? '',
+      'Nomor Telepon': '',
+      'Deskripsi': '',
+      'PhotoURL': '',
+    };
+
+    await userDocRef.set(userData);
+  }
+}
+
+
 Future<void> updateProfileName(String newName) async {
   User? user = FirebaseAuth.instance.currentUser;
   if (user == null) {

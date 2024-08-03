@@ -3,6 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:inkostel/pages/signin.dart';
+import 'package:inkostel/service/user_model.dart';
 import 'package:inkostel/utils/color.dart';
 import 'package:inkostel/utils/reusable.dart';
 
@@ -62,12 +63,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 20,
                 ),
                 signInSignUpButton(context, false, () {
+                  showLoadingDialog(context); // Loading Mulai
                   FirebaseAuth.instance
                       .createUserWithEmailAndPassword(
                           email: _emailTextController.text,
                           password: _passwordTextController.text)
                       .then((value) {
+                    // Data dibuat ke firestore
+                    createUserProfileFirestore(_usernameTextController.text,
+                        _emailTextController.text);
                     print("Created New Account");
+                    Navigator.pop(context); // Tutup loading
                     // Tampilkan Snackbar setelah berhasil mendaftar
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
