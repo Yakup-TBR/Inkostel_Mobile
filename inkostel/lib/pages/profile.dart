@@ -307,20 +307,11 @@ class _ProfileState extends State<Profile> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            name,
+            username,
             style: GoogleFonts.getFont(
               'Poppins',
               fontSize: 36,
               fontWeight: FontWeight.bold,
-              color: const Color(0xFF436850),
-            ),
-          ),
-          Text(
-            username,
-            style: GoogleFonts.getFont(
-              'Poppins',
-              fontSize: 18,
-              fontWeight: FontWeight.w300,
               color: const Color(0xFF436850),
             ),
           ),

@@ -149,7 +149,7 @@ Future<void> updateProfileName(String newName) async {
     throw Exception("User not logged in");
   }
 
-  Map<String, dynamic> updateData = {'Nama': newName};
+  Map<String, dynamic> updateData = {'Username': newName};
   await FirebaseFirestore.instance.collection('users').doc(user.uid).update(updateData);
 }
 

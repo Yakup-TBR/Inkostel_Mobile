@@ -173,7 +173,7 @@ class _PengaturanState extends State<Pengaturan> {
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   return Text(
-                                    'Hai, ${snapshot.data!.username}',
+                                    snapshot.data!.username,
                                     style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                                   );
                                 } else {
